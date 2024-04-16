@@ -1,0 +1,15 @@
+body {
+	background-color: black;
+}
+
+#stage {
+	background-color: white;
+
+	width: 85vw;
+	height: 85vh;
+
+	margin: auto;
+	margin-top: 5vh;
+
+	position: relative;
+}
