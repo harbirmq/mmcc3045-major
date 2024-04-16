@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Always Rainy at MQ</title>
+
+	<link href="styles.css" rel="stylesheet"/>
+
+	<!-- Load external modules-->
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+	<!-- Load internal modules-->
+	<script src="scripts/storage.js"></script>
+
+	<!-- Load library modules-->
+	<script src="libraries/item_library.js"></script>
+	<script src="libraries/ally_library.js"></script>
+
+	<script>
+		$(document).ready(function() {
+			AddItem(ITEMS["armor"]["Motorcycle Helmet"]);
+
+			console.log(items);
+		});
+	</script>
+</head>
+
+<body>
+	<div id="stage"></div>
+</body>
+</html>
