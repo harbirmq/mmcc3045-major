@@ -48,8 +48,6 @@ function AddGeneric(genericID, genericArray, genericType) {
 		}
 
 		SaveData("stats", stats);
-
-		console.log(stats);
 	}
 
 	SaveData(genericType, genericArray);
@@ -65,10 +63,7 @@ function RemoveGeneric(genericID, genericArray, genericType) {
 				for (const [key, value] of Object.entries(genericID.stats)) {
 					stats[key] -= value;
 				}
-
 				SaveData("stats", stats);
-
-				console.log(stats);
 			}
 
 			SaveData(genericType, genericArray);

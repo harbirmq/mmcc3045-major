@@ -1,3 +1,96 @@
+let skip = false;
+let script_index = 0;
+let active = false;
+
+let text_area;
+let choice_buttons;
+
+function InitTextEngine(_text_area, _choice_buttons) {
+	text_area = _text_area;
+	choice_buttons = _choice_buttons;
+}
+
+function SetScript(script, run) {
+	script_index = 0;
+
+	choice_buttons.forEach(element => {
+		DisableButton(element);
+	});
+
+	text_area.off("click");
+	text_area.click(function() {
+		RunScript(script);
+	});
+
+	if (run) { RunScript(script); }
+}
+
+function WriteText(text) {
+	text_area.html(text).typewrite({
+		"callback": function() {
+			active = false;
+		}
+	});
+}
+
+function EnableButton(button, option) {
+	button.removeClass("choice-button-disabled");
+
+	button.html(option.label);
+
+	button.off("click");
+	button.click(option.function);
+}
+
+function DisableButton(button) {
+	button.addClass("choice-button-disabled");
+
+	button.html("");
+
+	button.off("click");
+}
+
+function RunScript(script) {
+	if (script_index >= Object.keys(script).length) { return; }
+	if (active) { skip = true; }
+
+	active = true;
+
+	for (let [key, value] of Object.entries(script[script_index])) {
+		switch (key) {
+			case "item":
+				value.forEach(element => {
+					AddItem(element);
+				});
+			break;
+
+			case "ally":
+				value.forEach(element => {
+					AddAlly(element);
+				});
+
+				console.log("ally")
+			break;
+
+			case "buff":
+				value.forEach(element => {
+					AddBuff(element);
+				});
+			break;
+
+			case "options":
+				let i = 0;
+				value.forEach(element => {
+					EnableButton(choice_buttons[i++], element);
+				});
+			break;
+		}
+	}
+	
+	WriteText(script[script_index].text);
+
+	script_index++;
+}
 
 // typewriter jquery plugin from https://github.com/chadselph/jquery-typewriter/
 // modified by Harbir Singh to allow for text skipping
@@ -8,7 +101,7 @@
             'extra_char': '_',
             'delay':    25,
             'trim':     false,
-            'callback': null
+            'callback': null,
         };
         if (options) $.extend(settings, options);
 
@@ -22,6 +115,7 @@
                 element.html( final_text.substr(0, i)+settings.extra_char );
                 if (final_text.length >= i) {
                     setTimeout(function() {
+						if (skip) { skip = false; return; }
                         type_next_character(element, i+1);
                     }, settings.delay);
                 }
@@ -39,7 +133,3 @@
         return this;
     };
 })(jQuery);
-
-function RunScript(script) {
-
-}
