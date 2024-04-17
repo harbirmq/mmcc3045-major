@@ -154,10 +154,15 @@ body {
 }
 
 .choice-button-disabled {
-	background-color: white;
+	background-color: black;
+	color: black;
+
+	border: solid 1px black;
+
 	cursor: default;
 }
 
 .choice-button-disabled:hover {
-	color: white;
+	color: black;
+	background-color: black;
 }

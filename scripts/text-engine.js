@@ -52,7 +52,7 @@ function DisableButton(button) {
 }
 
 function RunScript(script) {
-	if (script_index >= Object.keys(script).length) { return; }
+	if (script_index >= script.length) { return; }
 	if (active) { skip = true; }
 
 	active = true;
