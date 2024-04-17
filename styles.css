@@ -108,6 +108,8 @@ body {
 	position: absolute;
 
 	border-right: 2px solid white;
+
+	cursor: pointer;
 }
 
 #choice-buttons {

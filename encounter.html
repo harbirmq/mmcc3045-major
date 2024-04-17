@@ -20,7 +20,56 @@
 	<script src="libraries/buffs_library.js"></script>
 
 	<script>
+		let script = {
+			[0]: '"Last day, huh?", I thought to myself...',
+			[1]: "I lugged myself out of the metro and walked slowly to my class...",
+			[2]: "I took in the sounds of people walking, the birds chirping, the trees rustling...",
+			[3]: "Strolling through Wally's Walk, I noticed the new law building was finally completed...",
+			[4]: "To my right I saw two birds fighting over the last few chips...",
+			[5]: "The people in front of me, walking ever so slightly slower than me...",
+			[6]: '"I wish I could never leave...", I thought...',
+			[7]: "...",
+			[8]: "It's been 3 weeks now...",
+			[9]: "Now, I hear the sound of *them* walking, the birds missing, the trees dripping...",
+			[10]: "Strolling through Wally's Walk, I notice the amount of blood on the floor...",
+			[11]: "To my right I see two zombies fighting over the remains of a student..",
+			[12]: "No people in front of me to complain about...",
+			[13]: "...",
+			[14]: "Oh, and it's always raining...",
+			[15]: "...",
+			[16]: "Now then...",
+			[17]: "Where should I go next?",
+		}
+
 		$(document).ready(function() {
+			let text_area = $("#text-area");
+			let script_index = 0;
+			let ready = true;
+
+			function WriteText() {
+				if (script_index >= Object.keys(script).length) { 
+					return; 
+				}
+
+				text_area.html(script[script_index]).typewrite({
+					"callback": function() {
+						ready = true;
+					}
+				});
+			}
+
+			text_area.click(function() {
+				script_index++;
+
+				if (!ready) { 
+
+
+					return; 
+				}
+
+				ready = false;
+				WriteText();
+			});
 		});
 	</script>
 </head>
@@ -28,14 +77,12 @@
 <body>
 	<div id="stage">
 		<div id="main-text-window">
-			<div id="text-area">
-				a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a 
-			</div>
+			<div id="text-area">s</div>
 			<div id="choice-buttons">
-				<div class="choice-button" id="choice1">Choice1</div>
-				<div class="choice-button" id="choice2">Choice2</div>
-				<div class="choice-button" id="choice3">Choice3</div>
-				<div class="choice-button" id="choice4">Choice4</div>
+				<div class="choice-button .choice-button-disabled" id="choice1">Choice1</div>
+				<div class="choice-button .choice-button-disabled" id="choice2">Choice2</div>
+				<div class="choice-button .choice-button-disabled" id="choice3">Choice3</div>
+				<div class="choice-button .choice-button-disabled" id="choice4">Choice4</div>
 			</div>
 		</div>
 	</div>
