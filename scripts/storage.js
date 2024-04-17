@@ -20,6 +20,9 @@ if (items_value != null) { items = items_value; }
 let allies_value = ReadData("allies");
 if (allies_value != null) { allies = allies_value; }
 
+let buffs_value = ReadData("buffs");
+if (buffs_value != null) { buffs = buffs_value; }
+
 // functions
 function AddGeneric(genericID, genericArray, genericType) {
 	genericArray.push(genericID.storage);
