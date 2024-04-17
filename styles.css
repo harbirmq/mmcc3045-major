@@ -98,3 +98,59 @@ body {
 
 	bottom: 0;
 }
+
+#text-area {
+	width: 75.5%;
+	height: 84%;
+	
+	padding-right: 5px;
+
+	position: absolute;
+
+	border-right: 2px solid white;
+}
+
+#choice-buttons {
+	position: absolute;
+
+	width: 20%;
+	height: 84%;
+
+	right: 20px;
+
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.choice-button {
+	border: 1px solid white;
+
+	font-size: large;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+
+	height: 18.16%;
+
+	padding: 5px;
+	margin-bottom: 5px;
+
+	cursor: pointer;
+}
+
+.choice-button:hover {
+	color: black;
+
+	background-color: white;
+}
+
+.choice-button-disabled {
+	background-color: white;
+	cursor: default;
+}
+
+.choice-button-disabled:hover {
+	color: white;
+}
