@@ -12,6 +12,7 @@ function InitTextEngine(_text_area, _choice_buttons) {
 
 function SetScript(script, run) {
 	script_index = 0;
+	active = false;
 
 	choice_buttons.forEach(element => {
 		DisableButton(element);
@@ -84,6 +85,10 @@ function RunScript(script) {
 					EnableButton(choice_buttons[i++], element);
 				});
 			break;
+
+			case "function":
+				value();
+			return;
 		}
 	}
 	

@@ -70,9 +70,14 @@ body {
 	padding-top: 10px;
 }
 
-#start-button {
+#new-game {
 	bottom: 5%;
-	left: 35%;
+	left: 20%;
+}
+
+#load-game {
+	bottom: 5%;
+	right: 20%;
 }
 
 /* --- ENCOUNTERS --- */
