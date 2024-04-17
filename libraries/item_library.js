@@ -51,8 +51,8 @@ const ITEMS = {
 	},
 
 	"armor": {
-		"Motorcycle Helmet": Armor("Motorcycle Helmet", "A cool, black, motorcycle helmet", {}),
-		"Lucky Bracelet": Armor("Lucky Bracelet", "A shiny gold bracelet decorated with some gems", {}),
+		"Motorcycle Helmet": Armor("Motorcycle Helmet", "A cool, black, motorcycle helmet", { defense: 5 }),
+		"Lucky Bracelet": Armor("Lucky Bracelet", "A shiny gold bracelet decorated with some gems", { luck: 3 }),
 	},
 
 	"consumable": {

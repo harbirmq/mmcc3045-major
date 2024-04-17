@@ -11,7 +11,7 @@ function Ally(_name, _description, stats) {
 
 // library
 const ALLIES = {
-	"Vanessa": Ally("Vanessa", "A very cute girl you saved from some zombies", {}),
+	"Vanessa": Ally("Vanessa", "A very cute girl you saved from some zombies", { perception: 2, luck: 5 }),
 };
 
 // functions
