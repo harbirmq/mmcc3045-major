@@ -1,8 +1,8 @@
 // types
-function Weapon(_name, _description, _damage) {
+function Weapon(_name, _description, _stats) {
 	return {
 		description: _description,
-		damage: _damage,
+		stats: _stats,
 		storage: {
 			type: "weapon",
 			name: _name,
@@ -45,13 +45,13 @@ function Key(_name, _description) {
 // library
 const ITEMS = {
 	"weapon": {
-		"Stick": Weapon("Stick", "A suprisingly sturdy stick", 2),
-		"Kitchen Knife": Weapon("Kitchen Knife", "A dull knife found in a kitchen", 5),
-		"Gun": Weapon("Gun", "A blickey", 15),
+		"Stick": Weapon("Stick", "A suprisingly sturdy stick", { strength: 5 }),
+		"Kitchen Knife": Weapon("Kitchen Knife", "A dull knife found in a kitchen", { strength: 5 }),
+		"Gun": Weapon("Gun", "A blickey", { strength: 15 }),
 	},
 
 	"armor": {
-		"Motorcycle Helmet": Armor("Motorcycle Helmet", "A cool, black, motorcycle helmet", { defense: 5 }),
+		"Motorcycle Helmet": Armor("Motorcycle Helmet", "A cool, black, motorcycle helmet", { defense: 5, perception: -5 }),
 		"Lucky Bracelet": Armor("Lucky Bracelet", "A shiny gold bracelet decorated with some gems", { luck: 3 }),
 	},
 

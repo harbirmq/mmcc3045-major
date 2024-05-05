@@ -17,6 +17,8 @@ let stats = { // default stats
 
 // data functions
 function SaveData(name, data) {
+	RefreshWindows();
+
 	localStorage.setItem(name, JSON.stringify(data));
 }
 
@@ -82,4 +84,88 @@ function HasGeneric(genericID, genericArray) {
 	}
 
 	return false;
+}
+
+// id generator
+// src: https://stackoverflow.com/a/33226136
+const uniqId = (() => {
+    let i = 0;
+    return () => {
+        return i++;
+    }
+})();
+
+function RefreshWindows() {
+	// update health
+	$("#hp").html("HP: " +  stats.health);
+	$("#sanity").html("SANITY: " +  stats.sanity);
+
+	$(".scrolling-window").empty();
+
+	// update items
+	items.forEach(element => {
+		itemString = "";
+
+		if (ITEMS[element.type][element.name].stats != null) {
+			for (const [key, value] of Object.entries(ITEMS[element.type][element.name].stats)) {
+				itemString += "<h3 class='item-stat'>" + value + " " + key + "</h3>"
+			}
+		}
+
+		const id = "item" + uniqId();
+		const tooltip = $("#tooltip");
+
+		$("#items-window").append("<div class='item' id='" + id + "'><h3 class=item-name>" + element.name +"</h3><div class='item-stats'>" + itemString + "</div></div>");
+		$("#" + id).on( "mouseenter", function (){
+			tooltip.show();
+			tooltip.html("[" + element.type.toUpperCase() + "] " + ITEMS[element.type][element.name].description);
+		}).on( "mouseleave", function (){
+			tooltip.hide();
+		});
+
+	});
+
+	// update allies
+	allies.forEach(element => {
+		allyString = "";
+
+		if (ALLIES[element.name].stats != null) {
+			for (const [key, value] of Object.entries(ALLIES[element.name].stats)) {
+				allyString += "<h3 class='item-stat'>" + value + " " + key + "</h3>"
+			}
+		}
+
+		const id = "item" + uniqId();
+		const tooltip = $("#tooltip");
+
+		$("#allies-window").append("<div class='item' id='" + id + "'><h3 class=item-name>" + element.name +"</h3><div class='item-stats'>" + allyString + "</div></div>");
+		$("#" + id).on( "mouseenter", function (){
+			tooltip.show();
+			tooltip.html(ALLIES[element.name].description);
+		}).on( "mouseleave", function (){
+			tooltip.hide();
+		});
+	});
+
+	// update buffs
+	buffs.forEach(element => {
+		buffString = "";
+
+		if (BUFFS[element.name].stats != null) {
+			for (const [key, value] of Object.entries(BUFFS[element.name].stats)) {
+				buffString += "<h3 class='item-stat'>" + value + " " + key + "</h3>"
+			}
+		}
+
+		const id = "item" + uniqId();
+		const tooltip = $("#tooltip");
+
+		$("#allies-window").append("<div class='item' id='" + id + "'><h3 class=item-name>" + element.name +"</h3><div class='item-stats'>" + buffString + "</div></div>");
+		$("#" + id).on( "mouseenter", function (){
+			tooltip.show();
+			tooltip.html(BUFFS[element.name].description);
+		}).on( "mouseleave", function (){
+			tooltip.hide();
+		});
+	});
 }

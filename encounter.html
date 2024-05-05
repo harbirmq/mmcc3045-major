@@ -23,21 +23,52 @@
 
 	<script>
 		$(document).ready(function() {
-			let text_area = $("#text-area");
-			let choice_buttons = [$("#choice1"), $("#choice2"), $("#choice3"), $("#choice4")];
+			const text_area = $("#text-area");
+			const choice_buttons = [$("#choice1"), $("#choice2"), $("#choice3"), $("#choice4")];
 
 			InitTextEngine(text_area, choice_buttons);
 			InitEncounters(SetScript);
 
-			let encounter = ReadData("encounter");
-
+			const encounter = ReadData("encounter");
 			SetScript(ENCOUNTERS[encounter], true);
+
+			RefreshWindows();
+
+			const tooltip = $("#tooltip");
+			tooltip.hide();
+			$(document).on('mousemove', function(e){
+				tooltip.css('top', e.pageY);
+				tooltip.css('left', e.pageX);
+			});
+			// script that positions a div at the mouse coordinates
+			// src: https://stackoverflow.com/a/31664932
 		});
 	</script>
 </head>
 
 <body>
 	<div id="stage">
+		<div id="information-panel">
+			<h2>ITEMS</h2>
+			<div class="scrolling-window" id="items-window">
+				<div class="item">
+					<h3 class="item-name">GUN</h3>
+					<div class="item-stats">
+						<h3 class="item-stat">+5 strength</h3>
+					</div>
+				</div>
+			</div>
+
+			<h2>ALLIES & BUFFS</h2>
+			<div class="scrolling-window" id="allies-window">
+				<h1>test</h1>
+			</div>
+
+			<div id="status-bar">
+				<h1 id="hp">HP:</h1>
+				<h1 id="sanity">SANITY:</h1>
+			</div>
+		</div>
 		<div id="main-text-window">
 			<div id="text-area"></div>
 			<div id="choice-buttons">
@@ -47,6 +78,9 @@
 				<div class="choice-button choice-button-disabled" id="choice4">Choice4</div>
 			</div>
 		</div>
+	</div>
+	<div id="tooltip">
+		weapon: a blickey you found on the side of the road.
 	</div>
 </body>
 </html>
