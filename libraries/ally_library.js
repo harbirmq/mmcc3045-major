@@ -17,4 +17,4 @@ const ALLIES = {
 // functions
 function AddAlly(allyID) { AddGeneric(allyID, allies, "allies"); }
 function RemoveAlly(allyID) { RemoveGeneric(allyID, allies, "allies"); }
-function HasAlly(allyID) { HasGeneric(allyID, allies); }
+function HasAlly(allyID) { return HasGeneric(allyID, allies); }

@@ -67,4 +67,4 @@ const ITEMS = {
 // functions
 function AddItem(itemID) { AddGeneric(itemID, items, "items"); }
 function RemoveItem(itemID) { RemoveGeneric(itemID, items, "items"); }
-function HasItem(itemID) { HasGeneric(itemID, items); }
+function HasItem(itemID) { return HasGeneric(itemID, items); }

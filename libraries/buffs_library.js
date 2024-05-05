@@ -17,4 +17,4 @@ const BUFFS = {
 // functions
 function AddBuff(buffID) { AddGeneric(buffID, buffs, "buffs"); }
 function RemoveBuff(buffID) { RemoveGeneric(buffID, buffs, "buffs"); }
-function HasBuff(buffID) { HasGeneric(buffID, buffs); }
+function HasBuff(buffID) { return HasGeneric(buffID, buffs); }

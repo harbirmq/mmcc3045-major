@@ -16,9 +16,9 @@ let stats = { // default stats
 };
 
 // data functions
-function SaveData(name, data) {
-	RefreshWindows();
-
+function SaveData(name, data, intro = false) {
+	if (!intro) { RefreshWindows(); }
+	
 	localStorage.setItem(name, JSON.stringify(data));
 }
 

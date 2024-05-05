@@ -18,8 +18,8 @@ function InitEncounters(_setScript) {
 // encounters
 let ENCOUNTERS = {
 	"intro sequence": [
-		{text: '"Last day, huh?", I thought to myself...', item:[ ITEMS["weapon"]["Kitchen Knife"] ] },
-		{text: "I lugged myself out of the metro and walked slowly to my class...", buff:[ BUFFS["Missing Eye"] ]},
+		{text: '"Last day, huh?", I thought to myself...'},
+		{text: "I lugged myself out of the metro and walked slowly to my class..."},
 		{text: "I took in the sounds of people walking, the birds chirping, the trees rustling...",},
 		{text: "Strolling through Wally's Walk, I noticed the new law building was finally completed...",},
 		{text: "To my right I saw two birds fighting over the last few chips...",},
@@ -46,12 +46,25 @@ let ENCOUNTERS = {
 		{text: 'now take this free ally', ally: [ ALLIES["Vanessa"], ]},
 		{text: 'now heres a choice', options: [
 			Option("option 1", function() {
+				AddItem(ITEMS["weapon"]["Stick"]);
+				AddItem(ITEMS["weapon"]["Kitchen Knife"]);
+				AddItem(ITEMS["weapon"]["Gun"]);
 			}),
 			Option("option 2", function() {
+				AddItem(ITEMS["armor"]["Motorcycle Helmet"]);
+				AddItem(ITEMS["armor"]["Lucky Bracelet"]);
+				AddItem(ITEMS["consumable"]["Bandage"]);
+				AddItem(ITEMS["key"]["Keyboard"]);
 			}),
 			Option("option 3", function() {
+				AddBuff(BUFFS["Missing Eye"]);
+				AddAlly(ALLIES["Vanessa"]);
 			}),
-			Option("[REQUIRES whatever] option 4", function() {
+			Option("[REQUIRES KEYBOARD] option 4", function() {
+				console.log(HasItem(ITEMS["key"]["Keyboard"]))
+
+				if (!HasItem(ITEMS["key"]["Keyboard"])) { return; }
+
 				setScript(ENCOUNTERS["intro sequence"], true);
 			}),
 		]},
