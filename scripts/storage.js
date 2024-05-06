@@ -100,6 +100,14 @@ function RefreshWindows() {
 	$("#hp").html("HP: " +  stats.health);
 	$("#sanity").html("SANITY: " +  stats.sanity);
 
+	// update stats
+	$("#strength").html(stats.strength);
+	$("#defense").html(stats.defense);
+	$("#luck").html(stats.luck);
+	$("#charisma").html(stats.charisma);
+	$("#speed").html(stats.speed);
+	$("#perception").html(stats.perception);
+
 	$(".scrolling-window").empty();
 
 	// update items

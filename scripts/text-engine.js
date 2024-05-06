@@ -98,7 +98,7 @@ function RunScript(script) {
 }
 
 // typewriter jquery plugin from https://github.com/chadselph/jquery-typewriter/
-// modified by Harbir Singh to allow for text skipping
+// modified to allow for text skipping
 (function ( $ ) {
     $.fn.typewrite = function ( options ) {
         var settings = {

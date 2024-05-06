@@ -113,6 +113,28 @@ body {
 	overflow-y: scroll;
 }
 
+#stats-window {
+	border: 2px dotted white;
+
+	height: 20%;
+
+	display:flex;
+	flex-wrap: wrap;
+
+	margin-top: -5%;
+}
+
+.stat {
+	width: 48%;
+
+	padding-left: 2%;
+	padding-top: 1%;
+}
+
+.stat a {
+	vertical-align: text-top;
+}
+
 #status-bar {
 	display: flex;
 
