@@ -79,6 +79,15 @@ function RunScript(script) {
 				});
 			break;
 
+			case "stat":
+				for (const [stat, v] of Object.entries(script[script_index][key])) {
+					console.log(stats[stat] + " " + v);
+					stats[stat] += v;
+				}
+			
+				SaveData("stats", stats);
+			break;
+
 			case "options":
 				let i = 0;
 				value.forEach(element => {
