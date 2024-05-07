@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>Always Rainy at MQ - Encounter</title>
+	<title>Always Rainy at MQ - Map</title>
 
 	<link href="styles.css" rel="stylesheet"/>
 
@@ -29,14 +29,9 @@
 			InitTextEngine(text_area, choice_buttons);
 			InitEncounters(SetScript);
 
-			const location = ReadData("location");
-			const encounter = ReadData("encounter");
-
-			if (encounter == "intro sequence") { $("#information-panel").hide(); }
-
-			SetScript(ENCOUNTERS[location][encounter], true);
-
 			RefreshWindows();
+
+			setScript(ENCOUNTERS["meta"]["map screen"], true);
 
 			const tooltip = $("#tooltip");
 			tooltip.hide();
@@ -100,7 +95,13 @@
 			</div>
 		</div>
 		<div id="main-text-window">
-			<div id="text-area"></div>
+			<div id="text-area">
+			</div>
+			<div id="objectives">
+				<div class="objective">PRIMARY OBJECTIVE: Maybe exploring the COMP BUILDING can give us a lead on how to escape?</div>
+				<div>⠀</div>
+				<div class="secondary-objective">SECONDARY OBJECTIVE: If we explore a location that isn't the COMP BUILDING, maybe we could find something that we overlooked? [0/3]</div>
+			</div>
 			<div id="choice-buttons">
 				<div class="choice-button choice-button-disabled" id="choice1">Choice1</div>
 				<div class="choice-button choice-button-disabled" id="choice2">Choice2</div>
@@ -110,7 +111,6 @@
 		</div>
 	</div>
 	<div id="tooltip">
-		weapon: a blickey you found on the side of the road.
 	</div>
 </body>
 </html>

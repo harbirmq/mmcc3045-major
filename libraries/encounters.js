@@ -26,63 +26,85 @@ function Roll(stat, required) {
 	return rollData;
 }
 
+
+
 /*
+	locations:
+	COMP BUILDING, CENTRAL COURTYARD, LECTURE HALL, LAW BUILDING, MACQUARIE LAKE, APARTMENTS
+
+	modifiers:
 	text, item, ally, buff, options, function, stat
 */
 
 // encounters
 let ENCOUNTERS = {
-	"intro sequence": [
-		{text: '"Last day, huh?", I thought to myself...'},
-		{text: "I lugged myself out of the metro and walked slowly to my class..."},
-		{text: "I took in the sounds of people walking, the birds chirping, the trees rustling...",},
-		{text: "Strolling through Wally's Walk, I noticed the new law building was finally completed...",},
-		{text: "To my right I saw two birds fighting over the last few chips...",},
-		{text: "The people in front of me, walking ever so slightly slower than me...",},
-		{text: '"I wish I could never leave...", I thought...',},
-		{text: "...",},
-		{text: "It's been 3 weeks now...",},
-		{text: "Now, I hear the sound of *them* walking, the birds missing, the trees dripping...",},
-		{text: "Strolling through Wally's Walk, I notice the amount of blood on the floor...",},
-		{text: "To my right I see two zombies fighting over the remains of a student..",},
-		{text: "No people in front of me to complain about...",},
-		{text: "...",},
-		{text: "Oh, and it's always raining...",},
-		{text: "...",},
-		{text: "Now then...",},
-		{text: "Where should I go next?",},
-		{function: function() {
-			setScript(ENCOUNTERS["next encounter"], true);
-		}},
+
+	"meta": {
+		"intro sequence": [
+			{text: '"Last day, huh?", I thought to myself...'},
+			{text: "I lugged myself out of the metro and walked slowly to my class..."},
+			{text: "I took in the sounds of people walking, the birds chirping, the trees rustling...",},
+			{text: "Strolling through Wally's Walk, I noticed the new law building was finally completed...",},
+			{text: "To my right I saw two birds fighting over the last few chips...",},
+			{text: "The people in front of me, walking ever so slightly slower than me...",},
+			{text: '"I wish I could never leave...", I thought...',},
+			{text: "...",},
+			{text: "It's been 3 weeks now...",},
+			{text: "Now, I hear the sound of *them* walking, the birds missing, the trees dripping...",},
+			{text: "Strolling through Wally's Walk, I notice the amount of blood on the floor...",},
+			{text: "To my right I see two zombies fighting over the remains of a student..",},
+			{text: "No people in front of me to complain about...",},
+			{text: "...",},
+			{text: "Oh, and it's always raining...",},
+			{text: "...",},
+			{text: "Now then...",},
+			{function: function() {
+				window.location.replace("map.html");
+			}},
+		],
+
+		"map screen": [
+			{text: "Where should we go next?", options: [
+				Option("Rest", function() {
+					setScript([
+						{text: "You took a well-deserved nap and composed yourself. [+5 HP] [+5 SANITY]", stat: { health: 5, sanity: 5 }}
+					], true);
+				}),
+				Option("Jog on the spot", function() {
+					setScript([
+						{text: "You jogged on the spot. Your feel a little tired, but it was probably worth it. [+1 SPEED] [-1 DEFENSE]", stat: { speed: 1, defense: -1 }}
+					], true);
+				}),
+				Option("Talk into the mirror", function() {
+					setScript([
+						{text: "You talk to yourself in the mirror... 'Am I going crazy..?' [+2 CHARISMA] [-1 SANITY]", stat: { charisma: 2, sanity: -1 }}
+					], true);
+				}),
+				Option("Train your eyes", function() {
+					SaveData("location", "COMP BUILDING");
+					SaveData("encounter", 0);
+					window.location.replace("encounter.html");
+					/*
+					setScript([
+						{text: "You train your eyes by tracking a fly as it zips around the room. [+2 PERCEPTION] [-1 SANITY]", stat: { perception: 2, sanity: -1 }}
+					], true);*/
+				}),
+			]}
+		],
+	},
+
+	"COMP BUILDING": [
+		[
+			{text: "Entering a classroom on the upper floor, you notice that all the keyboards are missing... All except one..."},
+			{text: "As you contemplate taking it, a loud *BANG* could be heard outside."},
+			{text: "You quickly stuff the keyboard into your bag and leave the building. [+ITEM: KEYBOARD]", item: [ITEMS["key"]["Keyboard"]]},
+			{finish: true},
+		],
+
+
 	],
 
-	"next encounter": [
-		{text: 'here is some sample text'},
-		{text: 'now take this free ally', ally: [ ALLIES["Vanessa"], ]},
-		{text: 'now heres a choice', options: [
-			Option("give weapons", function() {
-				AddItem(ITEMS["weapon"]["Stick"]);
-				AddItem(ITEMS["weapon"]["Kitchen Knife"]);
-				AddItem(ITEMS["weapon"]["Gun"]);
-			}),
-			Option("give armor + keyboard", function() {
-				AddItem(ITEMS["armor"]["Motorcycle Helmet"]);
-				AddItem(ITEMS["armor"]["Lucky Bracelet"]);
-				AddItem(ITEMS["consumable"]["Bandage"]);
-				AddItem(ITEMS["key"]["Keyboard"]);
-			}),
-			Option("example battle", function() {
-				setScript(ENCOUNTERS["example battle"], true);
-			}),
-			Option("[REQUIRES KEYBOARD] restart intro", function() {
-				console.log(HasItem(ITEMS["key"]["Keyboard"]))
 
-				if (!HasItem(ITEMS["key"]["Keyboard"])) { return; }
-
-				setScript(ENCOUNTERS["intro sequence"], true);
-			}),
-		]},
-	],
 
 	"example battle": [
 		{text: "As you walk through the classroom you notice a groaning sound..."},
@@ -116,7 +138,7 @@ let ENCOUNTERS = {
 					setScript([
 						{text: "LUCK ROLL: " + roll.text + "!"},
 						{text: "The zombie trips over and smashes its head on the floor!"},
-						{text: "You notice what it had tripped over... some sort of bracelet? [+ITEM - LUCKY BRACELET]", item: [ ITEMS["armor"]["Lucky Bracelet"] ]},
+						{text: "You notice what it had tripped over... some sort of bracelet? [+ITEM: LUCKY BRACELET]", item: [ ITEMS["armor"]["Lucky Bracelet"] ]},
 						{function: function() {
 							setScript(ENCOUNTERS["next encounter"], true);
 						}},

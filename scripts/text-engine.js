@@ -69,8 +69,6 @@ function RunScript(script) {
 				value.forEach(element => {
 					AddAlly(element);
 				});
-
-				console.log("ally")
 			break;
 
 			case "buff":
@@ -93,6 +91,12 @@ function RunScript(script) {
 				value.forEach(element => {
 					EnableButton(choice_buttons[i++], element);
 				});
+			break;
+
+			case "finish":
+				script[script_index].text = "";
+
+				window.location.replace("map.html");
 			break;
 
 			case "function":

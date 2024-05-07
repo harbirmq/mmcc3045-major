@@ -212,6 +212,14 @@ body {
 	cursor: pointer;
 }
 
+#objectives {
+	padding-top: 5%;
+
+	width: 75.5%;
+
+	position: absolute;
+}
+
 #choice-buttons {
 	position: absolute;
 
@@ -260,4 +268,13 @@ body {
 .choice-button-disabled:hover {
 	color: black;
 	background-color: black;
+}
+
+/* --- TEXT TAGS --- */
+.objective {
+	color: rgb(0, 149, 255);
+}
+
+.secondary-objective {
+	color: rgb(119, 0, 255);
 }
