@@ -117,6 +117,10 @@ function RunScript(script) {
 				window.location.replace("map.html");
 			break;
 
+			case "background":
+				$(".background").attr("src","images/backgrounds/" + value + ".png");
+			break;
+
 			case "function":
 				value();
 			return;

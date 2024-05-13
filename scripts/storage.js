@@ -15,6 +15,11 @@ let stats = { // default stats
 	defense: 10,
 };
 
+let flags = {
+	unlocked_apartments: false,
+	unlocked_lake: false,
+}
+
 // data functions
 function SaveData(name, data, intro = false) {
 	if (!intro) { RefreshWindows(); }
@@ -38,6 +43,9 @@ if (buffs_value != null) { buffs = buffs_value; }
 
 let stats_value = ReadData("stats");
 if (stats_value != null) { stats = stats_value; }
+
+let flags_value = ReadData("flags");
+if (flags_value != null) { flags = flags_value; }
 
 // functions
 function AddGeneric(genericID, genericArray, genericType) {
@@ -84,6 +92,12 @@ function HasGeneric(genericID, genericArray) {
 	}
 
 	return false;
+}
+
+function SetFlag(id, value) {
+	flags[id] = value;
+
+	SaveData("flags", flags);
 }
 
 // id generator

@@ -52,12 +52,19 @@
 			});
 			// script that positions a div at the mouse coordinates
 			// src: https://stackoverflow.com/a/31664932
+
+			if (!flags.unlocked_apartments) { $("#map_apartments").hide(); }
+			if (!flags.unlocked_lake) { $("#map_lake").hide(); }
 		});
 	</script>
 </head>
 
 <body>
 	<div id="stage">
+		<img class="background" src="images/backgrounds/map.png">
+		<img class="background" id="map_lake" src="images/backgrounds/map lake.png">
+		<img class="background" id="map_apartments" src="images/backgrounds/map apartments.png">
+
 		<div id="information-panel">
 			<h2>ITEMS</h2>
 			<div class="scrolling-window" id="items-window">

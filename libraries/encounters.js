@@ -37,7 +37,7 @@ function Roll(stat, required) {
 	COMP BUILDING, CENTRAL COURTYARD, LECTURE HALL, LAW BUILDING, MACQUARIE LAKE, APARTMENTS
 
 	modifiers:
-	text, item, ally, buff, options, function, stat
+	text, item, ally, buff, options, function, stat, background
 */
 
 // encounters
@@ -53,7 +53,7 @@ let ENCOUNTERS = {
 			{text: "The people in front of me, walking ever so slightly slower than me...",},
 			{text: '"I wish I could never leave...", I thought...',},
 			{text: "...",},
-			{text: "It's been 3 weeks now...",},
+			{text: "It's been 3 weeks now...", background: "wallyswalk2"},
 			{text: "Now, I hear the sound of *them* walking, the birds missing, the trees dripping...",},
 			{text: "Strolling through Wally's Walk, I notice the amount of blood on the floor...",},
 			{text: "To my right I see two zombies fighting over the remains of a student..",},
