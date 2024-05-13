@@ -101,21 +101,21 @@ let ENCOUNTERS = {
 			{finish: true},
 		],
 		[
-			{text: "Sneaking through the building, you feel like that there's something that you could take right in front of your eyes..."},
-			{ function: function() {
+			{text: "Sneaking through the building, you feel like that there's something that you could take right in front of your eyes...",
+			function: function() {
 				if (stats.perception >= 7) {
 					setScript([
 						{text: "[PERCEPTION CHECK SUCCESS] You could use the glass shards on the floor as a weapon!"},
 						{text: "You rip a part of your shirt off, and wrap it around a large shard to form a makeshift shiv. [+ITEM: GLASS SHIV]", item: [ITEMS["weapon"]["Glass Shiv"]]},
 						{finish: true}
-					], true);
+					]);
 				}
 				else {
 					setScript([
 						{text: "[PERCEPTION CHECK FAILED] 'Eh, it's probably nothing' you think to yourself..."},
 						{text: "You decide to head back to base empty-handed."},
 						{finish: true}
-					], true);
+					]);
 				}
 			}}
 		],
@@ -164,7 +164,76 @@ let ENCOUNTERS = {
 		],
 	],
 
+	"CENTRAL COURTYARD": [
+		[
+			{text: "Walking through Central Courtyard, you notice a scream!"},
+			{text: "You duck behind some cover and peek out."},
+			{text: "You notice a pair of zombies attacking a fairly armored girl!", options: [
+				Option("[SPEED CHECK] Distract Zombies", function(){
+					if (stats.speed >= 7) {
+						setScript([
+							{text: "[SPEED CHECK SUCCESS] You succesfully distract the zombies by yelling, then evading them."},
+							{text:"The girl thanks you and asks to join your team. [+ALLY: VANESSA]", ally: [ALLIES["Vanessa"]]},
+							{finish: true}
+						], true);
+					}
+					else {
+						let roll = Roll(stats.strength, 15);
 
+						setScript([
+							{text: "[SPEED CHECK FAIL] You scream at the top of your lungs to distract the zombies... but now they're coming at you!",
+							function: function() {
+								if (roll.success) {
+									setScript([
+										{text: "STRENGTH ROLL: " + roll.text + "!"},
+										{text: "You successfully defeated the zombies, but looking up you notice the girl is nowhere to be seen. [-1 SANITY]", stat: {sanity: -1}},
+										{finish: true}
+									]);
+								}
+								else {
+									setScript([
+										{text: "STRENGTH ROLL: " + roll.text + "..."},
+										{text: "You barely manage to defeat the zombies..."},
+										{text: "Too scared to look up, you hastily leave the scene. [-2 HP] [+INJURY: DEEP SCRATCH]", stat: {hp: -2}, buff: [BUFFS["Deep Scratch"]] },
+										{finish: true}
+									]);
+								}
+							}}
+						], true);
+					}
+				}),
+				Option("[LUCK ROLL] Wait and loot her corpse", function(){
+					let roll = Roll(stats.luck, 10);
+
+					if (roll.success) {
+						setScript([
+							{text: "LUCK ROLL: " + roll.text + "!"},
+							{text:"You watch the girl fight for her life."},
+							{text:"At a crucial moment, she slips and is promptly killed by the zombies. Shortly after, the zombies move on to find their next target..."},
+							{text:"You sneak up and loot her corpse... was it worth it? [+ITEM: MOTORCYCLE HELMET] [-3 SANITY]", stat: {sanity: -1}, item: [ ITEMS["armor"]["Motorcycle Helmet"]]},
+							{finish: true}
+						], true);
+					}
+					else {
+						setScript([
+							{text: "LUCK ROLL: " + roll.text + "..."},
+							{text: "You watch the girl swiftly take out the zombies with ease."},
+							{text: "She glares at you as she wipes blood off her face."},
+							{text: "'She saw me...' [-2 SANITY]", stat: {sanity: -2}},
+							{finish: true}
+						], true);
+					}
+				}),
+				Option(" ", function(){}),
+				Option("Do Nothing", function(){
+					setScript([
+						{text:"You decide to sneak away, leaving the poor girl alone [-1 SANITY]", stat: {sanity: -1}},
+						{finish: true},
+					], true);
+				}),
+			]},
+		]
+	],
 
 	"LAW BUILDING": [
 		[

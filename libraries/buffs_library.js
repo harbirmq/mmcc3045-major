@@ -11,7 +11,8 @@ function Buff(_name, _description, stats) {
 
 // library
 const BUFFS = {
-	"Missing Eye": Buff("Missing Eye", "Your right eye is missing...", { perception: -1 }),
+	"Missing Eye": Buff("Missing Eye", "Your right eye is missing...", { perception: -5 }),
+	"Deep Scratch": Buff("Deep Scratch", "Hopefully this wont lead to an infection...", { speed: -2 })
 };
 
 // functions
