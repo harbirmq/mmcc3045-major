@@ -39,6 +39,13 @@
 				}
 			});
 
+			$(document).on('mousemove', function(e){
+				tooltip.css('top', e.pageY);
+				tooltip.css('left', e.pageX);
+			});
+			// script that positions a div at the mouse coordinates
+			// src: https://stackoverflow.com/a/31664932
+
 			InitTextEngine(text_area, choice_buttons);
 			InitEncounters(SetScript);
 
@@ -53,13 +60,6 @@
 			$(".background").attr("src","images/backgrounds/" + location + ".png");
 
 			RefreshWindows();
-
-			$(document).on('mousemove', function(e){
-				tooltip.css('top', e.pageY);
-				tooltip.css('left', e.pageX);
-			});
-			// script that positions a div at the mouse coordinates
-			// src: https://stackoverflow.com/a/31664932
 		});
 	</script>
 </head>

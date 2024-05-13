@@ -282,3 +282,11 @@ body {
 .secondary-objective {
 	color: rgb(119, 0, 255);
 }
+
+/* --- MAP PAGE --- */
+.map-button {
+	position: absolute;
+	cursor: pointer;
+
+	background-color: rgba(255, 0, 0, 0.5);
+}

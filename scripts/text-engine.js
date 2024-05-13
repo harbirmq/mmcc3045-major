@@ -57,8 +57,14 @@ function RunScript(script) {
 
 	active = true;
 
+	WriteText(script[script_index].text);
+
 	for (let [key, value] of Object.entries(script[script_index])) {
 		switch (key) {
+			case "function":
+				value();
+			return;
+
 			case "item":
 				value.forEach(element => {
 					AddItem(element);
@@ -120,14 +126,8 @@ function RunScript(script) {
 			case "background":
 				$(".background").attr("src","images/backgrounds/" + value + ".png");
 			break;
-
-			case "function":
-				value();
-			return;
 		}
 	}
-	
-	WriteText(script[script_index].text);
 
 	script_index++;
 }

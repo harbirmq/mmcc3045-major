@@ -85,13 +85,9 @@ let ENCOUNTERS = {
 					], true);
 				}),
 				Option("Train your eyes", function() {
-					SaveData("location", "COMP BUILDING");
-					SaveData("encounter", Random(ENCOUNTERS["COMP BUILDING"].length - 1));
-					window.location.replace("encounter.html");
-					/*
 					setScript([
 						{text: "You train your eyes by tracking a fly as it zips around the room. [+2 PERCEPTION] [-1 SANITY]", stat: { perception: 2, sanity: -1 }}
-					], true);*/
+					], true);
 				}),
 			]}
 		],
@@ -133,7 +129,7 @@ let ENCOUNTERS = {
 						{finish: true}
 					], true);
 				}),
-				Option("[REQUIRE KEYBOARD] Reply", function() {
+				Option("[REQUIRES KEYBOARD] Reply", function() {
 					if (!HasItem(ITEMS["key"]["Keyboard"])) { return; }
 
 					setScript([
@@ -156,8 +152,10 @@ let ENCOUNTERS = {
 		[
 			{text: "Looking through the bags on the lower floor, you find a key! [+ITEM: APARTMENT KEY?]", item: [ ITEMS["key"]["Apartment Key?"] ]},
 			{text: "The key reads '002'. Maybe it's a key to an apartment?"},
-			{text: "You add it to your keychain and leave the building." },
-			{finish: true}
+			{text: "You add it to your keychain and leave the building. [NEW LOCATION: APARTMENTS]" },
+			{finish: true, function: function(){
+				SetFlag("unlocked_apartments", true);
+			}}
 		],
 		[
 			{text: "Sneaking past a zombie, you notice a pair of coding socks on the floor."},
@@ -168,89 +166,76 @@ let ENCOUNTERS = {
 
 
 
-	"example battle": [
-		{text: "As you walk through the classroom you notice a groaning sound..."},
-		{text: "A zombie attacks you from behind!", options: [
-			Option("[STRENGTH ROLL] Attack", function(){
-				let roll = Roll(stats.strength, 10);
+	"LAW BUILDING": [
+		[
+			{text: "As you walk through a classroom you notice a groaning sound..."},
+			{text: "A zombie attacks you from behind!", options: [
+				Option("[STRENGTH ROLL] Attack", function(){
+					let roll = Roll(stats.strength, 10);
 
-				if (roll.success) {
-					setScript([
-						{text: "STRENGTH ROLL: " + roll.text + "!"},
-						{text: "You successfully defeated the zombie with ease!"},
-						{function: function() {
-							setScript(ENCOUNTERS["next encounter"], true);
-						}},
-					], true);
-				}
-				else {
-					setScript([
-						{text: "STRENGTH ROLL: " + roll.text + "..."},
-						{text: "You defeated the zombie, with some difficulty... [-2 HP]", stat: { health: -2 }},
-						{function: function() {
-							setScript(ENCOUNTERS["next encounter"], true);
-						}},
-					], true);
-				}
-			}),
-			Option("[LUCK ROLL] Pray", function(){
-				let roll = Roll(stats.luck, 15);
+					if (roll.success) {
+						setScript([
+							{text: "STRENGTH ROLL: " + roll.text + "!"},
+							{text: "You successfully defeated the zombie with ease!"},
+							{finish: true}
+						], true);
+					}
+					else {
+						setScript([
+							{text: "STRENGTH ROLL: " + roll.text + "..."},
+							{text: "You defeated the zombie, with some difficulty... [-2 HP]", stat: { health: -2 }},
+							{finish: true}
+						], true);
+					}
+				}),
+				Option("[LUCK ROLL] Pray", function(){
+					let roll = Roll(stats.luck, 15);
 
-				if (roll.success) {
-					setScript([
-						{text: "LUCK ROLL: " + roll.text + "!"},
-						{text: "The zombie trips over and smashes its head on the floor!"},
-						{text: "You notice what it had tripped over... some sort of bracelet? [+ITEM: LUCKY BRACELET]", item: [ ITEMS["armor"]["Lucky Bracelet"] ]},
-						{function: function() {
-							setScript(ENCOUNTERS["next encounter"], true);
-						}},
-					], true);
-				}
-				else {
-					setScript([
-						{text: "LUCK ROLL: " + roll.text + "..."},
-						{text: "The zombie lunges at you dealing severe damage! [-7 HP]", stat: { health: -7 }},
-						{text: "As you recover, you swiftly stomp on it's head, finishing it off..."},
-						{function: function() {
-							setScript(ENCOUNTERS["next encounter"], true);
-						}},
-					], true);
-				}
-			}),
-			Option("[SPEED ROLL] Flee", function(){
-				let roll = Roll(stats.speed, 5);
+					if (roll.success) {
+						setScript([
+							{text: "LUCK ROLL: " + roll.text + "!"},
+							{text: "The zombie trips over and smashes its head on the floor!"},
+							{text: "You notice what it had tripped over... some sort of bracelet? [+ITEM: LUCKY BRACELET]", item: [ ITEMS["armor"]["Lucky Bracelet"] ]},
+							{finish: true}
+						], true);
+					}
+					else {
+						setScript([
+							{text: "LUCK ROLL: " + roll.text + "..."},
+							{text: "The zombie lunges at you dealing severe damage! [-7 HP]", stat: { health: -7 }},
+							{text: "As you recover, you swiftly stomp on it's head, finishing it off..."},
+							{finish: true}
+						], true);
+					}
+				}),
+				Option("[SPEED ROLL] Flee", function(){
+					let roll = Roll(stats.speed, 5);
 
-				if (roll.success) {
+					if (roll.success) {
+						setScript([
+							{text: "SPEED ROLL: " + roll.text + "!"},
+							{text: "You quickly sprint away, without even looking back."},
+							{finish: true}
+						], true);
+					}
+					else {
+						setScript([
+							{text: "SPEED ROLL: " + roll.text + "..."},
+							{text: "The zombie lunges at you! You dodge, but... what if you didn't? [-2 SANITY]", stat: { sanity: -2 }},
+							{text: "Before anything else can happen, you swiftly leave the room."},
+							{finish: true}
+						], true);
+					}
+				}),
+				Option("Accept your fate", function(){
 					setScript([
-						{text: "SPEED ROLL: " + roll.text + "!"},
-						{text: "You quickly sprint away, without even looking back."},
-						{function: function() {
-							setScript(ENCOUNTERS["next encounter"], true);
-						}},
+						{text: "You close your eyes and accept your fate..."},
+						{text: "The zombie forcefully opens one of your eyes and pulls it out! [-5 HP] [-5 SANITY] [+INJURY - MISSING EYE]", stat: { sanity: -5, health: -5 }, buff: [ BUFFS["Missing Eye"]]},
+						{text: "Satisifed with just your eye, the zombie walks away chewing on it..."},
+						{finish: true}
 					], true);
-				}
-				else {
-					setScript([
-						{text: "SPEED ROLL: " + roll.text + "..."},
-						{text: "The zombie lunges at you! You dodge, but... what if you didn't? [-2 SANITY]", stat: { sanity: -2 }},
-						{text: "Before anything else can happen, you swiftly leave the room."},
-						{function: function() {
-							setScript(ENCOUNTERS["next encounter"], true);
-						}},
-					], true);
-				}
-			}),
-			Option("Accept your fate", function(){
-				setScript([
-					{text: "You close your eyes and accept your fate..."},
-					{text: "The zombie forcefully opens one of your eyes and pulls it out! [-5 HP] [-5 SANITY] [+INJURY - MISSING EYE]", stat: { sanity: -5, health: -5 }, buff: [ BUFFS["Missing Eye"]]},
-					{text: "Satisifed with just your eye, the zombie walks away chewing on it..."},
-					{function: function() {
-						setScript(ENCOUNTERS["next encounter"], true);
-					}},
-				], true);
-			}),
-		]},
-
+				}),
+			]},
+		]
 	]
 }
