@@ -45,14 +45,15 @@ function Key(_name, _description) {
 // library
 const ITEMS = {
 	"weapon": {
-		"Stick": Weapon("Stick", "A suprisingly sturdy stick", { strength: 5 }),
-		"Kitchen Knife": Weapon("Kitchen Knife", "A dull knife found in a kitchen", { strength: 5 }),
-		"Gun": Weapon("Gun", "A blickey", { strength: 15 }),
+		"Stick": Weapon("Stick", "A suprisingly sturdy stick", { strength: 2 }),
+		"Kitchen Knife": Weapon("Kitchen Knife", "A dull knife found in a kitchen", { strength: 4 }),
+		"Glass Shiv": Weapon("Glass Shiv", "A large piece of glass wrapped with a part of your shirt", { strength: 5 }),
 	},
 
 	"armor": {
 		"Motorcycle Helmet": Armor("Motorcycle Helmet", "A cool, black, motorcycle helmet", { defense: 5, perception: -5 }),
 		"Lucky Bracelet": Armor("Lucky Bracelet", "A shiny gold bracelet decorated with some gems", { luck: 3 }),
+		"Coding Socks": Armor("Coding Socks", "A pair of thigh-high, black socks", { charisma: 2, luck: 1 }),
 	},
 
 	"consumable": {
@@ -61,6 +62,8 @@ const ITEMS = {
 
 	"key": {
 		"Keyboard": Key("Keyboard", "A board of keys"),
+		"Computer Part": Key("Computer Part", "A small CPU chip"),
+		"Apartment Key?": Key("Apartment Key?", "'002' is written on the key"),
 	},
 };
 

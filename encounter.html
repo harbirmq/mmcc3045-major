@@ -26,6 +26,9 @@
 			const text_area = $("#text-area");
 			const choice_buttons = [$("#choice1"), $("#choice2"), $("#choice3"), $("#choice4")];
 
+			const tooltip = $("#tooltip");
+			tooltip.hide();
+
 			InitTextEngine(text_area, choice_buttons);
 			InitEncounters(SetScript);
 
@@ -38,8 +41,6 @@
 
 			RefreshWindows();
 
-			const tooltip = $("#tooltip");
-			tooltip.hide();
 			$(document).on('mousemove', function(e){
 				tooltip.css('top', e.pageY);
 				tooltip.css('left', e.pageX);

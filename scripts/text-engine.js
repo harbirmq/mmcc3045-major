@@ -65,15 +65,33 @@ function RunScript(script) {
 				});
 			break;
 
+			case "removeitem":
+				value.forEach(element => {
+					RemoveItem(element);
+				});
+			break;
+
 			case "ally":
 				value.forEach(element => {
 					AddAlly(element);
 				});
 			break;
 
+			case "removeally":
+				value.forEach(element => {
+					RemoveAlly(element);
+				});
+			break;
+
 			case "buff":
 				value.forEach(element => {
 					AddBuff(element);
+				});
+			break;
+
+			case "removebuff":
+				value.forEach(element => {
+					RemoveBuff(element);
 				});
 			break;
 

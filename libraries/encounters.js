@@ -11,9 +11,13 @@ function InitEncounters(_setScript) {
 	setScript = _setScript;
 }
 
+function Random(num) {
+	return Math.floor(Math.random() * (num + 1));
+}
+
 // rolls a random number from 0[inclusive] --> required[inclusive].
 function Roll(stat, required) {
-	let roll = Math.floor(Math.random() * (stat + 1));
+	let roll = Random(stat);
 
 	let success = false;
 	if (roll >= required) { success = true; }
@@ -82,7 +86,7 @@ let ENCOUNTERS = {
 				}),
 				Option("Train your eyes", function() {
 					SaveData("location", "COMP BUILDING");
-					SaveData("encounter", 0);
+					SaveData("encounter", Random(ENCOUNTERS["COMP BUILDING"].length - 1));
 					window.location.replace("encounter.html");
 					/*
 					setScript([
@@ -100,8 +104,66 @@ let ENCOUNTERS = {
 			{text: "You quickly stuff the keyboard into your bag and leave the building. [+ITEM: KEYBOARD]", item: [ITEMS["key"]["Keyboard"]]},
 			{finish: true},
 		],
+		[
+			{text: "Sneaking through the building, you feel like that there's something that you could take right in front of your eyes..."},
+			{ function: function() {
+				if (stats.perception >= 7) {
+					setScript([
+						{text: "[PERCEPTION CHECK SUCCESS] You could use the glass shards on the floor as a weapon!"},
+						{text: "You rip a part of your shirt off, and wrap it around a large shard to form a makeshift shiv. [+ITEM: GLASS SHIV]", item: [ITEMS["weapon"]["Glass Shiv"]]},
+						{finish: true}
+					], true);
+				}
+				else {
+					setScript([
+						{text: "[PERCEPTION CHECK FAILED] 'Eh, it's probably nothing' you think to yourself..."},
+						{text: "You decide to head back to base empty-handed."},
+						{finish: true}
+					], true);
+				}
+			}}
+		],
+		[
+			{text: "While scavenging one of the computer rooms, you notice one of the monitors are on!"},
+			{text: "Upon further inspection, a chatroom window is open... The chatroom contains one message simply reading 'hello?'.", options:[
+				Option("Scavenge Computer Part", function() {
+					setScript([
+						{text: "You ignore the chatroom and carefully extract some parts from the computer..."},
+						{text: "'What if they needed help?' you think to yourself... [+ITEM: COMPUTER PARTS] [-1 SANITY]", item: [ITEMS["key"]["Computer Part"]], stat: { sanity: -1 }},
+						{finish: true}
+					], true);
+				}),
+				Option("[REQUIRE KEYBOARD] Reply", function() {
+					if (!HasItem(ITEMS["key"]["Keyboard"])) { return; }
 
-
+					setScript([
+						{text: "You plug in your keyboard, and reply with 'hi? where are you?'."},
+						{text: "For convience sake, you leave the keyboard plugged in. Awaiting a reponse fills you with hope. [-ITEM: COMPUTER PARTS] [+2 SANITY]", stat: { sanity: 2 }, removeitem: [ ITEMS["key"]["Keyboard"] ]},
+						{finish: true}
+					], true);
+				}),
+				Option("", function() {
+				}),
+				Option("Leave", function() {
+					setScript([
+						{text: "You ignore the chatroom and leave the building."},
+						{text: "'What if they needed help?' you think to yourself... [-1 SANITY]", stat: { sanity: -1 }},
+						{finish: true}
+					], true);
+				}),
+			]},
+		],
+		[
+			{text: "Looking through the bags on the lower floor, you find a key! [+ITEM: APARTMENT KEY?]", item: [ ITEMS["key"]["Apartment Key?"] ]},
+			{text: "The key reads '002'. Maybe it's a key to an apartment?"},
+			{text: "You add it to your keychain and leave the building." },
+			{finish: true}
+		],
+		[
+			{text: "Sneaking past a zombie, you notice a pair of coding socks on the floor."},
+			{text: "You decide to take it, doubling up on socks can't hurt... right? [+ITEM: CODING SOCKS]", item: [ ITEMS["armor"]["Coding Socks"]]},
+			{finish: true}
+		],
 	],
 
 
