@@ -29,6 +29,16 @@
 			const tooltip = $("#tooltip");
 			tooltip.hide();
 
+			$(".scrolling-window").on({
+				mouseenter: function() {
+					tooltip.show();
+				},
+				mouseleave: function() {
+					tooltip.hide();
+					tooltip.html("");
+				}
+			});
+
 			InitTextEngine(text_area, choice_buttons);
 			InitEncounters(SetScript);
 

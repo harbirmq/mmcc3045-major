@@ -110,6 +110,8 @@ function RefreshWindows() {
 
 	$(".scrolling-window").empty();
 
+	const tooltip = $("#tooltip");
+
 	// update items
 	items.forEach(element => {
 		itemString = "";
@@ -121,14 +123,10 @@ function RefreshWindows() {
 		}
 
 		const id = "item" + uniqId();
-		const tooltip = $("#tooltip");
 
 		$("#items-window").append("<div class='item' id='" + id + "'><h3 class=item-name>" + element.name +"</h3><div class='item-stats'>" + itemString + "</div></div>");
 		$("#" + id).on( "mouseenter", function (){
-			tooltip.show();
 			tooltip.html("[" + element.type.toUpperCase() + "] " + ITEMS[element.type][element.name].description);
-		}).on( "mouseleave", function (){
-			tooltip.hide();
 		});
 
 	});
@@ -144,14 +142,10 @@ function RefreshWindows() {
 		}
 
 		const id = "item" + uniqId();
-		const tooltip = $("#tooltip");
 
 		$("#allies-window").append("<div class='item' id='" + id + "'><h3 class=item-name>" + element.name +"</h3><div class='item-stats'>" + allyString + "</div></div>");
 		$("#" + id).on( "mouseenter", function (){
-			tooltip.show();
 			tooltip.html(ALLIES[element.name].description);
-		}).on( "mouseleave", function (){
-			tooltip.hide();
 		});
 	});
 
@@ -166,14 +160,10 @@ function RefreshWindows() {
 		}
 
 		const id = "item" + uniqId();
-		const tooltip = $("#tooltip");
 
 		$("#allies-window").append("<div class='item' id='" + id + "'><h3 class=item-name>" + element.name +"</h3><div class='item-stats'>" + buffString + "</div></div>");
 		$("#" + id).on( "mouseenter", function (){
-			tooltip.show();
 			tooltip.html(BUFFS[element.name].description);
-		}).on( "mouseleave", function (){
-			tooltip.hide();
 		});
 	});
 }
