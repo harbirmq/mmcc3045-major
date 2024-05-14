@@ -160,6 +160,9 @@ function RefreshWindows() {
 		$("#allies-window").append("<div class='item' id='" + id + "'><h3 class=item-name>" + element.name +"</h3><div class='item-stats'>" + allyString + "</div></div>");
 		$("#" + id).on( "mouseenter", function (){
 			tooltip.html(ALLIES[element.name].description);
+			tooltip.append("<img class='portrait' src='images/actors/" + element.name + ".png'>");
+		}).on( "mouseleave", function() {
+			tooltip.remove("img");
 		});
 	});
 

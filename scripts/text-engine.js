@@ -71,6 +71,19 @@ function RunScript(script) {
 				});
 			break;
 
+			case "actor":
+				$(".actor").attr("src","images/actors/" + value + ".png");
+			break;
+
+			case "zombie":
+				if (!value) {
+					$(".actor").attr("src","images/actors/zombie_" + Random(11) + ".png");
+				}
+				else {
+					$(".actor").attr("src","images/actors/zombie_" + value + ".png");
+				}
+			break;
+
 			case "removeitem":
 				value.forEach(element => {
 					RemoveItem(element);

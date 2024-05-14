@@ -37,7 +37,7 @@ function Roll(stat, required) {
 	COMP BUILDING, CENTRAL COURTYARD, LECTURE HALL, LAW BUILDING, MACQUARIE LAKE, APARTMENTS
 
 	modifiers:
-	text, item, ally, buff, options, function, stat, background
+	text, item, ally, buff, options, function, stat, background, actor, zombie
 */
 
 // encounters
@@ -86,7 +86,7 @@ let ENCOUNTERS = {
 				}),
 				Option("Train your eyes", function() {
 					setScript([
-						{text: "You train your eyes by tracking a fly as it zips around the room. [+2 PERCEPTION] [-1 SANITY]", stat: { perception: 2, sanity: -1 }}
+						{text: "You train your eyes by tracking a fly as it zips around the room. [+2 PERCEPTION] [-1 SANITY]", stat: { perception: 2, sanity: -1 }, ally: [ALLIES["Vanessa"], ALLIES["Kaitlyn"], ALLIES["Lance"], ALLIES["Lily"], ALLIES["Alvin"], ALLIES["Linus"], ALLIES["Trevor"], ALLIES["Wendy"]]}
 					], true);
 				}),
 			]}
@@ -173,7 +173,7 @@ let ENCOUNTERS = {
 					if (stats.speed >= 7) {
 						setScript([
 							{text: "[SPEED CHECK SUCCESS] You succesfully distract the zombies by yelling, then evading them."},
-							{text:"The girl thanks you and asks to join your team. [+ALLY: VANESSA]", ally: [ALLIES["Vanessa"]]},
+							{text:"The girl thanks you and asks to join your team. [+ALLY: VANESSA]", ally: [ALLIES["Vanessa"]], actor: "Vanessa"},
 							{finish: true}
 						], true);
 					}
@@ -218,7 +218,7 @@ let ENCOUNTERS = {
 						setScript([
 							{text: "LUCK ROLL: " + roll.text + "..."},
 							{text: "You watch the girl swiftly take out the zombies with ease."},
-							{text: "She glares at you as she wipes blood off her face."},
+							{text: "She glares at you as she wipes blood off her face.", actor: "Vanessa"},
 							{text: "'She saw me...' [-2 SANITY]", stat: {sanity: -2}},
 							{finish: true}
 						], true);
@@ -238,7 +238,7 @@ let ENCOUNTERS = {
 	"LAW BUILDING": [
 		[
 			{text: "As you walk through a classroom you notice a groaning sound..."},
-			{text: "A zombie attacks you from behind!", options: [
+			{text: "A zombie attacks you from behind!", zombie: false, options: [
 				Option("[STRENGTH ROLL] Attack", function(){
 					let roll = Roll(stats.strength, 10);
 

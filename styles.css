@@ -24,6 +24,10 @@ body {
 	position: absolute;
 }
 
+.actor {
+	position: absolute;
+}
+
 #fade {
 	position: absolute;
 
@@ -167,6 +171,15 @@ body {
 	margin: 0px;
 
 	text-align: right;
+}
+
+.portrait {
+	border: solid 1px white;
+	background-color: rgb(42, 42, 42);
+
+	display: block;
+
+	height: 200px;
 }
 
 #tooltip {
