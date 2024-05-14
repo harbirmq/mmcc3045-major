@@ -27,11 +27,7 @@ function SetScript(script, run) {
 }
 
 function WriteText(text) {
-	text_area.html(text).typewrite({
-		"callback": function() {
-			active = false;
-		}
-	});
+	text_area.html(text).typewrite();
 }
 
 function EnableButton(button, option) {
@@ -154,7 +150,6 @@ function RunScript(script) {
             'extra_char': '_',
             'delay':    25,
             'trim':     false,
-            'callback': null,
         };
         if (options) $.extend(settings, options);
 
@@ -176,7 +171,7 @@ function RunScript(script) {
                     if (++index < settings.selector.length) {
                         type_next_element(index);
                     }
-                    else if (settings.callback) settings.callback();
+                    else { active = false; }
                 }
             }
             type_next_character(current_element, 0);
