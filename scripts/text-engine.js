@@ -68,10 +68,12 @@ function RunScript(script) {
 			break;
 
 			case "actor":
+				$(".actor").fadeIn(200);
 				$(".actor").attr("src","images/actors/" + value + ".png");
 			break;
 
 			case "zombie":
+				$(".actor").fadeIn(200);
 				if (!value) {
 					$(".actor").attr("src","images/actors/zombie_" + Random(11) + ".png");
 				}

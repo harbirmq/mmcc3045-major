@@ -53,6 +53,8 @@
 
 			setScript(ENCOUNTERS["meta"]["map screen"], true);
 
+			$(".actor").hide();
+
 			if (!flags.unlocked_apartments) { $("#map-apartments").hide(); }
 			if (!flags.unlocked_lake) { $("#map-lake").hide(); }
 
