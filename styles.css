@@ -177,9 +177,16 @@ body {
 	border: solid 1px white;
 	background-color: rgb(42, 42, 42);
 
+	object-position: center;
+	object-fit: cover;
+
+	margin-left: auto;
+	margin-top: 2px;
+
 	display: block;
 
-	height: 200px;
+	height: 150px;
+	width: 99.5%;
 }
 
 #tooltip {
