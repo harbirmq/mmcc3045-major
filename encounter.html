@@ -29,16 +29,6 @@
 			const tooltip = $("#tooltip");
 			tooltip.hide();
 
-			$(".scrolling-window").on({
-				mouseenter: function() {
-					tooltip.show();
-				},
-				mouseleave: function() {
-					tooltip.hide();
-					tooltip.html("");
-				}
-			});
-
 			$(document).on('mousemove', function(e){
 				tooltip.css('top', e.pageY + 8);
 				tooltip.css('left', e.pageX + 8);

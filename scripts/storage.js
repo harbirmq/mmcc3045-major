@@ -143,6 +143,16 @@ function RefreshWindows() {
 			tooltip.html("[" + element.type.toUpperCase() + "] " + ITEMS[element.type][element.name].description);
 		});
 
+		$("#" + id).on({
+			mouseenter: function() {
+				tooltip.show();
+				tooltip.html("[" + element.type.toUpperCase() + "] " + ITEMS[element.type][element.name].description);
+			},
+			mouseleave: function() {
+				tooltip.hide();
+				tooltip.html("");
+			}
+		});
 	});
 
 	// update allies
@@ -158,11 +168,16 @@ function RefreshWindows() {
 		const id = "item" + uniqId();
 
 		$("#allies-window").append("<div class='item' id='" + id + "'><h3 class=item-name>" + element.name +"</h3><div class='item-stats'>" + allyString + "</div></div>");
-		$("#" + id).on( "mouseenter", function (){
-			tooltip.html(ALLIES[element.name].description);
-			tooltip.append("<img class='portrait' src='images/actors/" + element.name + ".png'>");
-		}).on( "mouseleave", function() {
-			tooltip.remove("img");
+		$("#" + id).on({
+			mouseenter: function() {
+				tooltip.show();
+				tooltip.html(ALLIES[element.name].description);
+				tooltip.append("<img class='portrait' src='images/actors/" + element.name + ".png'>");
+			},
+			mouseleave: function() {
+				tooltip.hide();
+				tooltip.html("");
+			}
 		});
 	});
 
@@ -181,6 +196,17 @@ function RefreshWindows() {
 		$("#allies-window").append("<div class='item' id='" + id + "'><h3 class=item-name>" + element.name +"</h3><div class='item-stats'>" + buffString + "</div></div>");
 		$("#" + id).on( "mouseenter", function (){
 			tooltip.html(BUFFS[element.name].description);
+		});
+
+		$("#" + id).on({
+			mouseenter: function() {
+				tooltip.show();
+				tooltip.html(BUFFS[element.name].description);
+			},
+			mouseleave: function() {
+				tooltip.hide();
+				tooltip.html("");
+			}
 		});
 	});
 }
