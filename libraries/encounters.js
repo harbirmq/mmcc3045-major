@@ -162,6 +162,7 @@ const ENCOUNTERS = {
 						{text: "You plug in your keyboard, and reply with 'hi? where are you?'."},
 						{text: "For convienience sake, you leave the keyboard plugged in. Awaiting a reponse fills you with hope. [-ITEM: KEYBOARD] [+2 SANITY]", stat: { sanity: 2 }, removeitem: [ ITEMS["key"]["Keyboard"] ]},
 						{finish: true, removeencounter: ["COMP BUILDING", "E2"], function: function() {
+							SetObjective("await_response", true);
 							AddEncounter("COMP BUILDING", "S0");
 						}}
 					], true);
@@ -203,6 +204,8 @@ const ENCOUNTERS = {
 			{text: "Did a zombie type this?"},
 			{text: "You simply reply with 'got it, i'll try and find it'."},
 			{finish: true, removeencounter: ["COMP BUILDING", "S0"], function: function() {
+				SetObjective("await_response", false);
+				SetObjective("find_apartment_key", true);
 				AddEncounter("COMP BUILDING", "S1");
 			}}
 		],
@@ -213,6 +216,8 @@ const ENCOUNTERS = {
 			{text: "You look through all the pockets and find a key! [+ITEM: APARTMENT MASTER KEY]", item: [ITEMS["key"]["Apartment Master Key"]]},
 			{text: "You add it to your keychain and leave the building. [NEW LOCATION: APARTMENTS]"},
 			{finish: true, removeencounter: ["COMP BUILDING", "S1"], function: function() {
+				SetObjective("find_apartment_key", false);
+				SetObjective("apartment_002", true);
 				SetFlag("unlocked_apartments", true);
 			}}
 		],
@@ -393,8 +398,89 @@ const ENCOUNTERS = {
 			{text: "..."},
 			{text: "'okay...' he quietly responds"},
 			{text: "[+ALLY: LINUS]", ally: [ALLIES["Linus"]]},
-			{finish: true, removeencounter: ["APARTMENTS", "E0"]}
+			{finish: true, removeencounter: ["APARTMENTS", "E0"], function() {
+				SetObjective("apartment_002", false);
+			}}
 		]
+	},
+
+	"LECTURE HALL": {
+		"E0": [
+			{text: "As you walk past a janitor's closet you notice a ruffling sound coming from inside.", options: [
+				Option("Investigate", function (){
+					setScript([
+						{text: "Preparing for the worst, you put your hand on the handle and slowly twist it open..."},
+						{text: "'STOP!' - a voice from inside the closet firmly exclaims."},
+						{text: "A girl is inside of this closet.."},
+						{text: "'Do you need he-' 'GO AWAY' she yells"},
+						{text: "'Quiet down, the zombies will hear us...' you try and reason"},
+						{text: "'Leave. Now. Or I'll scream...' the girl responds", function: function() {
+							if (HasAlly(ALLIES["Vanessa"])) {
+								setScript([
+									{text: "'Wendy... chill out please...' Vanessa says", actor: "Vanessa"},
+									{text: "'V-Vanessa? Are you really there?' The girl asks"},
+									{text: "'Yes Wendy... It's safe. Come out.' Vanessa firmly states"},
+									{text: "The door opens slowly..."},
+									{text: "A shy looking girl walks out.", actor: "Wendy"},
+									{text: "'Y-you could've just said you were here...' Wendy quietly exclaims"},
+									{text: "[+ALLY: WENDY]", ally: [ALLIES["Wendy"]]},
+									{finish: true, removeencounter: ["LECTURE HALL", "E0"]}
+								]);
+							}
+						}},
+						{text: "..."},
+						{text: "She seems serious... what should I do?", options: [
+							Option("[CHARISMA CHECK] Reason with her", function(){
+								if (stats.charisma >= 10) {
+									setScript([
+										{text: "[CHARISMA CHECK SUCCESS] 'Look, It's safe out here right now, but it might not be later.' you calmly speak"},
+										{text: "'We've got plenty of supplies... you'll be safe with us.'"},
+										{text: "'-nessa.' she quietly responds."},
+										{text: "'Huh?' you ask."},
+										{text: "'Is Vanessa with you?' she asks."},
+										{text: "'Uh.. Yes! She is... She's back at our base...' you quickly respond."},
+										{text: "'Come with me I'll take you to her.' you insist."},
+										{text: "'I don't believe you! Bring her here' she conflicts."},
+										{text: "'Okay. I'll go get her.' you say"},
+										{text: "Okay... I need to go find a Vanessa... If she's even still alive."},
+										{finish: true, removeencounter: ["LECTURE HALL", "E0"], function: function() {
+											SetObjective("find_vanessa", true);
+											AddEncounter("LECTURE HALL", "S0");
+										}},
+									], true);
+								}
+								else {
+									
+								}
+							}),
+							Option("", function(){}),
+							Option("", function(){}),
+							Option("Give Up", function(){
+								setScript([
+									{text: "'Her loss' you think to yourself..."},
+									{finish: true, removeencounter: ["LECTURE HALL", "E0"], function: function() {
+										AddEncounter("LECTURE HALL", "S0");
+									}},
+								], true);
+							}),
+						]},
+						{finish: true}
+					], true);
+				}),
+				Option("", function(){}),
+				Option("", function(){}),
+				Option("Leave", function(){
+					setScript([
+						{text: "Not wanting to risk any conflict, you decide to leave without checking the closet."},
+						{finish: true}
+					], true);
+				}),
+			]},
+		],
+
+		"S0": [
+
+		],
 	}
 }
 

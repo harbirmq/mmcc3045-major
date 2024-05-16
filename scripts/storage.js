@@ -22,6 +22,16 @@ let flags = {
 	rested: false,
 }
 
+let objectives = {
+	// UNLOCK LINUS
+	await_response: false,
+	find_apartment_key: false,
+	apartment_002: false,
+
+	// UNLOCK WENDY
+	find_vanessa: false,
+}
+
 // data functions
 function SaveData(name, data, intro = false) {
 	if (!intro) { RefreshWindows(); }
@@ -48,6 +58,9 @@ if (stats_value != null) { stats = stats_value; }
 
 let flags_value = ReadData("flags");
 if (flags_value != null) { flags = flags_value; }
+
+let objectives_value = ReadData("objectives");
+if (objectives_value != null) { objectives = objectives_value; }
 
 // functions
 function AddGeneric(genericID, genericArray, genericType) {
@@ -100,6 +113,12 @@ function SetFlag(id, value) {
 	flags[id] = value;
 
 	SaveData("flags", flags);
+}
+
+function SetObjective(id, value) {
+	objectives[id] = value;
+
+	SaveData("objectives", objectives);
 }
 
 // id generator
@@ -211,4 +230,24 @@ function RefreshWindows() {
 			}
 		});
 	});
+
+	// update objectives
+	const objective_list = $("#objectives-list");
+	objective_list.empty();
+
+	for (const [key, value] of Object.entries(objectives)) {
+		if (!value) { continue; }
+
+		let string = "";
+
+		switch(key) {
+			case "await_response": string = "Check if you got a reply from the chatroom at the COMP BUILDING"; break;
+			case "find_apartment_key": string = "Look for an apartment master key in the COMP BUILDING"; break;
+			case "apartment_002": string = "Head to the APARTMENTS and meet with the person at room 002"; break;
+
+			case "find_vanessa": string = "Find someone named 'Vanessa' then return to the LECTURE HALL"; break;
+		}
+
+		objective_list.append("<li>" + string + "</li>");
+	}
 }
