@@ -18,6 +18,8 @@ let stats = { // default stats
 let flags = {
 	unlocked_apartments: false,
 	unlocked_lake: false,
+
+	rested: false,
 }
 
 // data functions

@@ -77,25 +77,29 @@ let ENCOUNTERS = {
 					setScript([
 						{text: "You took a well-deserved nap and composed yourself. [+5 HP] [+5 SANITY]", stat: { health: 5, sanity: 5 }}
 					], true);
+
+					flags.rested = true;
 				}),
 				Option("Jog on the spot", function() {
 					setScript([
 						{text: "You jogged on the spot. Your feel a little tired, but it was probably worth it. [+1 SPEED] [-1 DEFENSE]", stat: { speed: 1, defense: -1 }}
 					], true);
+
+					flags.rested = true;
 				}),
 				Option("Talk into the mirror", function() {
 					setScript([
 						{text: "You talk to yourself in the mirror... 'Am I going crazy..?' [+2 CHARISMA] [-1 SANITY]", stat: { charisma: 2, sanity: -1 }}
 					], true);
+
+					flags.rested = true;
 				}),
 				Option("Train your eyes", function() {
 					setScript([
-						{text: "You train your eyes by tracking a fly as it zips around the room. [+2 PERCEPTION] [-1 SANITY]", stat: { perception: 2, sanity: -1 }, function: function() {
-							for (const [_, ally] of Object.entries(ALLIES)) {
-								AddAlly(ally);
-							  }
-						}}
+						{text: "You train your eyes by tracking a fly as it zips around the room. [+2 PERCEPTION] [-1 SANITY]", stat: { perception: 2, sanity: -1 }}
 					], true);
+
+					flags.rested = true;
 				}),
 			]}
 		],
