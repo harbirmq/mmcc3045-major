@@ -45,6 +45,14 @@ function RemoveEncounter(location, code) {
 	SaveData("active_encounters", ACTIVE_ENCOUNTERS);
 }
 
+function FlagIncrementor(id, threshold, location, code) {
+	if (flags[id] == null) { flags[id] = 0; }
+
+	SetFlag(id, flags[id] + 1);
+
+	if (flags[id] >= threshold) { RemoveEncounter(location, code); }
+}
+
 /*
 	LOCATIONS:
 	COMP BUILDING, CENTRAL COURTYARD, LECTURE HALL, LAW BUILDING,
@@ -188,9 +196,7 @@ const ENCOUNTERS = {
 			{text: "You attempt to connect to the internet on one of the only computers that appear to be working..."},
 			{text: "UPDATING..."},
 			{text: "Maybe if I come back later?", function() {
-				SetFlag("comp_e4", flags.comp_e4 + 1);
-
-				if (flags.comp_e4 >= 3) { RemoveEncounter("COMP BUILDING", "E4"); }
+				FlagIncrementor("comp_e4", 3, "COMP BUILDING", "E4");
 			}},
 			{finish: true}
 		],
@@ -377,6 +383,14 @@ const ENCOUNTERS = {
 					], true);
 				}),
 			]},
+		],
+
+		"E1": [
+			{text: "Skimming through one of the classrooms, you notice tally marks scratched onto the wall."},
+			{text: "The numbers look to only go up to seven... The thought of people not even surviving past a week fills you with dread. [-2 SANITY]", stat: { sanity: -2 }, function() {
+				FlagIncrementor("law_e1", 3, "LAW BUILDING", "E1");
+			}},
+			{finish: true}
 		]
 	},
 

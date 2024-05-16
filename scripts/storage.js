@@ -19,8 +19,6 @@ let flags = {
 	unlocked_apartments: false,
 	unlocked_lake: false,
 
-	comp_e4: 0,
-
 	rested: false,
 }
 
