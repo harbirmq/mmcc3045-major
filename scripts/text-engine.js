@@ -149,6 +149,16 @@ function RunScript(script) {
 			case "background":
 				$(".background").attr("src","images/backgrounds/" + value + ".png");
 			break;
+
+			case "removeencounter":
+				const location = value[0];
+				const index = ACTIVE_ENCOUNTERS[location].indexOf(value[1]);
+
+				if (index == -1) { console.log("Error removing encounter"); break; }
+
+				ACTIVE_ENCOUNTERS[location].splice(index, 1);
+				SaveData("active_encounters", ACTIVE_ENCOUNTERS);
+			break;
 		}
 	}
 

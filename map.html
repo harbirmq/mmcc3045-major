@@ -41,7 +41,7 @@
 
 			RefreshWindows();
 
-			setScript(ENCOUNTERS["meta"]["map screen"], true);
+			setScript(ENCOUNTERS["meta"]["S0"], true);
 
 			$(".actor").hide();
 
@@ -53,7 +53,7 @@
 			$(".map-button").on("click", function() {
 				let location = $(this).data("location");
 
-				if (ENCOUNTERS[location] == null || ENCOUNTERS[location].length == 0) {
+				if (ACTIVE_ENCOUNTERS[location] == null || ACTIVE_ENCOUNTERS[location].length == 0) {
 
 					if (flags.rested) {
 						setScript([
@@ -98,7 +98,7 @@
 				}
 
 				SaveData("location", location);
-				SaveData("encounter", Random(ENCOUNTERS[location].length - 1));
+				SaveData("encounter", ACTIVE_ENCOUNTERS[location][Random(ACTIVE_ENCOUNTERS[location].length - 1)]);
 				window.location.replace("encounter.html");
 			});
 		});

@@ -31,9 +31,6 @@ function Roll(stat, required) {
 }
 
 /*
-	locations:
-	COMP BUILDING, CENTRAL COURTYARD, LECTURE HALL, LAW BUILDING, MACQUARIE LAKE, APARTMENTS
-
 	modifiers:
 	text, options,
 
@@ -41,14 +38,28 @@ function Roll(stat, required) {
 
 	item, removeitem, ally, removeally, buff, removebuff
 
-	function
+	removeencounter, function
 */
 
-// encounters
-let ENCOUNTERS = {
+/*
+	encounters prefixed with 'E' are regular encounters that should be added when a new game is made
+	
+	encounters prefixed with 'S' are special encounters that should not be added when a new game is made
+*/
 
+const LOCATIONS = [
+	"COMP BUILDING",
+	"CENTRAL COURTYARD",
+	"LECTURE HALL",
+	"LAW BUILDING",
+	"MACQUARIE LAKE",
+	"APARTMENTS"
+]
+
+// encounters
+const ENCOUNTERS = {
 	"meta": {
-		"intro sequence": [
+		"E0": [
 			{text: '"Last day, huh?", I thought to myself...'},
 			{text: "I lugged myself out of the metro and walked slowly to my class..."},
 			{text: "I took in the sounds of people walking, the birds chirping, the trees rustling...",},
@@ -71,7 +82,7 @@ let ENCOUNTERS = {
 			}},
 		],
 
-		"map screen": [
+		"S0": [
 			{text: "Where should we go next?", options: [
 				Option("Rest", function() {
 					setScript([
@@ -105,21 +116,21 @@ let ENCOUNTERS = {
 		],
 	},
 
-	"COMP BUILDING": [
-		[
+	"COMP BUILDING": {
+		"E0": [
 			{text: "Entering a classroom on the upper floor, you notice that all the keyboards are missing... All except one..."},
 			{text: "As you contemplate taking it, a loud *BANG* could be heard outside."},
 			{text: "You quickly stuff the keyboard into your bag and leave the building. [+ITEM: KEYBOARD]", item: [ITEMS["key"]["Keyboard"]]},
-			{finish: true},
+			{finish: true, removeencounter: ["COMP BUILDING", "E0"]},
 		],
-		[
+		"E1": [
 			{text: "Sneaking through the building, you feel like that there's something that you could take right in front of your eyes...",
 			function: function() {
 				if (stats.perception >= 7) {
 					setScript([
 						{text: "[PERCEPTION CHECK SUCCESS] You could use the glass shards on the floor as a weapon!"},
 						{text: "You rip a part of your shirt off, and wrap it around a large shard to form a makeshift shiv. [+ITEM: GLASS SHIV]", item: [ITEMS["weapon"]["Glass Shiv"]]},
-						{finish: true}
+						{finish: true, removeencounter: ["COMP BUILDING", "E1"]}
 					]);
 				}
 				else {
@@ -131,14 +142,14 @@ let ENCOUNTERS = {
 				}
 			}}
 		],
-		[
+		"E2": [
 			{text: "While scavenging one of the computer rooms, you notice one of the monitors are on!"},
 			{text: "Upon further inspection, a chatroom window is open... The chatroom contains one message simply reading 'hello?'.", options:[
 				Option("Scavenge Computer Part", function() {
 					setScript([
 						{text: "You ignore the chatroom and carefully extract some parts from the computer..."},
 						{text: "'What if they needed help?' you think to yourself... [+ITEM: COMPUTER PARTS] [-1 SANITY]", item: [ITEMS["key"]["Computer Part"]], stat: { sanity: -1 }},
-						{finish: true}
+						{finish: true, removeencounter: ["COMP BUILDING", "E2"]}
 					], true);
 				}),
 				Option("[REQUIRES KEYBOARD] Reply", function() {
@@ -147,7 +158,7 @@ let ENCOUNTERS = {
 					setScript([
 						{text: "You plug in your keyboard, and reply with 'hi? where are you?'."},
 						{text: "For convience sake, you leave the keyboard plugged in. Awaiting a reponse fills you with hope. [-ITEM: COMPUTER PARTS] [+2 SANITY]", stat: { sanity: 2 }, removeitem: [ ITEMS["key"]["Keyboard"] ]},
-						{finish: true}
+						{finish: true, removeencounter: ["COMP BUILDING", "E2"]}
 					], true);
 				}),
 				Option("", function() {
@@ -161,23 +172,23 @@ let ENCOUNTERS = {
 				}),
 			]},
 		],
-		[
+		"E3": [
 			{text: "Looking through the bags on the lower floor, you find a key! [+ITEM: APARTMENT KEY?]", item: [ ITEMS["key"]["Apartment Key?"] ]},
 			{text: "The key reads '002'. Maybe it's a key to an apartment?"},
 			{text: "You add it to your keychain and leave the building. [NEW LOCATION: APARTMENTS]" },
-			{finish: true, function: function(){
+			{finish: true, removeencounter: ["COMP BUILDING", "E3"],  function: function(){
 				SetFlag("unlocked_apartments", true);
 			}}
 		],
-		[
+		"E4": [
 			{text: "Sneaking past a zombie, you notice a pair of coding socks on the floor."},
 			{text: "You decide to take it, doubling up on socks can't hurt... right? [+ITEM: CODING SOCKS]", item: [ ITEMS["armor"]["Coding Socks"]]},
-			{finish: true}
+			{finish: true, removeencounter: ["COMP BUILDING", "E4"]}
 		],
-	],
+	},
 
-	"CENTRAL COURTYARD": [
-		[
+	"CENTRAL COURTYARD": {
+		"E0": [
 			{text: "Walking through Central Courtyard, you notice a scream!"},
 			{text: "You duck behind some cover and peek out."},
 			{text: "You notice a pair of zombies attacking a fairly armored girl!", options: [
@@ -186,7 +197,7 @@ let ENCOUNTERS = {
 						setScript([
 							{text: "[SPEED CHECK SUCCESS] You succesfully distract the zombies by yelling, then evading them."},
 							{text:"The girl thanks you and asks to join your team. [+ALLY: VANESSA]", ally: [ALLIES["Vanessa"]], actor: "Vanessa"},
-							{finish: true}
+							{finish: true, removeencounter: ["CENTRAL COURTYARD", "E0"]}
 						], true);
 					}
 					else {
@@ -199,7 +210,7 @@ let ENCOUNTERS = {
 									setScript([
 										{text: "STRENGTH ROLL: " + roll.text + "!"},
 										{text: "You successfully defeated the zombies, but looking up you notice the girl is nowhere to be seen. [-1 SANITY]", stat: {sanity: -1}},
-										{finish: true}
+										{finish: true, removeencounter: ["CENTRAL COURTYARD", "E0"]}
 									]);
 								}
 								else {
@@ -207,7 +218,7 @@ let ENCOUNTERS = {
 										{text: "STRENGTH ROLL: " + roll.text + "..."},
 										{text: "You barely manage to defeat the zombies..."},
 										{text: "Too scared to look up, you hastily leave the scene. [-2 HP] [+INJURY: DEEP SCRATCH]", stat: {hp: -2}, buff: [BUFFS["Deep Scratch"]] },
-										{finish: true}
+										{finish: true, removeencounter: ["CENTRAL COURTYARD", "E0"]}
 									]);
 								}
 							}}
@@ -223,7 +234,7 @@ let ENCOUNTERS = {
 							{text:"You watch the girl fight for her life."},
 							{text:"At a crucial moment, she slips and is promptly killed by the zombies. Shortly after, the zombies move on to find their next target..."},
 							{text:"You sneak up and loot her corpse... was it worth it? [+ITEM: MOTORCYCLE HELMET] [-3 SANITY]", stat: {sanity: -1}, item: [ ITEMS["armor"]["Motorcycle Helmet"]]},
-							{finish: true}
+							{finish: true, removeencounter: ["CENTRAL COURTYARD", "E0"]}
 						], true);
 					}
 					else {
@@ -232,7 +243,7 @@ let ENCOUNTERS = {
 							{text: "You watch the girl swiftly take out the zombies with ease."},
 							{text: "She glares at you as she wipes blood off her face.", actor: "Vanessa"},
 							{text: "'She saw me...' [-2 SANITY]", stat: {sanity: -2}},
-							{finish: true}
+							{finish: true, removeencounter: ["CENTRAL COURTYARD", "E0"]}
 						], true);
 					}
 				}),
@@ -240,15 +251,15 @@ let ENCOUNTERS = {
 				Option("Do Nothing", function(){
 					setScript([
 						{text:"You decide to sneak away, leaving the poor girl alone [-1 SANITY]", stat: {sanity: -1}},
-						{finish: true},
+						{finish: true, removeencounter: ["CENTRAL COURTYARD", "E0"]},
 					], true);
 				}),
 			]},
 		]
-	],
+	},
 
-	"LAW BUILDING": [
-		[
+	"LAW BUILDING": {
+		"E0": [
 			{text: "As you walk through a classroom you notice a groaning sound..."},
 			{text: "A zombie attacks you from behind!", zombie: false, options: [
 				Option("[STRENGTH ROLL] Attack", function(){
@@ -258,14 +269,14 @@ let ENCOUNTERS = {
 						setScript([
 							{text: "STRENGTH ROLL: " + roll.text + "!"},
 							{text: "You successfully defeated the zombie with ease!"},
-							{finish: true}
+							{finish: true, removeencounter: ["LAW BUILDING", "E0"]}
 						], true);
 					}
 					else {
 						setScript([
 							{text: "STRENGTH ROLL: " + roll.text + "..."},
 							{text: "You defeated the zombie, with some difficulty... [-2 HP]", stat: { health: -2 }},
-							{finish: true}
+							{finish: true, removeencounter: ["LAW BUILDING", "E0"]}
 						], true);
 					}
 				}),
@@ -277,7 +288,7 @@ let ENCOUNTERS = {
 							{text: "LUCK ROLL: " + roll.text + "!"},
 							{text: "The zombie trips over and smashes its head on the floor!"},
 							{text: "You notice what it had tripped over... some sort of bracelet? [+ITEM: LUCKY BRACELET]", item: [ ITEMS["armor"]["Lucky Bracelet"] ]},
-							{finish: true}
+							{finish: true, removeencounter: ["LAW BUILDING", "E0"]}
 						], true);
 					}
 					else {
@@ -285,7 +296,7 @@ let ENCOUNTERS = {
 							{text: "LUCK ROLL: " + roll.text + "..."},
 							{text: "The zombie lunges at you dealing severe damage! [-7 HP]", stat: { health: -7 }},
 							{text: "As you recover, you swiftly stomp on it's head, finishing it off..."},
-							{finish: true}
+							{finish: true, removeencounter: ["LAW BUILDING", "E0"]}
 						], true);
 					}
 				}),
@@ -296,7 +307,7 @@ let ENCOUNTERS = {
 						setScript([
 							{text: "SPEED ROLL: " + roll.text + "!"},
 							{text: "You quickly sprint away, without even looking back."},
-							{finish: true}
+							{finish: true, removeencounter: ["LAW BUILDING", "E0"]}
 						], true);
 					}
 					else {
@@ -304,7 +315,7 @@ let ENCOUNTERS = {
 							{text: "SPEED ROLL: " + roll.text + "..."},
 							{text: "The zombie lunges at you! You dodge, but... what if you didn't? [-2 SANITY]", stat: { sanity: -2 }},
 							{text: "Before anything else can happen, you swiftly leave the room."},
-							{finish: true}
+							{finish: true, removeencounter: ["LAW BUILDING", "E0"]}
 						], true);
 					}
 				}),
@@ -313,10 +324,25 @@ let ENCOUNTERS = {
 						{text: "You close your eyes and accept your fate..."},
 						{text: "The zombie forcefully opens one of your eyes and pulls it out! [-5 HP] [-5 SANITY] [+INJURY - MISSING EYE]", stat: { sanity: -5, health: -5 }, buff: [ BUFFS["Missing Eye"]]},
 						{text: "Satisifed with just your eye, the zombie walks away chewing on it..."},
-						{finish: true}
+						{finish: true, removeencounter: ["LAW BUILDING", "E0"]}
 					], true);
 				}),
 			]},
 		]
-	]
+	}
 }
+
+let ACTIVE_ENCOUNTERS = {};
+
+for (const [location, _] of Object.entries(ENCOUNTERS)) {
+	ACTIVE_ENCOUNTERS[location] = [];
+
+	for (const [code, _] of Object.entries(ENCOUNTERS[location])) {
+		if (code.startsWith("E")) {
+			ACTIVE_ENCOUNTERS[location].push(code);
+		}
+	}
+}
+
+let active_encounters_value = ReadData("active_encounters");
+if (active_encounters_value != null) { ACTIVE_ENCOUNTERS = active_encounters_value; }

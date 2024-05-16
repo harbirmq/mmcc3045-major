@@ -42,8 +42,9 @@
 			const location = ReadData("location");
 			const encounter = ReadData("encounter");
 
-			if (encounter == "intro sequence") { $("#information-panel").hide(); }
+			if (location == "meta" && encounter == "E0") { $("#information-panel").hide(); }
 
+			console.log(ACTIVE_ENCOUNTERS);
 			SetScript(ENCOUNTERS[location][encounter], true);
 
 			// backgrounds have been sourced from https://www.pexels.com/. they have then been grayscaled, posterized, and pixelated
