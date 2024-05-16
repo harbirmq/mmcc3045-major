@@ -45,7 +45,7 @@
 
 			$(".actor").hide();
 
-			if (!flags.unlocked_apartments) { $("#map-apartments").hide(); }
+			if (!flags.unlocked_apartments) { $("#map-apartments").hide(); $("#apartments").hide(); }
 			if (!flags.unlocked_lake) { $("#map-lake").hide(); }
 
 			SetFlag("rested", false);
@@ -116,6 +116,8 @@
 		<div class="map-button" id="law-building" data-location="LAW BUILDING" style="height: 100px; width: 100px; top: 255px; left: 580px">⠀</div>
 		<div class="map-button" id="comp-building" data-location="COMP BUILDING" style="height: 100px; width: 100px; top: 350px; left: 770px">⠀</div>
 
+		<div class="map-button" id="apartments" data-location="APARTMENTS" style="height: 100px; width: 100px; top: 415px; left: 915px">⠀</div>
+
 		<div id="information-panel">
 			<h2>ITEMS</h2>
 			<div class="scrolling-window" id="items-window">
@@ -165,11 +167,6 @@
 		</div>
 		<div id="main-text-window">
 			<div id="text-area" style="cursor:default">
-			</div>
-			<div id="objectives">
-				<div class="objective">PRIMARY OBJECTIVE: Maybe exploring the COMP BUILDING can give us a lead on how to escape?</div>
-				<div>⠀</div>
-				<div class="secondary-objective">SECONDARY OBJECTIVE: If we explore a location that isn't the COMP BUILDING, maybe we could find something that we overlooked? [0/3]</div>
 			</div>
 			<div id="choice-buttons">
 				<div class="choice-button choice-button-disabled" id="choice1">Choice1</div>

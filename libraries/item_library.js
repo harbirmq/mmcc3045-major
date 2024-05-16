@@ -48,7 +48,7 @@ const ITEMS = {
 	"key": {
 		"Keyboard": Key("Keyboard", "A board of keys"),
 		"Computer Part": Key("Computer Part", "A small CPU chip"),
-		"Apartment Key?": Key("Apartment Key?", "'002' is written on the key"),
+		"Apartment Master Key": Key("Apartment Master Key", "A key to all the rooms in the apartments... Why does this exist?"),
 	},
 };
 

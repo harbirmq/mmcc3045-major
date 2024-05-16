@@ -30,6 +30,12 @@ function Roll(stat, required) {
 	return rollData;
 }
 
+function AddEncounter(location, code) {
+	ACTIVE_ENCOUNTERS[location].push(code);
+
+	SaveData("active_encounters", ACTIVE_ENCOUNTERS);
+}
+
 /*
 	LOCATIONS:
 	COMP BUILDING, CENTRAL COURTYARD, LECTURE HALL, LAW BUILDING,
@@ -154,8 +160,10 @@ const ENCOUNTERS = {
 
 					setScript([
 						{text: "You plug in your keyboard, and reply with 'hi? where are you?'."},
-						{text: "For convience sake, you leave the keyboard plugged in. Awaiting a reponse fills you with hope. [-ITEM: COMPUTER PARTS] [+2 SANITY]", stat: { sanity: 2 }, removeitem: [ ITEMS["key"]["Keyboard"] ]},
-						{finish: true, removeencounter: ["COMP BUILDING", "E2"]}
+						{text: "For convienience sake, you leave the keyboard plugged in. Awaiting a reponse fills you with hope. [-ITEM: KEYBOARD] [+2 SANITY]", stat: { sanity: 2 }, removeitem: [ ITEMS["key"]["Keyboard"] ]},
+						{finish: true, removeencounter: ["COMP BUILDING", "E2"], function: function() {
+							AddEncounter("COMP BUILDING", "S0");
+						}}
 					], true);
 				}),
 				Option("", function() {
@@ -170,24 +178,43 @@ const ENCOUNTERS = {
 			]},
 		],
 		"E3": [
-			{text: "Looking through the bags on the lower floor, you find a key! [+ITEM: APARTMENT KEY?]", item: [ ITEMS["key"]["Apartment Key?"] ]},
-			{text: "The key reads '002'. Maybe it's a key to an apartment?"},
-			{text: "You add it to your keychain and leave the building. [NEW LOCATION: APARTMENTS]" },
-			{finish: true, removeencounter: ["COMP BUILDING", "E3"],  function: function(){
-				SetFlag("unlocked_apartments", true);
-			}}
-		],
-		"E4": [
 			{text: "Sneaking past a zombie, you notice a pair of coding socks on the floor."},
 			{text: "You decide to take it, doubling up on socks can't hurt... right? [+ITEM: CODING SOCKS]", item: [ ITEMS["armor"]["Coding Socks"]]},
-			{finish: true, removeencounter: ["COMP BUILDING", "E4"]}
+			{finish: true, removeencounter: ["COMP BUILDING", "E3"]}
 		],
-		"E5": [
+		"E4": [
 			{text: "Our world seems grim as it is now, but maybe there is still hope out there."},
 			{text: "You attempt to connect to the internet on one of the only computers that appear to be working..."},
 			{text: "UPDATING..."},
 			{text: "Maybe if I come back later?"},
 			{finish: true}
+		],
+
+		"S0": [
+			{text: "You come back to the computer with the chatroom... and notice some new messages!"},
+			{text: "The screen reads the following:"},
+			{text: "'omg i didnt think anyone would actually reply...'"},
+			{text: "'i'm at the apartments. room 002.'"},
+			{text: "'i really do NOT want to leave my room but i think the apartments would have a lot of supplies'"},
+			{text: "'i think somewhere in the comp building, theres my red duffel bag.'"},
+			{text: "'inside is a master key to the apartments - could you maybe bring it to me?'"},
+			{text: "The rest of the text was... sent from this computer? It's a load of gibberish though..."},
+			{text: "..."},
+			{text: "Did a zombie type this?"},
+			{text: "You simply reply with 'got it, i'll try and find it'."},
+			{finish: true, removeencounter: ["COMP BUILDING", "S0"], function: function() {
+				AddEncounter("COMP BUILDING", "S1");
+			}}
+		],
+
+		"S1": [
+			{text: "Looking through the bags on the lower floor, you notice a red duffel bag!"},
+			{text: "'Was this the bag that person from the chatroom was talking about?'"},
+			{text: "You look through all the pockets and find a key! [+ITEM: APARTMENT MASTER KEY]", item: [ITEMS["key"]["Apartment Master Key"]]},
+			{text: "You add it to your keychain and leave the building. [NEW LOCATION: APARTMENTS]"},
+			{finish: true, removeencounter: ["COMP BUILDING", "S1"], function: function() {
+				SetFlag("unlocked_apartments", true);
+			}}
 		],
 	},
 
@@ -334,6 +361,41 @@ const ENCOUNTERS = {
 			]},
 		]
 	},
+
+	"APARTMENTS": {
+		"E0":  [
+			{text: "You sneak past a few zombies on your way to the apartments. Upon reaching the door you try the handle."},
+			{text: "It's locked, but you have the master key thanks to that person from the chatroom."},
+			{text: "You insert the key, and try to turn the handle..."},
+			{text: "You slowly open the door and look inside..."},
+			{text: "No zombies for now..."},
+			{text: "You sneak through the main corridor and make it to Room 002."},
+			{text: "You think about knocking the door, but that would probably attract the wrong attention..."},
+			{text: "Instead you slowly turn the handle; the door is unlocked."},
+			{text: "'..Hello?' - A voice from inside the room whispers..."},
+			{text: "'It's me... from the chatroom' you whisper back"},
+			{text: "'Oh thank god...', you hear... A sigh of relief follows."},
+			{text: "'Well what are you doing? Get in here...' the voice exclaims."},
+			{text: "You quickly shift into the room and tap the door shut."},
+			{text: "'Hey. Thanks for coming.', the boy says.", actor: "Linus"},
+			{text: "'No problem, you want to come back to my safehouse?', you reply."},
+			{text: "'Yeah... that'll be great.' he replies"},
+			{text: "You notice he is a bit tense..."},
+			{text: "'What's wrong?' you ask."},
+			{text: "'Oh.. nothing.. uh..' he stumbles"},
+			{text: "'Can I have my bag?' he finally asks"},
+			{text: "'Oh... I didn't bring it...' you confess"},
+			{text: "The boy looks away in silence. An awkwardness fills the room."},
+			{text: "'Let's g'-'Im'... you tried talking at the same time..."},
+			{text: "'You first' you insist."},
+			{text: "'I'm Linus... what about you?' he says."},
+			{text: "'Nice to meet you Linus, I don't want to stay here for long, lets go.' you reply."},
+			{text: "..."},
+			{text: "'okay...' he quietly responds"},
+			{text: "[+ALLY: LINUS]", ally: [ALLIES["Linus"]]},
+			{finish: true, removeencounter: ["APARTMENTS", "E0"]}
+		]
+	}
 }
 
 let ACTIVE_ENCOUNTERS = {};
