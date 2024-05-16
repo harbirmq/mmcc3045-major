@@ -31,7 +31,13 @@ function Roll(stat, required) {
 }
 
 /*
-	modifiers:
+	LOCATIONS:
+	COMP BUILDING, CENTRAL COURTYARD, LECTURE HALL, LAW BUILDING,
+	MACQUARIE LAKE, APARTMENTS
+
+	---
+
+	MODIFIERS:
 	text, options,
 
 	background, actor, zombie, sound
@@ -39,22 +45,13 @@ function Roll(stat, required) {
 	item, removeitem, ally, removeally, buff, removebuff
 
 	removeencounter, function
-*/
 
-/*
+	---
+
 	encounters prefixed with 'E' are regular encounters that should be added when a new game is made
 	
 	encounters prefixed with 'S' are special encounters that should not be added when a new game is made
 */
-
-const LOCATIONS = [
-	"COMP BUILDING",
-	"CENTRAL COURTYARD",
-	"LECTURE HALL",
-	"LAW BUILDING",
-	"MACQUARIE LAKE",
-	"APARTMENTS"
-]
 
 // encounters
 const ENCOUNTERS = {
@@ -89,28 +86,28 @@ const ENCOUNTERS = {
 						{text: "You took a well-deserved nap and composed yourself. [+5 HP] [+5 SANITY]", stat: { health: 5, sanity: 5 }}
 					], true);
 
-					flags.rested = true;
+					SetFlag("rested", true);
 				}),
 				Option("Jog on the spot", function() {
 					setScript([
 						{text: "You jogged on the spot. Your feel a little tired, but it was probably worth it. [+1 SPEED] [-1 DEFENSE]", stat: { speed: 1, defense: -1 }}
 					], true);
 
-					flags.rested = true;
+					SetFlag("rested", true);
 				}),
 				Option("Talk into the mirror", function() {
 					setScript([
 						{text: "You talk to yourself in the mirror... 'Am I going crazy..?' [+2 CHARISMA] [-1 SANITY]", stat: { charisma: 2, sanity: -1 }}
 					], true);
 
-					flags.rested = true;
+					SetFlag("rested", true);
 				}),
 				Option("Train your eyes", function() {
 					setScript([
 						{text: "You train your eyes by tracking a fly as it zips around the room. [+2 PERCEPTION] [-1 SANITY]", stat: { perception: 2, sanity: -1 }}
 					], true);
 
-					flags.rested = true;
+					SetFlag("rested", true);
 				}),
 			]}
 		],
@@ -184,6 +181,13 @@ const ENCOUNTERS = {
 			{text: "Sneaking past a zombie, you notice a pair of coding socks on the floor."},
 			{text: "You decide to take it, doubling up on socks can't hurt... right? [+ITEM: CODING SOCKS]", item: [ ITEMS["armor"]["Coding Socks"]]},
 			{finish: true, removeencounter: ["COMP BUILDING", "E4"]}
+		],
+		"E5": [
+			{text: "Our world seems grim as it is now, but maybe there is still hope out there."},
+			{text: "You attempt to connect to the internet on one of the only computers that appear to be working..."},
+			{text: "UPDATING..."},
+			{text: "Maybe if I come back later?"},
+			{finish: true}
 		],
 	},
 
@@ -329,7 +333,7 @@ const ENCOUNTERS = {
 				}),
 			]},
 		]
-	}
+	},
 }
 
 let ACTIVE_ENCOUNTERS = {};
