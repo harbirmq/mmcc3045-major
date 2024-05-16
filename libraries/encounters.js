@@ -36,6 +36,15 @@ function AddEncounter(location, code) {
 	SaveData("active_encounters", ACTIVE_ENCOUNTERS);
 }
 
+function RemoveEncounter(location, code) {
+	const index = ACTIVE_ENCOUNTERS[location].indexOf(code);
+
+	if (index == -1) { console.log("Error removing encounter"); return; }
+
+	ACTIVE_ENCOUNTERS[location].splice(index, 1);
+	SaveData("active_encounters", ACTIVE_ENCOUNTERS);
+}
+
 /*
 	LOCATIONS:
 	COMP BUILDING, CENTRAL COURTYARD, LECTURE HALL, LAW BUILDING,
@@ -80,7 +89,7 @@ const ENCOUNTERS = {
 			{text: "Oh, and it's always raining...",},
 			{text: "...",},
 			{text: "Now then...",},
-			{function: function() {
+			{function() {
 				window.location.replace("map.html");
 			}},
 		],
@@ -128,7 +137,7 @@ const ENCOUNTERS = {
 		],
 		"E1": [
 			{text: "Sneaking through the building, you feel like that there's something that you could take right in front of your eyes...",
-			function: function() {
+			function() {
 				if (stats.perception >= 7) {
 					setScript([
 						{text: "[PERCEPTION CHECK SUCCESS] You could use the glass shards on the floor as a weapon!"},
@@ -150,7 +159,7 @@ const ENCOUNTERS = {
 					setScript([
 						{text: "You plug in your keyboard, and reply with 'hi? where are you?'."},
 						{text: "For convienience sake, you leave the keyboard plugged in. Awaiting a reponse fills you with hope. [-ITEM: KEYBOARD] [+2 SANITY]", stat: { sanity: 2 }, removeitem: [ ITEMS["key"]["Keyboard"] ]},
-						{finish: true, removeencounter: ["COMP BUILDING", "E2"], function: function() {
+						{finish: true, removeencounter: ["COMP BUILDING", "E2"], function() {
 							SetObjective("await_response", true);
 							AddEncounter("COMP BUILDING", "S0");
 						}}
@@ -178,7 +187,11 @@ const ENCOUNTERS = {
 			{text: "Our world seems grim as it is now, but maybe there is still hope out there."},
 			{text: "You attempt to connect to the internet on one of the only computers that appear to be working..."},
 			{text: "UPDATING..."},
-			{text: "Maybe if I come back later?"},
+			{text: "Maybe if I come back later?", function() {
+				SetFlag("comp_e4", flags.comp_e4 + 1);
+
+				if (flags.comp_e4 >= 3) { RemoveEncounter("COMP BUILDING", "E4"); }
+			}},
 			{finish: true}
 		],
 
@@ -194,7 +207,7 @@ const ENCOUNTERS = {
 			{text: "..."},
 			{text: "Did a zombie type this?"},
 			{text: "You simply reply with 'got it, i'll try and find it'."},
-			{finish: true, removeencounter: ["COMP BUILDING", "S0"], function: function() {
+			{finish: true, removeencounter: ["COMP BUILDING", "S0"], function() {
 				SetObjective("await_response", false);
 				SetObjective("find_apartment_key", true);
 				AddEncounter("COMP BUILDING", "S1");
@@ -206,23 +219,12 @@ const ENCOUNTERS = {
 			{text: "'Was this the bag that person from the chatroom was talking about?'"},
 			{text: "You look through all the pockets and find a key! [+ITEM: APARTMENT MASTER KEY]", item: [ITEMS["key"]["Apartment Master Key"]]},
 			{text: "You add it to your keychain and leave the building. [NEW LOCATION: APARTMENTS]"},
-			{finish: true, removeencounter: ["COMP BUILDING", "S1"], function: function() {
+			{finish: true, removeencounter: ["COMP BUILDING", "S1"], function() {
 				SetObjective("find_apartment_key", false);
 				SetObjective("apartment_002", true);
 				SetFlag("unlocked_apartments", true);
 			}}
 		],
-
-		"TEST": [
-			{text: "fdgjfkdlg", function: function() {
-				if (true) {
-					setScript([
-						{text: "sdfdf"}
-					])
-				}
-			}},
-			{text: "sdfsdfsdf"}
-		]
 	},
 
 	"CENTRAL COURTYARD": {
@@ -235,13 +237,13 @@ const ENCOUNTERS = {
 						setScript([
 							{text: "[SPEED CHECK SUCCESS] You succesfully distract the zombies by yelling, then evading them."},
 							{text:"The girl thanks you and asks to join your team. [+ALLY: VANESSA]", ally: [ALLIES["Vanessa"]], actor: "Vanessa"},
-							{text:"'Thanks for that.. I'm Vanessa.' she proudly claims. 'And you are?'", function: function() {
+							{text:"'Thanks for that.. I'm Vanessa.' she proudly claims. 'And you are?'", function() {
 								if (objectives.find_vanessa) {
 									setScript([
 										{text: "..."},
 										{text: "..."},
 										{text: "'Hang on, did she just say Vanessa!?' you think to yourself..."},
-										{finish: true, removeencounter: ["CENTRAL COURTYARD", "E0"], function: function() {
+										{finish: true, removeencounter: ["CENTRAL COURTYARD", "E0"], function() {
 											SetObjective("find_vanessa", false);
 											SetObjective("return_vanessa", true);
 										}}
@@ -256,7 +258,7 @@ const ENCOUNTERS = {
 
 						setScript([
 							{text: "[SPEED CHECK FAIL] You scream at the top of your lungs to distract the zombies... but now they're coming at you!",
-							function: function() {
+							function() {
 								if (roll.success) {
 									setScript([
 										{text: "STRENGTH ROLL: " + roll.text + "!"},
@@ -411,7 +413,24 @@ const ENCOUNTERS = {
 			{text: "[+ALLY: LINUS]", ally: [ALLIES["Linus"]]},
 			{finish: true, removeencounter: ["APARTMENTS", "E0"], function() {
 				SetObjective("apartment_002", false);
+
+				AddEncounter("APARTMENTS", "S0");
 			}}
+		],
+
+		"S0": [
+			{text: "While exploring one apartment, a bookshelf suddenly gives way and crashes on top of you!", function() {
+				if (stats.defense > 12) {
+					setScript([
+						{text: "[DEFENSE CHECK SUCCESS] You tanked out the pain, and avoided any injuries."},
+						{text: "Before anything else starts falling on you, you quickly leave the apartment."},
+						{finish: true, removeencounter: ["APARTMENTS", "S0"]}
+					]);
+				}
+			}},
+			{text: "[DEFENSE CHECK FAILED] The crushing weight of the bookshelf has caused you some damage... [-3 HP]", stat: { health: -3 }},
+			{text: "Before anything else starts falling on you, you quickly leave the apartment."},
+			{finish: true, removeencounter: ["APARTMENTS", "S0"]}
 		]
 	},
 
@@ -425,7 +444,7 @@ const ENCOUNTERS = {
 						{text: "A girl is inside of this closet.."},
 						{text: "'Do you need he-' 'GO AWAY' she yells"},
 						{text: "'Quiet down, the zombies will hear us...' you try and reason"},
-						{text: "'Leave. Now. Or I'll scream...' the girl responds", function: function() {
+						{text: "'Leave. Now. Or I'll scream...' the girl responds", function() {
 							if (HasAlly(ALLIES["Vanessa"])) {
 								setScript([
 									{text: "'Wendy... chill out please...' Vanessa says", actor: "Vanessa"},
@@ -454,7 +473,7 @@ const ENCOUNTERS = {
 										{text: "'I don't believe you! Bring her here' she conflicts."},
 										{text: "'Okay. I'll go get her.' you say"},
 										{text: "Okay... I need to go find a Vanessa... If she's even still alive."},
-										{finish: true, removeencounter: ["LECTURE HALL", "E0"], function: function() {
+										{finish: true, removeencounter: ["LECTURE HALL", "E0"], function() {
 											SetObjective("find_vanessa", true);
 											AddEncounter("LECTURE HALL", "S0");
 										}},
@@ -465,7 +484,7 @@ const ENCOUNTERS = {
 										{text: "[CHARISMA CHECK FAILED] 'Look, It-BLGGHHGHHHHH' you awkwardly spit out..."},
 										{text: "You bit your tongue while trying to persuade the girl..."},
 										{text: "You quickly leave in embarrassment"},
-										{finish: true, removeencounter: ["LECTURE HALL", "E0"], function: function() {
+										{finish: true, removeencounter: ["LECTURE HALL", "E0"], function() {
 											AddEncounter("LECTURE HALL", "S0");
 										}}
 									], true);
@@ -476,7 +495,7 @@ const ENCOUNTERS = {
 							Option("Give Up", function(){
 								setScript([
 									{text: "'Her loss' you think to yourself..."},
-									{finish: true, removeencounter: ["LECTURE HALL", "E0"], function: function() {
+									{finish: true, removeencounter: ["LECTURE HALL", "E0"], function() {
 										AddEncounter("LECTURE HALL", "S0");
 									}},
 								], true);
@@ -496,7 +515,7 @@ const ENCOUNTERS = {
 		],
 
 		"S0": [
-			{text: "You come across the same closet that girl was in...", function: function() {
+			{text: "You come across the same closet that girl was in...", function() {
 				if (objectives.find_vanessa) {
 					setScript([
 						{text: "I haven't found Vanessa yet... I probably shouldn't try to talk to her."},
@@ -504,7 +523,7 @@ const ENCOUNTERS = {
 					]);
 				}
 			}},
-			{text: "'Who's there!?' the girl asks.", function: function() {
+			{text: "'Who's there!?' the girl asks.", function() {
 				if (HasAlly(ALLIES["Vanessa"])) {
 					setScript([
 						{text: "'Wendy... chill out please...' Vanessa says", actor: "Vanessa"},
@@ -534,7 +553,7 @@ const ENCOUNTERS = {
 							{text: "'I don't believe you! Bring her here' she conflicts."},
 							{text: "'Okay. I'll go get her.' you say"},
 							{text: "Okay... I need to go find a Vanessa... If she's even still alive."},
-							{finish: true, function: function() {
+							{finish: true, function() {
 								SetObjective("find_vanessa", true);
 							}},
 						], true);

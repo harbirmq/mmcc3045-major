@@ -153,13 +153,7 @@ function RunScript(script) {
 			break;
 
 			case "removeencounter":
-				const location = value[0];
-				const index = ACTIVE_ENCOUNTERS[location].indexOf(value[1]);
-
-				if (index == -1) { console.log("Error removing encounter"); break; }
-
-				ACTIVE_ENCOUNTERS[location].splice(index, 1);
-				SaveData("active_encounters", ACTIVE_ENCOUNTERS);
+				RemoveEncounter(value[0], value[1]);
 			break;
 		}
 	}
