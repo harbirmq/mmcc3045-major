@@ -54,11 +54,13 @@ function RunScript(script) {
 
 	WriteText(script[script_index].text);
 
-	for (let [key, value] of Object.entries(script[script_index])) {
+	script_index++;
+
+	for (let [key, value] of Object.entries(script[script_index - 1])) {
 		switch (key) {
 			case "function":
 				value();
-			return;
+			break;
 
 			case "item":
 				value.forEach(element => {
@@ -125,7 +127,7 @@ function RunScript(script) {
 			break;
 
 			case "stat":
-				for (const [stat, v] of Object.entries(script[script_index][key])) {
+				for (const [stat, v] of Object.entries(script[script_index - 1][key])) {
 					console.log(stats[stat] + " " + v);
 					stats[stat] += v;
 				}
@@ -141,7 +143,7 @@ function RunScript(script) {
 			break;
 
 			case "finish":
-				script[script_index].text = "";
+				script[script_index - 1].text = "";
 
 				window.location.replace("map.html");
 			break;
@@ -161,8 +163,6 @@ function RunScript(script) {
 			break;
 		}
 	}
-
-	script_index++;
 }
 
 // typewriter jquery plugin from https://github.com/chadselph/jquery-typewriter/
