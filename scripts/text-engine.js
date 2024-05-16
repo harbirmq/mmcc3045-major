@@ -74,11 +74,24 @@ function RunScript(script) {
 			case "zombie":
 				$(".actor").fadeIn(200);
 				if (!value) {
-					$(".actor").attr("src","images/actors/zombie_" + Random(11) + ".png");
+					let random = Random(17);
+
+					$(".actor").attr("src","images/actors/zombie_" + random + ".png");
+
+					let growl = new Audio("sounds/zombie_" + random + ".mp3");
+					growl.play();
 				}
 				else {
 					$(".actor").attr("src","images/actors/zombie_" + value + ".png");
+
+					let growl = new Audio("sounds/" + value + ".mp3");
+					growl.play();
 				}
+			break;
+
+			case "sound":
+				let sound = new Audio("sounds/" + value + ".mp3");
+				sound.play();
 			break;
 
 			case "removeitem":

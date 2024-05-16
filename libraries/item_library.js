@@ -21,17 +21,6 @@ function Armor(_name, _description, _stats) {
 	};
 }
 
-function Consumable(_name, _description, _function) {
-	return {
-		description: _description,
-		function: _function,
-		storage: {
-			type: "consumable",
-			name: _name,
-		}
-	};
-}
-
 function Key(_name, _description) {
 	return {
 		description: _description,
@@ -54,10 +43,6 @@ const ITEMS = {
 		"Motorcycle Helmet": Armor("Motorcycle Helmet", "A cool, black, motorcycle helmet", { defense: 5, perception: -5 }),
 		"Lucky Bracelet": Armor("Lucky Bracelet", "A shiny gold bracelet decorated with some gems", { luck: 3 }),
 		"Coding Socks": Armor("Coding Socks", "A pair of thigh-high, black socks", { charisma: 2, luck: 1 }),
-	},
-
-	"consumable": {
-		"Bandage": Consumable("Bandage", "A standard issue bandage", function(){}),
 	},
 
 	"key": {

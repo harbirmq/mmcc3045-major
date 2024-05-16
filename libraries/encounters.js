@@ -30,14 +30,18 @@ function Roll(stat, required) {
 	return rollData;
 }
 
-
-
 /*
 	locations:
 	COMP BUILDING, CENTRAL COURTYARD, LECTURE HALL, LAW BUILDING, MACQUARIE LAKE, APARTMENTS
 
 	modifiers:
-	text, item, ally, buff, options, function, stat, background, actor, zombie
+	text, options,
+
+	background, actor, zombie, sound
+
+	item, removeitem, ally, removeally, buff, removebuff
+
+	function
 */
 
 // encounters
@@ -86,7 +90,11 @@ let ENCOUNTERS = {
 				}),
 				Option("Train your eyes", function() {
 					setScript([
-						{text: "You train your eyes by tracking a fly as it zips around the room. [+2 PERCEPTION] [-1 SANITY]", stat: { perception: 2, sanity: -1 }, ally: [ALLIES["Vanessa"], ALLIES["Kaitlyn"], ALLIES["Lance"], ALLIES["Lily"], ALLIES["Alvin"], ALLIES["Linus"], ALLIES["Trevor"], ALLIES["Wendy"]]}
+						{text: "You train your eyes by tracking a fly as it zips around the room. [+2 PERCEPTION] [-1 SANITY]", stat: { perception: 2, sanity: -1 }, function: function() {
+							for (const [_, ally] of Object.entries(ALLIES)) {
+								AddAlly(ally);
+							  }
+						}}
 					], true);
 				}),
 			]}

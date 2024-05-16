@@ -19,6 +19,7 @@ const ALLIES = {
 	"Linus": Ally("Linus", "The guy from the chatroom. He said something about a walkie-talkie.", { perception: 8 }),
 	"Trevor": Ally("Trevor", "He keeps mentioning looking for his girlfriend.", { perception: 3, strength: 2, charisma: 3 }),
 	"Wendy": Ally("Wendy", "She only opened the door because we had Vanessa.", { perception: 2, speed: 1, strength: 1, charisma: 1 }),
+	"Noelle": Ally("Noelle", "Her voice strangely calms you down...", { perception: 5, charisma: 5, }),
 };
 
 // functions
