@@ -30,6 +30,7 @@ let objectives = {
 
 	// UNLOCK WENDY
 	find_vanessa: false,
+	return_vanessa: false,
 }
 
 // data functions
@@ -245,7 +246,8 @@ function RefreshWindows() {
 			case "find_apartment_key": string = "Look for an apartment master key in the COMP BUILDING"; break;
 			case "apartment_002": string = "Head to the APARTMENTS and meet with the person at room 002"; break;
 
-			case "find_vanessa": string = "Find someone named 'Vanessa' then return to the LECTURE HALL"; break;
+			case "find_vanessa": string = "Find someone named 'Vanessa'.. If they're not already dead"; break;
+			case "return_vanessa": string = "Return to the LECTURE HALL with Vanessa"; break;
 		}
 
 		objective_list.append("<li>" + string + "</li>");

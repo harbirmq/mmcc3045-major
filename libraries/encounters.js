@@ -148,13 +148,6 @@ const ENCOUNTERS = {
 		"E2": [
 			{text: "While scavenging one of the computer rooms, you notice one of the monitors are on!"},
 			{text: "Upon further inspection, a chatroom window is open... The chatroom contains one message simply reading 'hello?'.", options:[
-				Option("Scavenge Computer Part", function() {
-					setScript([
-						{text: "You ignore the chatroom and carefully extract some parts from the computer..."},
-						{text: "'What if they needed help?' you think to yourself... [+ITEM: COMPUTER PARTS] [-1 SANITY]", item: [ITEMS["key"]["Computer Part"]], stat: { sanity: -1 }},
-						{finish: true, removeencounter: ["COMP BUILDING", "E2"]}
-					], true);
-				}),
 				Option("[REQUIRES KEYBOARD] Reply", function() {
 					if (!HasItem(ITEMS["key"]["Keyboard"])) { return; }
 
@@ -166,6 +159,8 @@ const ENCOUNTERS = {
 							AddEncounter("COMP BUILDING", "S0");
 						}}
 					], true);
+				}),
+				Option("", function() {
 				}),
 				Option("", function() {
 				}),
@@ -233,7 +228,24 @@ const ENCOUNTERS = {
 						setScript([
 							{text: "[SPEED CHECK SUCCESS] You succesfully distract the zombies by yelling, then evading them."},
 							{text:"The girl thanks you and asks to join your team. [+ALLY: VANESSA]", ally: [ALLIES["Vanessa"]], actor: "Vanessa"},
-							{finish: true, removeencounter: ["CENTRAL COURTYARD", "E0"]}
+							{text:"'Thanks for that.. I'm Vanessa.' she proudly claims. 'And you are?'", function: function() {
+								if (objectives.find_vanessa) {
+									setScript([
+										{text: "..."},
+										{text: "..."},
+										{text: "'Hang on, did she just say Vanessa!?' you think to yourself..."},
+										{finish: true, removeencounter: ["CENTRAL COURTYARD", "E0"], function: function() {
+											SetObjective("find_vanessa", false);
+											SetObjective("return_vanessa", true);
+										}}
+									]);
+								}
+								else {
+									setScript([
+										{finish: true, removeencounter: ["CENTRAL COURTYARD", "E0"]}
+									]);
+								}
+							}},
 						], true);
 					}
 					else {
@@ -427,44 +439,54 @@ const ENCOUNTERS = {
 									{finish: true, removeencounter: ["LECTURE HALL", "E0"]}
 								]);
 							}
-						}},
-						{text: "..."},
-						{text: "She seems serious... what should I do?", options: [
-							Option("[CHARISMA CHECK] Reason with her", function(){
-								if (stats.charisma >= 10) {
-									setScript([
-										{text: "[CHARISMA CHECK SUCCESS] 'Look, It's safe out here right now, but it might not be later.' you calmly speak"},
-										{text: "'We've got plenty of supplies... you'll be safe with us.'"},
-										{text: "'-nessa.' she quietly responds."},
-										{text: "'Huh?' you ask."},
-										{text: "'Is Vanessa with you?' she asks."},
-										{text: "'Uh.. Yes! She is... She's back at our base...' you quickly respond."},
-										{text: "'Come with me I'll take you to her.' you insist."},
-										{text: "'I don't believe you! Bring her here' she conflicts."},
-										{text: "'Okay. I'll go get her.' you say"},
-										{text: "Okay... I need to go find a Vanessa... If she's even still alive."},
-										{finish: true, removeencounter: ["LECTURE HALL", "E0"], function: function() {
-											SetObjective("find_vanessa", true);
-											AddEncounter("LECTURE HALL", "S0");
-										}},
-									], true);
-								}
-								else {
-									
-								}
-							}),
-							Option("", function(){}),
-							Option("", function(){}),
-							Option("Give Up", function(){
+							else {
 								setScript([
-									{text: "'Her loss' you think to yourself..."},
-									{finish: true, removeencounter: ["LECTURE HALL", "E0"], function: function() {
-										AddEncounter("LECTURE HALL", "S0");
-									}},
-								], true);
-							}),
-						]},
-						{finish: true}
+									{text: "..."},
+									{text: "She seems serious... what should I do?", options: [
+										Option("[CHARISMA CHECK] Reason with her", function(){
+											if (stats.charisma >= 10) {
+												setScript([
+													{text: "[CHARISMA CHECK SUCCESS] 'Look, It's safe out here right now, but it might not be later.' you calmly speak"},
+													{text: "'We've got plenty of supplies... you'll be safe with us.'"},
+													{text: "'-nessa.' she quietly responds."},
+													{text: "'Huh?' you ask."},
+													{text: "'Is Vanessa with you?' she asks."},
+													{text: "'Uh.. Yes! She is... She's back at our base...' you quickly respond."},
+													{text: "'Come with me I'll take you to her.' you insist."},
+													{text: "'I don't believe you! Bring her here' she conflicts."},
+													{text: "'Okay. I'll go get her.' you say"},
+													{text: "Okay... I need to go find a Vanessa... If she's even still alive."},
+													{finish: true, removeencounter: ["LECTURE HALL", "E0"], function: function() {
+														SetObjective("find_vanessa", true);
+														AddEncounter("LECTURE HALL", "S0");
+													}},
+												], true);
+											}
+											else {
+												setScript([
+													{text: "[CHARISMA CHECK FAILED] 'Look, It-BLGGHHGHHHHH' you awkwardly spit out..."},
+													{text: "You bit your tongue while trying to persuade the girl..."},
+													{text: "You quickly leave in embarrassment"},
+													{finish: true, removeencounter: ["LECTURE HALL", "E0"], function: function() {
+														AddEncounter("LECTURE HALL", "S0");
+													}}
+												], true);
+											}
+										}),
+										Option("", function(){}),
+										Option("", function(){}),
+										Option("Give Up", function(){
+											setScript([
+												{text: "'Her loss' you think to yourself..."},
+												{finish: true, removeencounter: ["LECTURE HALL", "E0"], function: function() {
+													AddEncounter("LECTURE HALL", "S0");
+												}},
+											], true);
+										}),
+									]}
+								]);
+							}
+						}},
 					], true);
 				}),
 				Option("", function(){}),
@@ -479,7 +501,72 @@ const ENCOUNTERS = {
 		],
 
 		"S0": [
-
+			{text: "You come across the same closet that girl was in..."},
+			{text: "'Who's there!?' the girl asks.", function() {
+				if (objectives.find_vanessa) {
+					setScript([
+						{text: "I haven't found Vanessa yet... I probably shouldn't try to talk to her."},
+						{finish: true},
+					]);
+				}
+				else {
+					if (HasAlly(ALLIES["Vanessa"])) {
+						setScript([
+							{text: "'Wendy... chill out please...' Vanessa says", actor: "Vanessa"},
+							{text: "'V-Vanessa? Are you really there?' The girl asks"},
+							{text: "'Yes Wendy... It's safe. Come out.' Vanessa firmly states"},
+							{text: "The door opens slowly..."},
+							{text: "A shy looking girl walks out.", actor: "Wendy"},
+							{text: "'Y-you could've just said you were here...' Wendy quietly exclaims"},
+							{text: "[+ALLY: WENDY]", ally: [ALLIES["Wendy"]]},
+							{finish: true, removeencounter: ["LECTURE HALL", "S0"], function() {
+								SetObjective("return_vanessa", false);
+							}}
+						]);
+					}
+					else {
+						setScript([
+							{text: "She's... still in there. What should I do?", options: [
+								Option("[CHARISMA CHECK] Reason with her", function(){
+									if (stats.charisma >= 10) {
+										setScript([
+											{text: "[CHARISMA CHECK SUCCESS] 'Look, It's safe out here right now, but it might not be later.' you calmly speak"},
+											{text: "'We've got plenty of supplies... you'll be safe with us.'"},
+											{text: "'-nessa.' she quietly responds."},
+											{text: "'Huh?' you ask."},
+											{text: "'Is Vanessa with you?' she asks."},
+											{text: "'Uh.. Yes! She is... She's back at our base...' you quickly respond."},
+											{text: "'Come with me I'll take you to her.' you insist."},
+											{text: "'I don't believe you! Bring her here' she conflicts."},
+											{text: "'Okay. I'll go get her.' you say"},
+											{text: "Okay... I need to go find a Vanessa... If she's even still alive."},
+											{finish: true, function: function() {
+												SetObjective("find_vanessa", true);
+											}},
+										], true);
+									}
+									else {
+										setScript([
+											{text: "[CHARISMA CHECK FAILED] 'Look, It-BLGGHHGHHHHH' you awkwardly spit out..."},
+											{text: "You bit your tongue while trying to persuade the girl..."},
+											{text: "You quickly leave in embarrassment"},
+											{finish: true}
+										], true);
+									}
+								}),
+								Option("", function(){}),
+								Option("", function(){}),
+								Option("Give Up", function(){
+									setScript([
+										{text: "'Her loss' you think to yourself..."},
+										{finish: true},
+									], true);
+								}),
+							]}
+						]);
+					}
+				}
+			}},
 		],
 	}
 }
