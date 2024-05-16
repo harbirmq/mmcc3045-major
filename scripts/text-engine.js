@@ -127,12 +127,7 @@ function RunScript(script) {
 			break;
 
 			case "stat":
-				for (const [stat, v] of Object.entries(script[script_index - 1][key])) {
-					console.log(stats[stat] + " " + v);
-					stats[stat] += v;
-				}
-			
-				SaveData("stats", stats);
+				ModifyStats(script[script_index - 1][key]);
 			break;
 
 			case "options":

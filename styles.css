@@ -323,3 +323,9 @@ body {
 #objectives-list li {
 	padding-top: 5px;
 }
+
+/* --- TEXT STYLES --- */
+.maxstat {
+	font-size: 15px;
+	color: rgb(200, 200, 200);
+}

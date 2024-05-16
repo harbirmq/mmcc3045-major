@@ -7,6 +7,9 @@ let stats = { // default stats
 	health: 20,
 	sanity: 20,
 
+	"max health": 25,
+	"max sanity": 25,
+
 	strength: 10,
 	perception: 10,
 	luck: 5,
@@ -69,11 +72,7 @@ function AddGeneric(genericID, genericArray, genericType) {
 
 	// modify stats
 	if (genericID.stats != null) {
-		for (const [key, value] of Object.entries(genericID.stats)) {
-			stats[key] += value;
-		}
-
-		SaveData("stats", stats);
+		ModifyStats(genericID.stats);
 	}
 
 	SaveData(genericType, genericArray);
@@ -110,6 +109,17 @@ function HasGeneric(genericID, genericArray) {
 	return false;
 }
 
+function ModifyStats(inputStats) {
+	for (const [key, value] of Object.entries(inputStats)) {
+		stats[key] += value;
+	}
+
+	if (stats.health > stats["max health"]) { stats.health = stats["max health"]; }
+	if (stats.sanity > stats["max sanity"]) { stats.sanity = stats["max sanity"]; }
+
+	SaveData("stats", stats);
+}
+
 function SetFlag(id, value) {
 	flags[id] = value;
 
@@ -133,8 +143,14 @@ const uniqId = (() => {
 
 function RefreshWindows() {
 	// update health
-	$("#hp").html("HP: " +  stats.health);
-	$("#sanity").html("SANITY: " +  stats.sanity);
+	let hpText = stats.health;
+	let sanityText = stats.sanity;
+
+	if (stats.health <= 9) { hpText = "<span style='color:red;'>" + stats.health + "</span>"; }
+	if (stats.sanity <= 9) { sanityText = "<span style='color:red;'>" + stats.sanity + "</span>"; }
+
+	$("#hp").html("HP:" +  hpText + "<span class='maxstat'>/" + stats["max health"] + "</span>");
+	$("#sanity").html("SANITY:" +  sanityText + "<span class='maxstat'>/" + stats["max sanity"] + "</span>");
 
 	// update stats
 	$("#strength").html(stats.strength);

@@ -134,6 +134,14 @@ const ENCOUNTERS = {
 				}),
 			]}
 		],
+
+		"ALL ALLIES": [
+			{finish: true, function() {
+				for (const ally in ALLIES) {
+					AddAlly(ALLIES[ally]);
+				}
+			}}
+		]
 	},
 
 	"COMP BUILDING": {
