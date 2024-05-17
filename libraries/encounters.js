@@ -179,7 +179,14 @@ const ENCOUNTERS = {
 						{text: "..."},
 						{text: "The fight has only just begun."},
 						{text: "..."},
-						{text: "THE END [GOOD ENDING w/ ALLIES]"}
+						{text: "THE END [GOOD ENDING w/ ALLIES]", options: [
+							Option("Main Menu", function() {
+								window.location.replace("index.html");
+							}),
+							Option("", function() {}),
+							Option("", function() {}),
+							Option("Credits", function() {})
+						]}
 					]);
 				}
 			}},
@@ -191,7 +198,14 @@ const ENCOUNTERS = {
 			{text: "..."},
 			{text: "The fight has only just begun."},
 			{text: "..."},
-			{text: "THE END [GOOD ENDING - LONE WOLF]"}
+			{text: "THE END [GOOD ENDING - LONE WOLF]", options: [
+				Option("Main Menu", function() {
+					window.location.replace("index.html");
+				}),
+				Option("", function() {}),
+				Option("", function() {}),
+				Option("Credits", function() {})
+			]}
 		],
 
 		// bad ending
@@ -213,7 +227,14 @@ const ENCOUNTERS = {
 						{text: "TAKE ME!"},
 						{text: "TAKE ME!!!!!!!!! !!!!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!!"},
 						{text: "..."},
-						{text: "THE END [BAD ENDING - GONE INSANE]"}
+						{text: "THE END [BAD ENDING - GONE INSANE]", options: [
+							Option("Main Menu", function() {
+								window.location.replace("index.html");
+							}),
+							Option("", function() {}),
+							Option("", function() {}),
+							Option("Credits", function() {})
+						]}
 					]);
 				}
 			}},
@@ -226,7 +247,14 @@ const ENCOUNTERS = {
 			{text: "..."},
 			{text: "I'm coming now, mum..."},
 			{text: "..."},
-			{text: "THE END [BAD ENDING - DEATH]"}
+			{text: "THE END [BAD ENDING - DEATH]", options: [
+				Option("Main Menu", function() {
+					window.location.replace("index.html");
+				}),
+				Option("", function() {}),
+				Option("", function() {}),
+				Option("Credits", function() {})
+			]}
 		],
 
 		"ALL ALLIES": [

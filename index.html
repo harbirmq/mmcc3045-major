@@ -32,6 +32,8 @@
 			const load_game = $("div#load-game");
 
 			new_game.click(function() {
+				localStorage.clear();
+
 				fade.fadeIn(400, function() {
 					section_menu.hide();
 
