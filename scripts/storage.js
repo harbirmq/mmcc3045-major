@@ -44,6 +44,10 @@ let objectives = {
 	investigate_lake: false,
 	find_batteries: false, get_batteries: false,
 	find_frequency: false,
+	find_linus: false,
+	return_linus: false,
+	wait_for_military: false,
+	go_to_lake: false,
 }
 
 // data functions
@@ -144,6 +148,17 @@ function SetObjective(id, value) {
 	objectives[id] = value;
 
 	SaveData("objectives", objectives);
+}
+
+function IncrementProgressFlags() {
+	if (objectives.wait_for_military) {
+		SetFlag("military_counter", flags.military_counter + 1);
+
+		if (flags.military_counter == 5) {
+			SetObjective("wait_for_military", false);
+			SetObjective("go_to_lake", true);
+		}
+	}
 }
 
 // id generator
@@ -283,6 +298,10 @@ function RefreshWindows() {
 			case "find_batteries": string = "Find batteries somewhere to power the handheld radio"; break;
 			case "get_batteries": string = "Find the guy Vanessa was talking about at CENTRAL COURTYARD and get batteries from him"; break;
 			case "find_frequency": string = "If we investigate the LAW BUILDING again, maybe we can find the military frequency?"; break;
+			case "find_linus": string = "I need to find someone who can read binary... Maybe I'll look at the COMP BUILDING?"; break;
+			case "return_linus": string = "Linus seems great with computers. I should take him to the whiteboard at the LAW BUILDING."; break;
+			case "wait_for_military": string = "I need to survive for " + (5 - flags.military_counter) + " more encounters, then head to MACQUARIE LAKE"; break;
+			case "go_to_lake": string = "The military should be here any second now! I need to head to MACQUARIE LAKE!"; break;
 		}
 
 		objective_list.append("<li>" + string + "</li>");

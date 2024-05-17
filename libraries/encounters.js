@@ -360,9 +360,107 @@ const ENCOUNTERS = {
 			{text: "You attempt to connect to the internet on one of the only computers that appear to be working..."},
 			{text: "UPDATING..."},
 			{text: "Maybe if I come back later?", function() {
-				FlagIncrementor("comp_e4", 3, "COMP BUILDING", "E4");
+				FlagIncrementor("comp_e4", 2, "COMP BUILDING", "E4");
 			}},
 			{finish: true}
+		],
+		"E5": [
+			{text: "As you walk through a classroom you notice a groaning sound..."},
+			{text: "A zombie attacks you from behind!", zombie: false, options: [
+				Option("[STRENGTH ROLL] Attack", function(){
+					let roll = Roll(stats.strength, 10);
+
+					if (roll.success) {
+						setScript([
+							{text: "STRENGTH ROLL: " + roll.text + "!"},
+							{text: "You successfully defeated the zombie with ease!"},
+							{finish: true, function() {
+								FlagIncrementor("comp_e5", 3, "COMP BUILDING", "E5");
+							}}
+						], true);
+					}
+					else {
+						setScript([
+							{text: "STRENGTH ROLL: " + roll.text + "..."},
+							{text: "You defeated the zombie, with some difficulty... [-5 HP]", stat: { health: -5 }},
+							{finish: true, function() {
+								FlagIncrementor("comp_e5", 3, "COMP BUILDING", "E5");
+							}}
+						], true);
+					}
+				}),
+				Option("[DEFENSE ROLL] Parry", function() {
+					let roll = Roll(stats.defense, 8);
+
+					if (roll.success) {
+						setScript([
+							{text: "DEFENSE ROLL: " + roll.text + "!"},
+							{text: "The zombie dives at you and you perform a clean parry."},
+							{text: "You stomp on it's head to finish it off..."},
+							{finish: true, function() {
+								FlagIncrementor("comp_e5", 3, "COMP BUILDING", "E5");
+							}}
+						], true);
+					}
+					else {
+						setScript([
+							{text: "DEFENSE ROLL: " + roll.text + "..."},
+							{text: "The zombie leaps at your block... It wasn't strong enough! [-3 HP]", stat: { health: -3}},
+							{text: "You perform a counterattack and kill it..."},
+							{finish: true, function() {
+								FlagIncrementor("comp_e5", 3, "COMP BUILDING", "E5");
+							}}
+						], true);
+					}
+				}),
+				Option("[LUCK ROLL] Pray", function(){
+					let roll = Roll(stats.luck, 8);
+
+					if (roll.success) {
+						setScript([
+							{text: "LUCK ROLL: " + roll.text + "!"},
+							{text: "The zombie trips over and smashes its head on the floor!"},
+							{text: "'That was lucky..' you think to yourself."},
+							{finish: true, function() {
+								FlagIncrementor("comp_e5", 3, "COMP BUILDING", "E5");
+							}}
+						], true);
+					}
+					else {
+						setScript([
+							{text: "LUCK ROLL: " + roll.text + "..."},
+							{text: "The zombie lunges at you dealing severe damage! [-7 HP]", stat: { health: -7 }},
+							{text: "As you recover, you swiftly stomp on it's head, finishing it off..."},
+							{finish: true, function() {
+								FlagIncrementor("comp_e5", 3, "COMP BUILDING", "E5");
+							}}
+						], true);
+					}
+				}),
+				Option("[SPEED ROLL] Flee", function(){
+					let roll = Roll(stats.speed, 5);
+
+					if (roll.success) {
+						setScript([
+							{text: "SPEED ROLL: " + roll.text + "!"},
+							{text: "You quickly sprint away, without even looking back."},
+							{finish: true, function() {
+								FlagIncrementor("comp_e5", 3, "COMP BUILDING", "E5");
+							}}
+						], true);
+					}
+					else {
+						setScript([
+							{text: "SPEED ROLL: " + roll.text + "..."},
+							{text: "The zombie lunges at you! You dodge, but... what if you didn't? [-2 SANITY]", stat: { sanity: -2 }},
+							{text: "Before anything else can happen, you swiftly leave the room."},
+							{finish: true, function() {
+								FlagIncrementor("comp_e5", 3, "COMP BUILDING", "E5");
+							}}
+						], true);
+					}
+				}),
+			]},
 		],
 
 		"S0": [
@@ -541,6 +639,8 @@ const ENCOUNTERS = {
 								SetObjective("get_batteries", false);
 								SetObjective("find_batteries", false);
 								SetObjective("find_frequency", true);
+
+								AddEncounter("LAW BUILDING", "S2");
 							}}
 						], true);
 					}
@@ -557,6 +657,8 @@ const ENCOUNTERS = {
 								SetObjective("get_batteries", false);
 								SetObjective("find_batteries", false);
 								SetObjective("find_frequency", true);
+
+								AddEncounter("LAW BUILDING", "S2");
 							}}
 						], true);
 					}
@@ -576,6 +678,8 @@ const ENCOUNTERS = {
 								SetObjective("get_batteries", false);
 								SetObjective("find_batteries", false);
 								SetObjective("find_frequency", true);
+
+								AddEncounter("LAW BUILDING", "S2");
 							}}
 						], true);
 					}
@@ -592,6 +696,8 @@ const ENCOUNTERS = {
 								SetObjective("get_batteries", false);
 								SetObjective("find_batteries", false);
 								SetObjective("find_frequency", true);
+
+								AddEncounter("LAW BUILDING", "S2");
 							}}
 						], true);
 					}
@@ -611,6 +717,8 @@ const ENCOUNTERS = {
 								SetObjective("get_batteries", false);
 								SetObjective("find_batteries", false);
 								SetObjective("find_frequency", true);
+
+								AddEncounter("LAW BUILDING", "S2");
 							}}
 						], true);
 					}
@@ -627,6 +735,8 @@ const ENCOUNTERS = {
 								SetObjective("get_batteries", false);
 								SetObjective("find_batteries", false);
 								SetObjective("find_frequency", true);
+
+								AddEncounter("LAW BUILDING", "S2");
 							}}
 						], true);
 					}
@@ -843,6 +953,50 @@ const ENCOUNTERS = {
 				SetFlag("unlocked_lake", true);
 				SetObjective("investigate_lake", true);
 			}}
+		],
+
+		"S2": [
+			{text: "Returning to the classroom with the whiteboard, you notice some numbers that you missed..."},
+			{text: "It's a string of zeroes and ones... What did they call this again...", function() {
+				if (HasAlly(ALLIES["Linus"])) {
+					setScript([
+						{text: "'It's binary.' Linus says", actor: "Linus"},
+						{text: "'It might be the frequency we need to contact the military...' he continues"},
+						{text: "'Give me a few minutes. I'll translate it.'"},
+						{text: "..."},
+						{text: "..."},
+						{text: "..."},
+						{text: "'328.6' he finally says."},
+						{text: "I tune the radio to the frequency..."},
+						{text: "'Hello?' I say into it."},
+						{text: "..."},
+						{text: "..."},
+						{text: "A voice replies! 'This is a restricted frequency, please tune to a different one. Over.'"},
+						{text: "'W-wait!' I hastily say. 'We're trapped at Macquarie University. Can't you like send a helicopter or something to get us?'"},
+						{text: "..."},
+						{text: "'..over?' I add on the end."},
+						{text: "'Copy that, we received your previous transmission three days ago.' they say."},
+						{text: "'Thank you for confirming, A unit has been dispatched to the university.' they follow"},
+						{text: "'Head to a large open area - a helicopter will dispatch units to receive you. Over and out.' they finish"},
+						{text: "Previous transmission... was it the people who wrote on the whiteboard? The guy who died at the lake?"},
+						{text: "'It's probably going to take a while... let's head back' Linus says."},
+						{text: "'You're right.' I reply."},
+						{text: "Could this be our ticket out of here?"},
+						{finish: true, removeencounter: ["LAW BUILDING", "S2"], function() {
+							SetObjective("find_frequency", false);
+							SetObjective("return_linus", false);
+							SetObjective("wait_for_military", true);
+							SetFlag("military_counter", 0);
+						}}
+					]);
+				}
+			}},
+			{text: "Binary?"},
+			{text: "Well.. whatever they call it - I can't read it.. I need to find someone who can."},
+			{finish: true, function() {
+				SetObjective("find_frequency", false);
+				SetObjective("find_linus", true);
+			}}
 		]
 	},
 
@@ -879,6 +1033,11 @@ const ENCOUNTERS = {
 			{text: "[+ALLY: LINUS]", ally: [ALLIES["Linus"]]},
 			{finish: true, removeencounter: ["APARTMENTS", "E0"], function() {
 				SetObjective("apartment_002", false);
+				
+				if (objectives.find_linus) {
+					SetObjective("find_linus", false);
+					SetObjective("return_linus", true);
+				}
 
 				AddEncounter("APARTMENTS", "S0");
 			}}
