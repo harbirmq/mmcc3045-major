@@ -120,6 +120,12 @@ function ModifyStats(inputStats) {
 	if (stats.health > stats["max health"]) { stats.health = stats["max health"]; }
 	if (stats.sanity > stats["max sanity"]) { stats.sanity = stats["max sanity"]; }
 
+	if (stats.health <= 0 || stats.sanity <= 0) {
+		SaveData("location", "meta");
+		SaveData("encounter", "S2");
+		window.location.replace("encounter.html");
+	}
+
 	SaveData("stats", stats);
 }
 

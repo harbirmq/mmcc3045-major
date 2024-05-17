@@ -51,14 +51,14 @@
 
 			if (location == "meta" && encounter == "E0") { $("#information-panel").hide(); }
 
+			// backgrounds have been sourced from https://www.pexels.com/. they have then been grayscaled, posterized, and pixelated
+			$(".background").attr("src","images/backgrounds/" + location + ".png");
+
 			SetScript(ENCOUNTERS[location][encounter], true);
 
 			const music = new Audio("sounds/music/" + location + ".mp3");
 			music.volume = 0.3;
 			music.play();
-
-			// backgrounds have been sourced from https://www.pexels.com/. they have then been grayscaled, posterized, and pixelated
-			$(".background").attr("src","images/backgrounds/" + location + ".png");
 
 			$(".actor").hide();
 

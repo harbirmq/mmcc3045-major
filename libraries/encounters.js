@@ -162,6 +162,73 @@ const ENCOUNTERS = {
 			]}
 		],
 
+		// good ending
+		"S1": [
+			{text: "I knew that I should never give up."},
+			{text: "That it would all be worth it."},
+			{text: "Every choice I've made..."},
+			{text: "For better or for worse, It's come to this."},
+			{text: "I know it's a long road ahead...", function() {
+				if (allies.length > 0) {
+					setScript([
+						{text: "But for now... I can say we made it."},
+						{text: "We all did our parts..."},
+						{text: "We've all endured so much..."},
+						{text: "But..."},
+						{text: "I just can't stop thinking..."},
+						{text: "..."},
+						{text: "The fight has only just begun."},
+						{text: "..."},
+						{text: "THE END [GOOD ENDING w/ ALLIES]"}
+					]);
+				}
+			}},
+			{text: "But for now... I can say I made it."},
+			{text: "I did my part."},
+			{text: "I've endured so much..."},
+			{text: "But..."},
+			{text: "I just can't stop thinking..."},
+			{text: "..."},
+			{text: "The fight has only just begun."},
+			{text: "..."},
+			{text: "THE END [GOOD ENDING - LONE WOLF]"}
+		],
+
+		// bad ending
+		"S2": [
+			{text: "Suddenly, I was transported.", background: "afterlife"},
+			{text: "I could see it all."},
+			{text: "Everything laid out before me..."},
+			{text: "Every choice I've made... every soul I've taken..."},
+			{text: "...", function() {
+				if (stats.sanity < 0) {
+					setScript([
+						{text: "They're calling to me..."},
+						{text: "There is so much I've yet to do..."},
+						{text: "..."},
+						{text: "I don't care."},
+						{text: "I don't care anymore."},
+						{text: "..."},
+						{text: "TAKE ME."},
+						{text: "TAKE ME!"},
+						{text: "TAKE ME!!!!!!!!! !!!!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!!"},
+						{text: "..."},
+						{text: "THE END [BAD ENDING - GONE INSANE]"}
+					]);
+				}
+			}},
+			{text: "And now..."},
+			{text: "It looks like I'm joining them."},
+			{text: "I've endured so much..."},
+			{text: "But..."},
+			{text: "Looks like today's just not my day."},
+			{text: "..."},
+			{text: "..."},
+			{text: "I'm coming now, mum..."},
+			{text: "..."},
+			{text: "THE END [BAD ENDING - DEATH]"}
+		],
+
 		"ALL ALLIES": [
 			{finish: true, function() {
 				for (const ally in ALLIES) {
@@ -713,7 +780,11 @@ const ENCOUNTERS = {
 					}
 				}),
 			]}
-		]
+		],
+/*
+		"E1": [
+
+		]*/
 	}
 }
 
