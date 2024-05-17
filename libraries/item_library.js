@@ -49,6 +49,8 @@ const ITEMS = {
 		"Keyboard": Key("Keyboard", "A board of keys"),
 		"Computer Part": Key("Computer Part", "A small CPU chip"),
 		"Apartment Master Key": Key("Apartment Master Key", "A key to all the rooms in the apartments... Why does this exist?"),
+		"Handheld Radio (DEAD)": Key("Handheld Radio (DEAD)", "A radio that could be used to communicate with the military. Its batteries' are dead."),
+		"Handheld Radio": Key("Handheld Radio", "A radio that could be used to communicate with the military."),
 	},
 };
 

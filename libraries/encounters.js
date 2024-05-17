@@ -479,7 +479,7 @@ const ENCOUNTERS = {
 				Option("Accept your fate", function(){
 					setScript([
 						{text: "You close your eyes and accept your fate..."},
-						{text: "The zombie forcefully opens one of your eyes and pulls it out! [-5 HP] [-5 SANITY] [+INJURY - MISSING EYE]", stat: { sanity: -5, health: -5 }, buff: [ BUFFS["Missing Eye"]]},
+						{text: "The zombie forcefully opens one of your eyes and pulls it out! [-5 HP] [-5 SANITY] [+INJURY: MISSING EYE]", stat: { sanity: -5, health: -5 }, buff: [ BUFFS["Missing Eye"]]},
 						{text: "Satisifed with just your eye, the zombie walks away chewing on it..."},
 						{finish: true, removeencounter: ["LAW BUILDING", "E0"]}
 					], true);
@@ -771,7 +771,7 @@ const ENCOUNTERS = {
 					else {
 						setScript([
 							{text: "SPEED ROLL: " + roll.text + "... You attempt to run but the zombie catches your leg."},
-							{text: "It takes a crunch out of it, and as you shake it off you feel a chill go down your spine. [+INJURY: Leg Bite] [-3 SANITY]", stat: { sanity: -3}, buff: [BUFFS["Leg Bite"]]},
+							{text: "It takes a crunch out of it, and as you shake it off you feel a chill go down your spine. [+INJURY: LEG BITE] [-3 SANITY]", stat: { sanity: -3}, buff: [BUFFS["Leg Bite"]]},
 							{text: "Tears in your eyes, you limp-run back to your home base"},
 							{finish: true, function() {
 								FlagIncrementor("lake_e0", 3, "MACQUARIE LAKE", "E0");
@@ -781,10 +781,66 @@ const ENCOUNTERS = {
 				}),
 			]}
 		],
-/*
-		"E1": [
 
-		]*/
+		"E1": [
+			{text: "Moving through the shadows, you spot a dead body."},
+			{text: "You notice a small black object next to the body..."},
+			{text: "Upon moving closer you notice it's a handheld radio."},
+			{text: "This has to be what that whiteboard was mentioning..."},
+			{text: "You try turning it on... but,", function() {
+				if (HasAlly(ALLIES["Linus"])) {
+					setScript([
+						{text: "'It's dead.' Linus says", actor: "Linus"},
+						{text: "'The batteries are dead.' he continues."},
+						{text: "'Okay. Batteries. That shouldn't be too hard to come across... right?' I add.", function() {
+							if (HasAlly(ALLIES["Vanessa"])) {
+								setScript([
+									{text: "'Central Courtyard.' Vanessa chimes in.", actor: "Vanessa"},
+									{text: "'There's a guy at Central Courtyard. I remember him mentioning batteries.' she continues."},
+									{text: "'Though, I don't think he would willingly give it to us.' she adds."},
+									{text: "We decide to head back and prepare to move to CENTRAL COURTYARD to find batteries. [+ITEM: HANDHELD RADIO (DEAD)]", item: [ITEMS["key"]["Handheld Radio (DEAD)"]]},
+									{finish: true, removeencounter: ["MACQUARIE LAKE", "E1"], function() {
+										AddEncounter("CENTRAL COURTYARD", "S1");
+										SetObjective("investigate_lake", false);
+										SetObjective("get_batteries", true);
+									}}
+								]);
+							}
+						}},
+						{text: "We decide to head back and start looking for batteries. [+ITEM: HANDHELD RADIO (DEAD)]", item: [ITEMS["key"]["Handheld Radio (DEAD)"]]},
+						{finish: true, removeencounter: ["MACQUARIE LAKE", "E1"], function() {
+							AddEncounter("CENTRAL COURTYARD", "S0");
+							SetObjective("investigate_lake", false);
+							SetObjective("find_batteries", true);
+						}}
+					]);
+				}
+			}},
+			{text: "It doesn't work? No - It's dead."},
+			{text: "I open a compartment and find white acid over the batteries."},
+			{text: "I remove the batteries from the device."},
+			{text: "'Okay. Batteries. That shouldn't be too hard to come across... right?'", function() {
+				if (HasAlly(ALLIES["Vanessa"])) {
+					setScript([
+						{text: "'Central Courtyard.' Vanessa chimes in.", actor: "Vanessa"},
+						{text: "'There's a guy at Central Courtyard. I remember him mentioning batteries.' she continues."},
+						{text: "'Though, I don't think he would willingly give it to us.' she adds."},
+						{text: "We decide to head back and prepare to move to CENTRAL COURTYARD to find batteries. [+ITEM: HANDHELD RADIO (DEAD)]", item: [ITEMS["key"]["Handheld Radio (DEAD)"]]},
+						{finish: true, removeencounter: ["MACQUARIE LAKE", "E1"], function() {
+							AddEncounter("CENTRAL COURTYARD", "S1");
+							SetObjective("investigate_lake", false);
+							SetObjective("get_batteries", true);
+						}}
+					]);
+				}
+			}},
+			{text: "We decide to head back and start looking for batteries. [+ITEM: HANDHELD RADIO (DEAD)]", item: [ITEMS["key"]["Handheld Radio (DEAD)"]]},
+			{finish: true, removeencounter: ["MACQUARIE LAKE", "E1"], function() {
+				AddEncounter("CENTRAL COURTYARD", "S0");
+				SetObjective("investigate_lake", false);
+				SetObjective("find_batteries", true);
+			}}
+		]
 	}
 }
 

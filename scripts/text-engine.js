@@ -47,6 +47,12 @@ function DisableButton(button) {
 }
 
 function RunScript(script) {
+	if ($("#mark-of-death").length) {
+		SaveData("location", "meta");
+		SaveData("encounter", "S2");
+		window.location.replace("encounter.html");
+	}
+
 	if (script_index >= script.length) { return; }
 	if (active) { skip = true; }
 

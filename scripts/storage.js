@@ -37,6 +37,7 @@ let objectives = {
 
 	// MILITARY ENDING
 	investigate_lake: false,
+	find_batteries: false, get_batteries: false,
 }
 
 // data functions
@@ -121,9 +122,7 @@ function ModifyStats(inputStats) {
 	if (stats.sanity > stats["max sanity"]) { stats.sanity = stats["max sanity"]; }
 
 	if (stats.health <= 0 || stats.sanity <= 0) {
-		SaveData("location", "meta");
-		SaveData("encounter", "S2");
-		window.location.replace("encounter.html");
+		$("body").append("<div id='mark-of-death'>Something is calling...<div>");
 	}
 
 	SaveData("stats", stats);
@@ -275,6 +274,8 @@ function RefreshWindows() {
 			case "return_vanessa": string = "Return to the LECTURE HALL with Vanessa"; break;
 
 			case "investigate_lake": string = "Investigate MACQUARIE LAKE to find out what the whiteboard markings meant"; break;
+			case "find_batteries": string = "Find batteries somewhere to power the handheld radio"; break;
+			case "get_batteries": string = "Find the guy Vanessa was talking about at CENTRAL COURTYARD and get batteries from him"; break;
 		}
 
 		objective_list.append("<li>" + string + "</li>");
