@@ -82,7 +82,7 @@ function RunScript(script) {
 			case "zombie":
 				$(".actor").fadeIn(200);
 				if (!value) {
-					let random = Random(17);
+					let random = Random(19);
 
 					$(".actor").attr("src","images/actors/zombie_" + random + ".png");
 
@@ -92,7 +92,7 @@ function RunScript(script) {
 				else {
 					$(".actor").attr("src","images/actors/zombie_" + value + ".png");
 
-					let growl = new Audio("sounds/actors/" + value + ".mp3");
+					let growl = new Audio("sounds/actors/zombie_" + value + ".mp3");
 					growl.play();
 				}
 			break;

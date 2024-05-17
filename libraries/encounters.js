@@ -119,7 +119,7 @@ function MenuOptions() {
 		}),
 		Option("Jog on the spot", function() {
 			setScript([
-				{text: "You jogged on the spot. Your feel a little tired, but it was probably worth it. [+1 SPEED] [-1 DEFENSE]", stat: { speed: 1, defense: -1 }}
+				{text: "You jogged on the spot. Your feel a little tired afterwards. [+1 SPEED] [-1 DEFENSE]", stat: { speed: 1, defense: -1 }}
 			], true);
 
 			SetFlag("rested_two", true);
@@ -249,7 +249,7 @@ const ENCOUNTERS = {
 			{text: "Everything laid out before me..."},
 			{text: "Every choice I've made... every soul I've taken..."},
 			{text: "...", function() {
-				if (stats.sanity < 0) {
+				if (stats.sanity <= 0) {
 					setScript([
 						{text: "They're calling to me..."},
 						{text: "There is so much I've yet to do..."},
@@ -310,7 +310,7 @@ const ENCOUNTERS = {
 		"E1": [
 			{text: "Sneaking through the building, you feel like that there's something that you could take right in front of your eyes...",
 			function() {
-				if (stats.perception >= 7) {
+				if (stats.perception >= 11) {
 					setScript([
 						{text: "[PERCEPTION CHECK SUCCESS] You could use the glass shards on the floor as a weapon!"},
 						{text: "You rip a part of your shirt off, and wrap it around a large shard to form a makeshift shiv. [+ITEM: GLASS SHIV]", item: [ITEMS["weapon"]["Glass Shiv"]]},
@@ -439,7 +439,7 @@ const ENCOUNTERS = {
 							}},
 							{text: "STRENGTH ROLL: " + roll.text + "..."},
 							{text: "You barely manage to defeat the zombies..."},
-							{text: "Too scared to look up, you hastily leave the scene. [-2 HP] [+INJURY: DEEP SCRATCH]", stat: {hp: -2}, buff: [BUFFS["Deep Scratch"]] },
+							{text: "Too scared to look up, you hastily leave the scene. [-6 HP] [+INJURY: DEEP SCRATCH]", stat: {hp: -6}, buff: [BUFFS["Deep Scratch"]] },
 							{finish: true, removeencounter: ["CENTRAL COURTYARD", "E0"]}
 						], true);
 					}
@@ -653,7 +653,7 @@ const ENCOUNTERS = {
 					else {
 						setScript([
 							{text: "STRENGTH ROLL: " + roll.text + "..."},
-							{text: "You defeated the zombie, with some difficulty... [-2 HP]", stat: { health: -2 }},
+							{text: "You defeated the zombie, with some difficulty... [-5 HP]", stat: { health: -5 }},
 							{finish: true, removeencounter: ["LAW BUILDING", "E0"]}
 						], true);
 					}
@@ -700,7 +700,7 @@ const ENCOUNTERS = {
 				Option("Accept your fate", function(){
 					setScript([
 						{text: "You close your eyes and accept your fate..."},
-						{text: "The zombie forcefully opens one of your eyes and pulls it out! [-5 HP] [-5 SANITY] [+INJURY: MISSING EYE]", stat: { sanity: -5, health: -5 }, buff: [ BUFFS["Missing Eye"]]},
+						{text: "The zombie forcefully opens one of your eyes and pulls it out! [-10 HP] [-5 SANITY] [+INJURY: MISSING EYE]", stat: { sanity: -5, health: -5 }, buff: [ BUFFS["Missing Eye"]]},
 						{text: "Satisifed with just your eye, the zombie walks away chewing on it..."},
 						{finish: true, removeencounter: ["LAW BUILDING", "E0"]}
 					], true);
@@ -717,11 +717,129 @@ const ENCOUNTERS = {
 		],
 
 		"E2": [
-			{text: "Looking through the glass of one of the classrooms, you notice something on a whiteboard."},
+			{text: "Right now, I don't think it's possible to make it to the upper layers of the LAW BUILDING..."},
+			{text: "Maybe I should try and lure out a zombie from the stairwell? If I take out enough... it might be easier to go up.", options: [
+				Option("Lure a Zombie", function() {
+					setScript([
+						{text: "You see a lone zombie on the stairway... you decide to lure it out."},
+						{text: "Now then, what should I do?", zombie: false, options: [
+							Option("[STRENGTH ROLL] Attack", function(){
+								let roll = Roll(stats.strength, 10);
+
+								if (roll.success) {
+									setScript([
+										{text: "STRENGTH ROLL: " + roll.text + "!"},
+										{text: "You successfully defeated the zombie with ease!"},
+										{text: "If I do this enough, I'll be able to access the upper levels."},
+										{finish: true, function() {
+											FlagIncrementor("law_e2", 3, "LAW BUILDING", "E2");
+
+											if (flags.law_e2 == 3) { AddEncounter("LAW BUILDING", "S0"); }
+										}}
+									], true);
+								}
+								else {
+									setScript([
+										{text: "STRENGTH ROLL: " + roll.text + "..."},
+										{text: "You defeated the zombie, with some difficulty... [-7 HP]", stat: { health: -7 }},
+										{text: "If I do this enough, I'll be able to access the upper levels."},
+										{finish: true, function() {
+											FlagIncrementor("law_e2", 3, "LAW BUILDING", "E2");
+
+											if (flags.law_e2 == 3) { AddEncounter("LAW BUILDING", "S0"); }
+										}}
+									], true);
+								}
+							}),
+							Option("[DEFENSE ROLL] Parry", function(){
+								let roll = Roll(stats.defense, 8);
+
+								if (roll.success) {
+									setScript([
+										{text: "DEFENSE ROLL: " + roll.text + "!"},
+										{text: "As the zombie lunges at you, you parry it with ease."},
+										{text: "If I do this enough, I'll be able to access the upper levels."},
+										{finish: true, function() {
+											FlagIncrementor("law_e2", 3, "LAW BUILDING", "E2");
+
+											if (flags.law_e2 == 3) { AddEncounter("LAW BUILDING", "S0"); }
+										}}
+									], true);
+								}
+								else {
+									setScript([
+										{text: "DEFENSE ROLL: " + roll.text + "..."},
+										{text: "The zombie lunges at you! You catch it, and quickly throw it away before stomping on it. That did NOT go as planned. [-4 SANITY]", stat: { sanity: -4 }},
+										{text: "If I do this enough, I'll be able to access the upper levels."},
+										{finish: true, function() {
+											FlagIncrementor("law_e2", 3, "LAW BUILDING", "E2");
+
+											if (flags.law_e2 == 3) { AddEncounter("LAW BUILDING", "S0"); }
+										}}
+									], true);
+								}
+							}),
+							Option("[LUCK ROLL] Pray", function(){
+								let roll = Roll(stats.luck, 15);
+
+								if (roll.success) {
+									setScript([
+										{text: "LUCK ROLL: " + roll.text + "!"},
+										{text: "The zombie trips over and smashes its head on the floor!"},
+										{text: "*sigh* What a relief..."},
+										{text: "If I do this enough, I'll be able to access the upper levels."},
+										{finish: true, function() {
+											FlagIncrementor("law_e2", 3, "LAW BUILDING", "E2");
+
+											if (flags.law_e2 == 3) { AddEncounter("LAW BUILDING", "S0"); }
+										}}
+									], true);
+								}
+								else {
+									setScript([
+										{text: "LUCK ROLL: " + roll.text + "..."},
+										{text: "The zombie lunges at you dealing severe damage! [-7 HP]", stat: { health: -7 }},
+										{text: "As you recover, you swiftly stomp on it's head, finishing it off..."},
+										{text: "If I do this enough, I'll be able to access the upper levels."},
+										{finish: true, function() {
+											FlagIncrementor("law_e2", 3, "LAW BUILDING", "E2");
+
+											if (flags.law_e2 == 3) { AddEncounter("LAW BUILDING", "S0"); }
+										}}
+									], true);
+								}
+							}),
+							Option("", function(){}),
+						]}
+					], true);
+				}),
+				Option("", function(){}),
+				Option("", function(){}),
+				Option("Leave for now", function() {
+					setScript([
+						{text: "Maybe now is not a great time... I'll come back later."},
+						{finish: true},
+					], true);
+				})
+			]},
+		],
+
+		"S0": [
+			{text: "You check the stairway, and find no zombies in sight."},
+			{text: "'Finally, the stairway has been cleared.' you think to yourself."},
+			{text: "'Now I can freely go scavenge the upper floors.'"},
+			{text: "For now, you decide to go back and get ready to explore the new area."},
+			{finish: true, removeencounter: ["LAW BUILDING", "S0"], function() {
+				AddEncounter("LAW BUILDING", "S1");
+			}}
+		],
+
+		"S1": [
+			{text: "Looking through the glass of one of the classrooms on the upper floor, you notice something on a whiteboard."},
 			{text: "The words 'MILITARY', 'EVACUATION', and 'LAKE' are the only words you can make out..."},
 			{text: "'Could the military be planning to evacuate us at MACQUARIE LAKE?' you wonder."},
 			{text: "The lake is quiet far... but it might be worth investigating. [NEW LOCATION: MACQUARIE LAKE]"},
-			{finish: true, removeencounter: ["LAW BUILDING", "E2"], function() {
+			{finish: true, removeencounter: ["LAW BUILDING", "S1"], function() {
 				SetFlag("unlocked_lake", true);
 				SetObjective("investigate_lake", true);
 			}}
@@ -946,7 +1064,7 @@ const ENCOUNTERS = {
 					}
 					else {
 						setScript([
-							{text: "STRENGTH ROLL: " + roll.text + "... You manage to defeat the zombie, however it fought back fairly well. [-4 HP]", stat: { health: -4}},
+							{text: "STRENGTH ROLL: " + roll.text + "... You manage to defeat the zombie, however it fought back fairly well. [-5 HP]", stat: { health: -5}},
 							{text: "You also alerted some other zombies, so you decide to quickly head back."},
 							{finish: true, function() {
 								FlagIncrementor("lake_e0", 3, "MACQUARIE LAKE", "E0");
