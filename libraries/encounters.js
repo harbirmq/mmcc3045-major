@@ -31,6 +31,8 @@ function Roll(stat, required) {
 }
 
 function AddEncounter(location, code) {
+	if (ACTIVE_ENCOUNTERS[location].includes(code)) { return;}
+
 	ACTIVE_ENCOUNTERS[location].push(code);
 
 	SaveData("active_encounters", ACTIVE_ENCOUNTERS);
@@ -103,6 +105,67 @@ function FlagIncrementor(id, threshold, location, code) {
 	https://creativecommons.org/licenses/by/3.0/deed.en_US 
 */
 
+// menu options
+function MenuOptions() {
+	let options = [
+		Option("Rest", function() {
+			setScript([
+				{text: "You took a well-deserved nap and composed yourself. [+5 HP] [+5 SANITY]", stat: { health: 5, sanity: 5 }}
+			], true);
+
+			SetFlag("rested_one", true);
+			SetFlag("rested", true);
+			SetFlag("rested_count", flags.rested_count + 1);
+		}),
+		Option("Jog on the spot", function() {
+			setScript([
+				{text: "You jogged on the spot. Your feel a little tired, but it was probably worth it. [+1 SPEED] [-1 DEFENSE]", stat: { speed: 1, defense: -1 }}
+			], true);
+
+			SetFlag("rested_two", true);
+			SetFlag("rested", true);
+			SetFlag("rested_count", flags.rested_count + 1);
+		}),
+		Option("Talk into the mirror", function() {
+			setScript([
+				{text: "You talk to yourself in the mirror... 'Am I going crazy..?' [+2 CHARISMA] [-1 SANITY]", stat: { charisma: 2, sanity: -1 }}
+			], true);
+
+			SetFlag("rested_three", true);
+			SetFlag("rested", true);
+			SetFlag("rested_count", flags.rested_count + 1);
+		}),
+		Option("Train your eyes", function() {
+			setScript([
+				{text: "You train your eyes by tracking a fly as it zips around the room. [+2 PERCEPTION] [-1 SANITY]", stat: { perception: 2, sanity: -1 }}
+			], true);
+
+			SetFlag("rested_four", true);
+			SetFlag("rested", true);
+			SetFlag("rested_count", flags.rested_count + 1);
+		}),
+	];
+
+	if (flags.rested_count == 4) {
+		SetFlag("rested_count", 0);
+		SetFlag("rested_one", false);
+		SetFlag("rested_two", false);
+		SetFlag("rested_three", false);
+		SetFlag("rested_four", false);
+
+		return options; 
+	}
+
+	if (flags.rested_count > 0) {
+		if (flags.rested_one) { options[0] = Option("",function(){}); }
+		if (flags.rested_two) { options[1] = Option("",function(){}); }
+		if (flags.rested_three) { options[2] = Option("",function(){}); }
+		if (flags.rested_four) { options[3] = Option("",function(){}); }
+	}
+
+	return options;
+}
+
 // encounters
 const ENCOUNTERS = {
 	"meta": {
@@ -130,36 +193,7 @@ const ENCOUNTERS = {
 		],
 
 		"S0": [
-			{text: "Where should we go next?", options: [
-				Option("Rest", function() {
-					setScript([
-						{text: "You took a well-deserved nap and composed yourself. [+5 HP] [+5 SANITY]", stat: { health: 5, sanity: 5 }}
-					], true);
-
-					SetFlag("rested", true);
-				}),
-				Option("Jog on the spot", function() {
-					setScript([
-						{text: "You jogged on the spot. Your feel a little tired, but it was probably worth it. [+1 SPEED] [-1 DEFENSE]", stat: { speed: 1, defense: -1 }}
-					], true);
-
-					SetFlag("rested", true);
-				}),
-				Option("Talk into the mirror", function() {
-					setScript([
-						{text: "You talk to yourself in the mirror... 'Am I going crazy..?' [+2 CHARISMA] [-1 SANITY]", stat: { charisma: 2, sanity: -1 }}
-					], true);
-
-					SetFlag("rested", true);
-				}),
-				Option("Train your eyes", function() {
-					setScript([
-						{text: "You train your eyes by tracking a fly as it zips around the room. [+2 PERCEPTION] [-1 SANITY]", stat: { perception: 2, sanity: -1 }}
-					], true);
-
-					SetFlag("rested", true);
-				}),
-			]}
+			{text: "Where should we go next?", options: MenuOptions() }
 		],
 
 		// good ending
@@ -440,6 +474,165 @@ const ENCOUNTERS = {
 					], true);
 				}),
 			]},
+		],
+
+		"S0": [
+			{text: "You notice someone scavenging through a restaurant."},
+			{text: "As you approach them, they turn around and look at you."},
+			{text: "'Hey punk, whatcha lookin at?' he mutters", actor: "William"},
+			{text: "'Do you want to join us?' I reply. 'We have have a better chance of surviving together.'"},
+			{text: "His eye slightly twitches."},
+			{text: "..."},
+			{text: "'I'm pretty sure I'd die faster with you' he replies."},
+			{text: "..."},
+			{text: "'Uh... okay.' I shakily say. I don't know how to reply to that."},
+			{text: "He continues: 'Look pal, surviving is easy. I'd much rather find someone more-'", function() {
+				if (HasAlly(ALLIES["Vanessa"])) {
+					setScript([
+						{text: "'Alright, let's cut to the chase' Vanessa cuts in", actor: "Vanessa"},
+						{text: "'You have batteries. I saw them. Hand them over.' she adds."},
+						{text: "His eye twitches again.", actor: "William"},
+						{text: "'You smell li-' before he can finish his sentence, Vanessa lunges forward and performs a clean uppercut on him."},
+						{text: "'So.' Vanessa starts, 'About those batteries?'", actor: "Vanessa"},
+						{text: "He mumbles something and quickly runs away."},
+						{text: "..."},
+						{text: "I am completely speechless after that..."},
+						{text: "'Let's uh... head back now.' I finally say."},
+						{finish: true, removeencounter: ["CENTRAL COURTYARD", "S0"], function() {
+							AddEncounter("CENTRAL COURTYARD", "S1");
+						}}
+					]);
+				}
+			}},
+			{text: "He looks down and up again."},
+			{text: "'-fit.' he finishes."},
+			{text: "It's obvious this guy doesn't want to join."},
+			{text: "I try to keep my cool and respond: 'Well, do you have any batteries?'"},
+			{text: "His eye twitches again."},
+			{text: "'I don't know, do you have a diet?' he replies."},
+			{text: "... Seriously what is wrong with this guy?"},
+			{text: "'Smell you later!!' he finally adds while running away."},
+			{text: "..."},
+			{text: "Am I THAT fat?"},
+			{finish: true, removeencounter: ["CENTRAL COURTYARD", "S0"], function() {
+				AddEncounter("CENTRAL COURTYARD", "S1");
+			}}
+		],
+
+		"S1": [
+			{text: "Sneaking through one of the buildings at CENTRAL COURTYARD, you see a familiar figure."},
+			{text: "Looks like that guy with no manners..."},
+			{text: "I walk up to him again, hopefully this time he will cooperate."},
+			{text: "'Hey, uh-' I speak"},
+			{text: "Before I can finish, he turns around..."},
+			{text: "Oh SHIT!", zombie: "William", options: [
+				Option("[STRENGTH ROLL] Attack", function(){
+					let roll = Roll(stats.strength, 10);
+
+					if (roll.success) {
+						setScript([
+							{text: "STRENGTH ROLL: " + roll.text + "!"},
+							{text: "You perform a clean swipe at his neck."},
+							{text: "He falls to the floor, and something drops out of his hand."},
+							{text: "...Batteries!?"},
+							{text: "You quickly insert the batteries into the handheld radio. [+ITEM: Handheld Radio (FIXED)]", removeitem: [ITEMS["key"]["Handheld Radio (DEAD)"]], item:[ITEMS["key"]["Handheld Radio (FIXED)"]]},
+							{text: "Alright. Maybe I can head back to the LAW BUILDING and learn some more clues?"},
+							{finish: true, removeencounter: ["CENTRAL COURTYARD", "S1"], function() {
+								SetObjective("get_batteries", false);
+								SetObjective("find_batteries", false);
+								SetObjective("find_frequency", true);
+							}}
+						], true);
+					}
+					else {
+						setScript([
+							{text: "STRENGTH ROLL: " + roll.text + "..."},
+							{text: "He performs a clean swipe to your neck. [-6 HP]", stat: { health: -6}},
+							{text: "You perform a counterattack and kill him."},
+							{text: "He falls to the floor, and something drops out of his hand."},
+							{text: "...Batteries!?"},
+							{text: "You quickly insert the batteries into the handheld radio. [+ITEM: Handheld Radio (FIXED)]", removeitem: [ITEMS["key"]["Handheld Radio (DEAD)"]], item:[ITEMS["key"]["Handheld Radio (FIXED)"]]},
+							{text: "Alright. Maybe I can head back to the LAW BUILDING and learn some more clues?"},
+							{finish: true, removeencounter: ["CENTRAL COURTYARD", "S1"], function() {
+								SetObjective("get_batteries", false);
+								SetObjective("find_batteries", false);
+								SetObjective("find_frequency", true);
+							}}
+						], true);
+					}
+				}),
+				Option("[DEFENSE ROLL] Parry", function() {
+					let roll = Roll(stats.defense, 8);
+
+					if (roll.success) {
+						setScript([
+							{text: "DEFENSE ROLL: " + roll.text + "!"},
+							{text: "He dives at you and you perform a clean parry."},
+							{text: "He falls to the floor, and something drops out of his hand."},
+							{text: "...Batteries!?"},
+							{text: "You quickly insert the batteries into the handheld radio. [+ITEM: Handheld Radio (FIXED)]", removeitem: [ITEMS["key"]["Handheld Radio (DEAD)"]], item:[ITEMS["key"]["Handheld Radio (FIXED)"]]},
+							{text: "Alright. Maybe I can head back to the LAW BUILDING and learn some more clues?"},
+							{finish: true, removeencounter: ["CENTRAL COURTYARD", "S1"], function() {
+								SetObjective("get_batteries", false);
+								SetObjective("find_batteries", false);
+								SetObjective("find_frequency", true);
+							}}
+						], true);
+					}
+					else {
+						setScript([
+							{text: "DEFENSE ROLL: " + roll.text + "..."},
+							{text: "He performs a clean swipe to your neck. [-3 HP]", stat: { health: -3}},
+							{text: "You perform a counterattack and kill him."},
+							{text: "He falls to the floor, and something drops out of his hand."},
+							{text: "...Batteries!?"},
+							{text: "You quickly insert the batteries into the handheld radio. [+ITEM: Handheld Radio (FIXED)]", removeitem: [ITEMS["key"]["Handheld Radio (DEAD)"]], item:[ITEMS["key"]["Handheld Radio (FIXED)"]]},
+							{text: "Alright. Maybe I can head back to the LAW BUILDING and learn some more clues?"},
+							{finish: true, removeencounter: ["CENTRAL COURTYARD", "S1"], function() {
+								SetObjective("get_batteries", false);
+								SetObjective("find_batteries", false);
+								SetObjective("find_frequency", true);
+							}}
+						], true);
+					}
+				}),
+				Option("[LUCK ROLL] Hope", function() {
+					let roll = Roll(stats.luck, 10);
+
+					if (roll.success) {
+						setScript([
+							{text: "LUCK ROLL: " + roll.text + "!"},
+							{text: "He tries to dive at you, but somehow just... dies?"},
+							{text: "He falls to the floor, and something drops out of his hand."},
+							{text: "...Batteries!?"},
+							{text: "You quickly insert the batteries into the handheld radio. [+ITEM: Handheld Radio (FIXED)]", removeitem: [ITEMS["key"]["Handheld Radio (DEAD)"]], item:[ITEMS["key"]["Handheld Radio (FIXED)"]]},
+							{text: "Alright. Maybe I can head back to the LAW BUILDING and learn some more clues?"},
+							{finish: true, removeencounter: ["CENTRAL COURTYARD", "S1"], function() {
+								SetObjective("get_batteries", false);
+								SetObjective("find_batteries", false);
+								SetObjective("find_frequency", true);
+							}}
+						], true);
+					}
+					else {
+						setScript([
+							{text: "LUCK ROLL: " + roll.text + "..."},
+							{text: "He performs a clean swipe to your neck. [-7 HP]", stat: { health: -7}},
+							{text: "You perform a counterattack and kill him."},
+							{text: "He falls to the floor, and something drops out of his hand."},
+							{text: "...Batteries!?"},
+							{text: "You quickly insert the batteries into the handheld radio. [+ITEM: Handheld Radio (FIXED)]", removeitem: [ITEMS["key"]["Handheld Radio (DEAD)"]], item:[ITEMS["key"]["Handheld Radio (FIXED)"]]},
+							{text: "Alright. Maybe I can head back to the LAW BUILDING and learn some more clues?"},
+							{finish: true, removeencounter: ["CENTRAL COURTYARD", "S1"], function() {
+								SetObjective("get_batteries", false);
+								SetObjective("find_batteries", false);
+								SetObjective("find_frequency", true);
+							}}
+						], true);
+					}
+				}),
+				Option("", function() {}),
+			]}
 		]
 	},
 
@@ -828,7 +1021,7 @@ const ENCOUNTERS = {
 									{text: "'Though, I don't think he would willingly give it to us.' she adds."},
 									{text: "We decide to head back and prepare to move to CENTRAL COURTYARD to find batteries. [+ITEM: HANDHELD RADIO (DEAD)]", item: [ITEMS["key"]["Handheld Radio (DEAD)"]]},
 									{finish: true, removeencounter: ["MACQUARIE LAKE", "E1"], function() {
-										AddEncounter("CENTRAL COURTYARD", "S1");
+										AddEncounter("CENTRAL COURTYARD", "S0");
 										SetObjective("investigate_lake", false);
 										SetObjective("get_batteries", true);
 									}}
@@ -855,7 +1048,7 @@ const ENCOUNTERS = {
 						{text: "'Though, I don't think he would willingly give it to us.' she adds."},
 						{text: "We decide to head back and prepare to move to CENTRAL COURTYARD to find batteries. [+ITEM: HANDHELD RADIO (DEAD)]", item: [ITEMS["key"]["Handheld Radio (DEAD)"]]},
 						{finish: true, removeencounter: ["MACQUARIE LAKE", "E1"], function() {
-							AddEncounter("CENTRAL COURTYARD", "S1");
+							AddEncounter("CENTRAL COURTYARD", "S0");
 							SetObjective("investigate_lake", false);
 							SetObjective("get_batteries", true);
 						}}
