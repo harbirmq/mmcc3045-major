@@ -76,6 +76,33 @@ function FlagIncrementor(id, threshold, location, code) {
 	encounters prefixed with 'S' are special encounters that should not be added when a new game is made
 */
 
+/*
+	Lurking Evil by Darren Curtis | https://www.darrencurtismusic.com/
+	Music promoted by https://www.chosic.com/free-music/all/
+	Creative Commons CC BY 3.0
+	https://creativecommons.org/licenses/by/3.0/
+
+	My Dark Passenger by Darren Curtis | https://www.darrencurtismusic.com/
+	Music promoted by https://www.chosic.com/free-music/all/
+	Creative Commons CC BY 3.0
+	https://creativecommons.org/licenses/by/3.0/
+
+	Skeleton Carnival by Shane Ivers | https://www.silvermansound.com
+	Music promoted by https://www.chosic.com/free-music/all/
+	Creative Commons CC BY 4.0
+	https://creativecommons.org/licenses/by/4.0/
+
+	Fall From Grace by Darren Curtis | https://www.darrencurtismusic.com/
+	Music promoted by https://www.chosic.com/free-music/all/
+	Creative Commons CC BY 3.0
+	https://creativecommons.org/licenses/by/3.0/
+
+	The Soul-Crushing Monotony Of Isolation (Instrumental Mix) by Punch Deck | https://soundcloud.com/punch-deck
+	Music promoted by https://www.chosic.com/free-music/all/
+	Creative Commons Attribution 3.0 Unported License
+	https://creativecommons.org/licenses/by/3.0/deed.en_US 
+*/
+
 // encounters
 const ENCOUNTERS = {
 	"meta": {
@@ -147,7 +174,7 @@ const ENCOUNTERS = {
 	"COMP BUILDING": {
 		"E0": [
 			{text: "Entering a classroom on the upper floor, you notice that all the keyboards are missing... All except one..."},
-			{text: "As you contemplate taking it, a loud *BANG* could be heard outside."},
+			{text: "As you contemplate taking it, a loud *BANG* could be heard outside.", sound: "effects/gunshot"},
 			{text: "You quickly stuff the keyboard into your bag and leave the building. [+ITEM: KEYBOARD]", item: [ITEMS["key"]["Keyboard"]]},
 			{finish: true, removeencounter: ["COMP BUILDING", "E0"]},
 		],

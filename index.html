@@ -21,14 +21,15 @@
 			// play music
 
 			// sections
-			let section_menu = $("div#menu");
+			const section_menu = $("div#menu");
 			
 			// effects
-			let fade = $("div#fade");
+			const fade = $("div#fade");
+			fade.hide();
 
 			// buttons
-			let new_game = $("div#new-game");
-			let load_game = $("div#load-game");
+			const new_game = $("div#new-game");
+			const load_game = $("div#load-game");
 
 			new_game.click(function() {
 				fade.fadeIn(400, function() {
@@ -38,6 +39,14 @@
 					SaveData("encounter", "E0", true);
 					
 					window.location.replace("encounter.html");
+				});
+			});
+
+			load_game.click(function() {
+				fade.fadeIn(400, function() {
+					section_menu.hide();
+
+					window.location.replace("map.html");
 				});
 			});
 		});

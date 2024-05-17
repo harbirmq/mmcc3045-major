@@ -80,13 +80,13 @@ function RunScript(script) {
 
 					$(".actor").attr("src","images/actors/zombie_" + random + ".png");
 
-					let growl = new Audio("sounds/zombie_" + random + ".mp3");
+					let growl = new Audio("sounds/actors/zombie_" + random + ".mp3");
 					growl.play();
 				}
 				else {
 					$(".actor").attr("src","images/actors/zombie_" + value + ".png");
 
-					let growl = new Audio("sounds/" + value + ".mp3");
+					let growl = new Audio("sounds/actors/" + value + ".mp3");
 					growl.play();
 				}
 			break;
@@ -138,9 +138,14 @@ function RunScript(script) {
 			break;
 
 			case "finish":
-				script[script_index - 1].text = "";
+				text_area.hide();
 
-				window.location.replace("map.html");
+				new Audio("sounds/effects/footsteps.mp3").play();
+
+				const fade = $("div#fade");
+				fade.fadeIn(600, function() {
+					window.location.replace("map.html");
+				});
 			break;
 
 			case "background":

@@ -23,6 +23,13 @@
 
 	<script>
 		$(document).ready(function() {
+			const footsteps = new Audio("sounds/effects/footsteps.mp3");
+			footsteps.currentTime = 0.6;
+			footsteps.play();
+
+			const fade = $("div#fade");
+			fade.fadeOut(600);
+
 			const text_area = $("#text-area");
 			const choice_buttons = [$("#choice1"), $("#choice2"), $("#choice3"), $("#choice4")];
 
@@ -44,8 +51,11 @@
 
 			if (location == "meta" && encounter == "E0") { $("#information-panel").hide(); }
 
-			console.log(ACTIVE_ENCOUNTERS);
 			SetScript(ENCOUNTERS[location][encounter], true);
+
+			const music = new Audio("sounds/music/" + location + ".mp3");
+			music.volume = 0.3;
+			music.play();
 
 			// backgrounds have been sourced from https://www.pexels.com/. they have then been grayscaled, posterized, and pixelated
 			$(".background").attr("src","images/backgrounds/" + location + ".png");
@@ -65,17 +75,12 @@
 		<div id="information-panel">
 			<h2>ITEMS</h2>
 			<div class="scrolling-window" id="items-window">
-				<div class="item">
-					<h3 class="item-name">GUN</h3>
-					<div class="item-stats">
-						<h3 class="item-stat">+5 strength</h3>
-					</div>
-				</div>
+				<h1>Something has gone wrong.. I've failed haven't I!?</h1>
 			</div>
 
 			<h2>ALLIES & BUFFS</h2>
 			<div class="scrolling-window" id="allies-window">
-				<h1>test</h1>
+				<h1>Something has gone wrong.. I've failed haven't I!?</h1>
 			</div>
 
 			<div id="status-bar">
@@ -119,8 +124,8 @@
 			</div>
 		</div>
 	</div>
-	<div id="tooltip">
-		weapon: a blickey you found on the side of the road.
-	</div>
+
+	<div id="tooltip"></div>
+	<div id="fade"></div>
 </body>
 </html>

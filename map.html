@@ -23,6 +23,13 @@
 
 	<script>
 		$(document).ready(function() {
+			const footsteps = new Audio("sounds/effects/footsteps.mp3");
+			footsteps.currentTime = 0.6;
+			footsteps.play();
+
+			const fade = $("div#fade");
+			fade.fadeOut(600);
+
 			const text_area = $("#text-area");
 			const choice_buttons = [$("#choice1"), $("#choice2"), $("#choice3"), $("#choice4")];
 
@@ -42,6 +49,10 @@
 			RefreshWindows();
 
 			setScript(ENCOUNTERS["meta"]["S0"], true);
+
+			const music = new Audio("sounds/music/map.mp3");
+			music.volume = 0.3;
+			music.play();
 
 			$(".actor").hide();
 
@@ -99,7 +110,12 @@
 
 				SaveData("location", location);
 				SaveData("encounter", ACTIVE_ENCOUNTERS[location][Random(ACTIVE_ENCOUNTERS[location].length - 1)]);
-				window.location.replace("encounter.html");
+
+				footsteps.currentTime = 0;
+				footsteps.play();
+				fade.fadeIn(600, function() {
+					window.location.replace("encounter.html");
+				});
 			});
 		});
 	</script>
@@ -121,17 +137,12 @@
 		<div id="information-panel">
 			<h2>ITEMS</h2>
 			<div class="scrolling-window" id="items-window">
-				<div class="item">
-					<h3 class="item-name">GUN</h3>
-					<div class="item-stats">
-						<h3 class="item-stat">+5 strength</h3>
-					</div>
-				</div>
+				<h1>Something has gone wrong.. I've failed haven't I!?</h1>
 			</div>
 
 			<h2>ALLIES & BUFFS</h2>
 			<div class="scrolling-window" id="allies-window">
-				<h1>Test sdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsd</h1>
+				<h1>Something has gone wrong.. I've failed haven't I!?</h1>
 			</div>
 
 			<div id="status-bar">
@@ -181,7 +192,8 @@
 			</div>
 		</div>
 	</div>
-	<div id="tooltip">
-	</div>
+
+	<div id="tooltip"></div>
+	<div id="fade"></div>
 </body>
 </html>
