@@ -426,6 +426,17 @@ const ENCOUNTERS = {
 				FlagIncrementor("law_e1", 3, "LAW BUILDING", "E1");
 			}},
 			{finish: true}
+		],
+
+		"E2": [
+			{text: "Looking through the glass of one of the classrooms, you notice something on a whiteboard."},
+			{text: "The words 'MILITARY', 'EVACUATION', and 'LAKE' are the only words you can make out..."},
+			{text: "'Could the military be planning to evacuate us at MACQUARIE LAKE?' you wonder."},
+			{text: "The lake is quiet far... but it might be worth investigating. [NEW LOCATION: MACQUARIE LAKE]"},
+			{finish: true, removeencounter: ["LAW BUILDING", "E2"], function() {
+				SetFlag("unlocked_lake", true);
+				SetObjective("investigate_lake", true);
+			}}
 		]
 	},
 
@@ -626,6 +637,83 @@ const ENCOUNTERS = {
 				}),
 			]}
 		],
+	},
+
+	"MACQUARIE LAKE": {
+		"E0": [
+			{text: "In the large, open environment of the lake you notice many zombies. Sneaking past will be hard."},
+			{text: "..."},
+			{text: "Despite your best efforts, you manage to alert one zombie. At least it's just one...", zombie: false, options: [
+				Option("[STRENGTH ROLL] Attack", function(){
+					let roll = Roll(stats.strength, 10);
+
+					if (roll.success) {
+						setScript([
+							{text: "STRENGTH ROLL: " + roll.text + "! You easily punt the zombie back into hell."},
+							{text: "You also decide to head back to cut your losses and resupply."},
+							{finish: true, function() {
+								FlagIncrementor("lake_e0", 3, "MACQUARIE LAKE", "E0");
+							}}
+						], true);
+					}
+					else {
+						setScript([
+							{text: "STRENGTH ROLL: " + roll.text + "... You manage to defeat the zombie, however it fought back fairly well. [-4 HP]", stat: { health: -4}},
+							{text: "You also alerted some other zombies, so you decide to quickly head back."},
+							{finish: true, function() {
+								FlagIncrementor("lake_e0", 3, "MACQUARIE LAKE", "E0");
+							}}
+						], true);
+					}
+				}),
+				Option("[DEFENSE ROLL] Parry", function(){
+					let roll = Roll(stats.defense, 8);
+
+					if (roll.success) {
+						setScript([
+							{text: "DEFENSE ROLL: " + roll.text + "! The zombie lunges at you and you perform a counter move, throwing it away from you."},
+							{text: "Slightly shook from the encounter, you decide to head back."},
+							{finish: true, function() {
+								FlagIncrementor("lake_e0", 3, "MACQUARIE LAKE", "E0");
+							}}
+						], true);
+					}
+					else {
+						setScript([
+							{text: "DEFENSE ROLL: " + roll.text + "... The zombie lunges at you in a way you didn't expect."},
+							{text: "You still managed to block, but took some damage in process. [-2 HP] [-1 SANITY]", stat: { health: -2, sanity: -1 }},
+							{text: "You throw off the zombie and quickly leave the area."},
+							{finish: true, function() {
+								FlagIncrementor("lake_e0", 3, "MACQUARIE LAKE", "E0");
+							}}
+						], true);
+					}
+				}),
+				Option("", function(){}),
+				Option("[SPEED ROLL] Flee", function(){
+					let roll = Roll(stats.speed, 8);
+
+					if (roll.success) {
+						setScript([
+							{text: "SPEED ROLL: " + roll.text + "! You turn around and run, faster than the zombie can comprehend."},
+							{finish: true, function() {
+								FlagIncrementor("lake_e0", 3, "MACQUARIE LAKE", "E0");
+							}}
+						], true);
+					}
+					else {
+						setScript([
+							{text: "SPEED ROLL: " + roll.text + "... You attempt to run but the zombie catches your leg."},
+							{text: "It takes a crunch out of it, and as you shake it off you feel a chill go down your spine. [+INJURY: Leg Bite] [-3 SANITY]", stat: { sanity: -3}, buff: [BUFFS["Leg Bite"]]},
+							{text: "Tears in your eyes, you limp-run back to your home base"},
+							{finish: true, function() {
+								FlagIncrementor("lake_e0", 3, "MACQUARIE LAKE", "E0");
+							}}
+						], true);
+					}
+				}),
+			]}
+		]
 	}
 }
 

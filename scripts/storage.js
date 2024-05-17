@@ -34,6 +34,9 @@ let objectives = {
 	// UNLOCK WENDY
 	find_vanessa: false,
 	return_vanessa: false,
+
+	// MILITARY ENDING
+	investigate_lake: false,
 }
 
 // data functions
@@ -264,6 +267,8 @@ function RefreshWindows() {
 
 			case "find_vanessa": string = "Find someone named 'Vanessa'.. If they're not already dead"; break;
 			case "return_vanessa": string = "Return to the LECTURE HALL with Vanessa"; break;
+
+			case "investigate_lake": string = "Investigate MACQUARIE LAKE to find out what the whiteboard markings meant"; break;
 		}
 
 		objective_list.append("<li>" + string + "</li>");
