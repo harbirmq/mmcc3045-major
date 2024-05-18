@@ -219,52 +219,37 @@ const ENCOUNTERS = {
 					{text: "I know it's a long road ahead..."}
 				]
 
-				if (allies.length > 0) {
-					allies.forEach(ally => {
-						switch(ally.name) {
-							case "Vanessa": script.push({text: "'You really did a number on that guy.. huh?'", actor: "Vanessa"}); break;
-							case "Alvin": script.push({text: "'Boy am I glad you found me...'", actor: "Alvin"}); break;
-							case "Lily": script.push({text: "'We really did it...'", actor: "Lily"}); break;
-							case "Linus": script.push({text: "'Imagine if I never sent that message...'", actor: "Linus"}); break;
-							case "Trevor":
-								if (flags.jane_found) {
-									script.push({text: "'Watch me fly, Jane.'", actor: "Trevor"});
-								}
-								else {
-									script.push({text: "'...Where are you, Jane?'", actor: "Trevor"});
-								}
-							break;
-							case "Wendy": script.push({text: "'Good thing I stayed in that closet...'", actor: "Wendy"}); break;
-							case "Noelle": script.push({text: "'I knew you could lead us out of here... You did great.'", actor: "Noelle"}); break;
-							case "Kaitlyn": script.push({text: "'So high up...'", actor: "Kaitlyn"}); break;
-						}
-					});
+				allies.forEach(ally => {
+					switch(ally.name) {
+						case "Vanessa": script.push({text: "'You really did a number on that guy.. huh?'", actor: "Vanessa"}); break;
+						case "Alvin": script.push({text: "'Boy am I glad you found me...'", actor: "Alvin"}); break;
+						case "Lily": script.push({text: "'We really did it...'", actor: "Lily"}); break;
+						case "Linus": script.push({text: "'Imagine if I never sent that message...'", actor: "Linus"}); break;
+						case "Trevor":
+							if (flags.jane_found) {
+								script.push({text: "'Watch me fly, Jane.'", actor: "Trevor"});
+							}
+							else {
+								script.push({text: "'...Where are you, Jane?'", actor: "Trevor"});
+							}
+						break;
+						case "Wendy": script.push({text: "'Good thing I stayed in that closet...'", actor: "Wendy"}); break;
+						case "Noelle": script.push({text: "'I knew you could lead us out of here... You did great.'", actor: "Noelle"}); break;
+						case "Kaitlyn": script.push({text: "'So high up...'", actor: "Kaitlyn"}); break;
+					}
+				});
 					
-					script.push(
-						{text: "But for now... I can say we made it.", actor: ""},
-						{text: "We all did our parts..."},
-						{text: "We've all endured so much..."},
-						{text: "But..."},
-						{text: "I just can't stop thinking..."},
-						{text: "..."},
-						{text: "The fight has only just begun."},
-						{text: "..."},
-						{text: "THE END [ENDING: MILITARY EVACUATION]", options: EndingOptions() }
-					)
-				}
-				else {
-					script.push(
-						{text: "But for now... I can say I made it."},
-						{text: "I did my part."},
-						{text: "I've endured so much..."},
-						{text: "But..."},
-						{text: "I just can't stop thinking..."},
-						{text: "..."},
-						{text: "The fight has only just begun."},
-						{text: "..."},
-						{text: "THE END [ENDING: MILITARY EVACUATION - LONE WOLF]", options: EndingOptions()}
-					);
-				}
+				script.push(
+					{text: "But for now... I can say we made it.", actor: ""},
+					{text: "We all did our parts..."},
+					{text: "We've all endured so much..."},
+					{text: "But..."},
+					{text: "I just can't stop thinking..."},
+					{text: "..."},
+					{text: "The fight has only just begun."},
+					{text: "..."},
+					{text: "THE END [ENDING: MILITARY EVACUATION]", options: EndingOptions() }
+				)
 
 				setScript(script, true);
 			}}
@@ -1359,11 +1344,9 @@ const ENCOUNTERS = {
 			{text: "It makes several rounds above the lake."},
 			{text: "Suddenly, soldiers sitting on the sides of the helicopter start opening fire on the zombies!"},
 			{text: "It seems that they're clearing the way to land..."},
-			{text: "While I wait under cover for the shooting to stop...", function() {
+			{text: "While I wait under cover for the shooting to stop..."},
+			{text: "And while my allies are busy taking on some zombie stragglers...", function() {
 				let script = [];
-				if (allies.length > 0) {
-					script.push({text: "And while my allies are busy taking on some zombie stragglers..."});
-				}
 
 				if (stats.perception >= 15) {
 					script.push(
