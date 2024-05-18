@@ -75,8 +75,13 @@ function RunScript(script) {
 			break;
 
 			case "actor":
-				$(".actor").fadeIn(200);
-				$(".actor").attr("src","images/actors/" + value + ".png");
+				if (value == "") {
+					$(".actor").fadeOut(200);
+				}
+				else {
+					$(".actor").fadeIn(200);
+					$(".actor").attr("src","images/actors/" + value + ".png");
+				}
 			break;
 
 			case "zombie":

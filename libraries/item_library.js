@@ -47,7 +47,7 @@ const ITEMS = {
 
 	"key": {
 		"Keyboard": Key("Keyboard", "A board of keys"),
-		"Computer Part": Key("Computer Part", "A small CPU chip"),
+		"Computer Science Book": Key("Computer Science Book", "A book that explains the basics of computer science... and binary."),
 		"Apartment Master Key": Key("Apartment Master Key", "A key to all the rooms in the apartments... Why does this exist?"),
 		"Handheld Radio (DEAD)": Key("Handheld Radio (DEAD)", "A radio that could be used to communicate with the military. Its batteries' are dead."),
 		"Handheld Radio (FIXED)": Key("Handheld Radio (FIXED)", "A radio that could be used to communicate with the military. I've replaced the batteries."),

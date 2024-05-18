@@ -166,11 +166,22 @@ function MenuOptions() {
 	return options;
 }
 
+function EndingOptions() {
+	return [
+		Option("Main Menu", function() {
+			window.location.replace("index.html");
+		}),
+		Option("", function() {}),
+		Option("", function() {}),
+		Option("Credits", function() {})
+	]
+}
+
 // encounters
 const ENCOUNTERS = {
 	"meta": {
 		"E0": [
-			{text: '"Last day, huh?", I thought to myself...'},
+			{text: '"Last day, huh?", I thought to myself...', background: "wallyswalk", sound: "music/bad_ending"},
 			{text: "I lugged myself out of the metro and walked slowly to my class..."},
 			{text: "I took in the sounds of people walking, the birds chirping, the trees rustling...",},
 			{text: "Strolling through Wally's Walk, I noticed the new law building was finally completed...",},
@@ -196,16 +207,41 @@ const ENCOUNTERS = {
 			{text: "Where should we go next?", options: MenuOptions() }
 		],
 
-		// good ending
+		// MILITARY ending
 		"S1": [
-			{text: "I knew that I should never give up."},
-			{text: "That it would all be worth it."},
-			{text: "Every choice I've made..."},
-			{text: "For better or for worse, It's come to this."},
-			{text: "I know it's a long road ahead...", function() {
+			{function() {
+				let script = [
+					{text: '"Last day, huh?", I thought to myself...', background: "military_ending", sound: "music/good_ending"},
+					{text: "I knew that I should never give up."},
+					{text: "That it would all be worth it."},
+					{text: "Every choice I've made..."},
+					{text: "For better or for worse, It's come to this."},
+					{text: "I know it's a long road ahead..."}
+				]
+
 				if (allies.length > 0) {
-					setScript([
-						{text: "But for now... I can say we made it."},
+					allies.forEach(ally => {
+						switch(ally.name) {
+							case "Vanessa": script.push({text: "'You really did a number on that guy.. huh?'", actor: "Vanessa"}); break;
+							case "Alvin": script.push({text: "'Boy am I glad you found me...'", actor: "Alvin"}); break;
+							case "Lily": script.push({text: "'We really did it...'", actor: "Lily"}); break;
+							case "Linus": script.push({text: "'Imagine if I never sent that message...'", actor: "Linus"}); break;
+							case "Trevor":
+								if (flags.jane_found) {
+									script.push({text: "'Watch me fly, Jane.'", actor: "Trevor"});
+								}
+								else {
+									script.push({text: "'...Where are you, Jane?'", actor: "Trevor"});
+								}
+							break;
+							case "Wendy": script.push({text: "'Good thing I stayed in that closet...'", actor: "Wendy"}); break;
+							case "Noelle": script.push({text: "'I knew you could lead us out of here... You did great.'", actor: "Noelle"}); break;
+							case "Kaitlyn": script.push({text: "'So high up...'", actor: "Kaitlyn"}); break;
+						}
+					});
+					
+					script.push(
+						{text: "But for now... I can say we made it.", actor: ""},
 						{text: "We all did our parts..."},
 						{text: "We've all endured so much..."},
 						{text: "But..."},
@@ -213,38 +249,30 @@ const ENCOUNTERS = {
 						{text: "..."},
 						{text: "The fight has only just begun."},
 						{text: "..."},
-						{text: "THE END [GOOD ENDING w/ ALLIES]", options: [
-							Option("Main Menu", function() {
-								window.location.replace("index.html");
-							}),
-							Option("", function() {}),
-							Option("", function() {}),
-							Option("Credits", function() {})
-						]}
-					]);
+						{text: "THE END [ENDING: MILITARY EVACUATION]", options: EndingOptions() }
+					)
 				}
-			}},
-			{text: "But for now... I can say I made it."},
-			{text: "I did my part."},
-			{text: "I've endured so much..."},
-			{text: "But..."},
-			{text: "I just can't stop thinking..."},
-			{text: "..."},
-			{text: "The fight has only just begun."},
-			{text: "..."},
-			{text: "THE END [GOOD ENDING - LONE WOLF]", options: [
-				Option("Main Menu", function() {
-					window.location.replace("index.html");
-				}),
-				Option("", function() {}),
-				Option("", function() {}),
-				Option("Credits", function() {})
-			]}
+				else {
+					script.push(
+						{text: "But for now... I can say I made it."},
+						{text: "I did my part."},
+						{text: "I've endured so much..."},
+						{text: "But..."},
+						{text: "I just can't stop thinking..."},
+						{text: "..."},
+						{text: "The fight has only just begun."},
+						{text: "..."},
+						{text: "THE END [ENDING: MILITARY EVACUATION - LONE WOLF]", options: EndingOptions()}
+					);
+				}
+
+				setScript(script, true);
+			}}
 		],
 
 		// bad ending
 		"S2": [
-			{text: "Suddenly, I was transported.", background: "afterlife"},
+			{text: "Suddenly, I was transported.", background: "afterlife", sound: "music/bad_ending"},
 			{text: "I could see it all."},
 			{text: "Everything laid out before me..."},
 			{text: "Every choice I've made... every soul I've taken..."},
@@ -261,14 +289,7 @@ const ENCOUNTERS = {
 						{text: "TAKE ME!"},
 						{text: "TAKE ME!!!!!!!!! !!!!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!!"},
 						{text: "..."},
-						{text: "THE END [BAD ENDING - GONE INSANE]", options: [
-							Option("Main Menu", function() {
-								window.location.replace("index.html");
-							}),
-							Option("", function() {}),
-							Option("", function() {}),
-							Option("Credits", function() {})
-						]}
+						{text: "THE END [BAD ENDING - GONE INSANE]", options: EndingOptions() }
 					]);
 				}
 			}},
@@ -281,14 +302,7 @@ const ENCOUNTERS = {
 			{text: "..."},
 			{text: "I'm coming now, mum..."},
 			{text: "..."},
-			{text: "THE END [BAD ENDING - DEATH]", options: [
-				Option("Main Menu", function() {
-					window.location.replace("index.html");
-				}),
-				Option("", function() {}),
-				Option("", function() {}),
-				Option("Credits", function() {})
-			]}
+			{text: "THE END [BAD ENDING - DEATH]", options: EndingOptions() }
 		],
 
 		"ALL ALLIES": [
@@ -1338,6 +1352,123 @@ const ENCOUNTERS = {
 				SetObjective("investigate_lake", false);
 				SetObjective("find_batteries", true);
 			}}
+		],
+
+		"S0": [
+			{text: "As you make your way to the lake, you notice the military helicopter flying above."},
+			{text: "It makes several rounds above the lake."},
+			{text: "Suddenly, soldiers sitting on the sides of the helicopter start opening fire on the zombies!"},
+			{text: "It seems that they're clearing the way to land..."},
+			{text: "While I wait under cover for the shooting to stop...", function() {
+				let script = [];
+				if (allies.length > 0) {
+					script.push({text: "And while my allies are busy taking on some zombie stragglers..."});
+				}
+
+				if (stats.perception >= 15) {
+					script.push(
+						{text: "[PERCEPTION CHECK SUCCESS] I notice a figure sneaking up on me!"},
+						{text: "I turn around and..."},
+						{text: "See a man in body armour...", actor: "Lance"},
+						{text: "'Quite perceptive, I see.' he mutters."},
+						{text: "'Too bad, you will now die.' he adds."},
+						{text: "..?"},
+						{text: "..!"},
+						{text: "He lunges at you, and you dodge..."},
+						{text: "I want to try and reason with him but..."},	
+					);
+				}
+				else {
+					script.push(
+						{text: "[PERCEPTION CHECK FAILED] I notice a throbbing pain on my arm... [-4 HP]", stat: { health : -4}},
+						{text: "I quickly dodge back and turn around to find..."},
+						{text: "A man standing there, in body armour...", actor: "Lance"},
+						{text: "His posture hardens, he smiles..."},
+						{text: "'Now, you will die' he mutters."},
+						{text: "..?"},
+						{text: "..!"},
+						{text: "He lunges at you, and you dodge..."},
+					);
+				}
+
+				script.push(
+					{text: "I can tell.. He's killed before."},
+					{text: "The military is right there... I need to esc-"},
+					{text: "No."},
+					{text: "No there's no time."},
+					{text: "Whatever this guy wants...."},
+					{text: "I'm not going to let him get it."},
+					{text: "We need to settle this right here. Right now."},
+					{text: "I prepare my weapon and get ready..."},
+					{text: "For the final battle.", function() {
+						let lance_hp = 25;
+
+						let battleScript = function(new_hp){ return [
+							{text: "[LANCE: " + new_hp + " HP]... What should I do?", options: [
+								Option("[STRENGTH + SPEED ROLL] Attack", function() {
+									const strengthRoll = Random(stats.strength);
+									const speedRoll = Random(stats.speed);
+
+									const lance_damage = Math.max(0, 8 - speedRoll);
+
+									setScript([
+										{text: "I step back and begin a running attack. I damage him for [STRENGTH ROLL: " + strengthRoll + "].", function() {
+											lance_hp -= strengthRoll;
+											if (lance_hp <= 0) { setScript(winningScript); }
+										}},
+										{text: "He performs a counter attack. I try and dodge to the best of my ability. He damages me for ([SPEED ROLL: " + speedRoll + "] - 8) = " + lance_damage + ".", stat: { health: -lance_damage }},
+										{function() {
+											setScript(battleScript(lance_hp), true);
+										}}
+									], true);
+								}),
+								Option("", function(){}),
+								Option("[LUCK + DEFENSE ROLL] Heal", function() {
+									const luckRoll = Random(stats.luck);
+									const defenseRoll = Random(stats.defense);
+
+									const lance_damage = Math.max(0, 5 - defenseRoll);
+
+									setScript([
+										{text: "I step back and patch up some of my wounds. I heal for [LUCK ROLL: " + luckRoll + "].", stat: { health: luckRoll }},
+										{text: "He lunges at me. I try to defend to the best of my ability. He damages me for ([DEFENSE ROLL: " + defenseRoll + "] - 5) = " + lance_damage + ".", stat: { health: -lance_damage }},
+										{function() {
+											setScript(battleScript(lance_hp), true);
+										}}
+									], true);
+								}),
+								Option("", function(){}),
+							]}
+						]}
+
+						const winningScript = [
+							{text: "He grabs me by the neck."},
+							{text: "'You will DIE. Just like I killed EVERYONE ELSE.' he screams "},
+							{text: "The body we found with the walkie talkie... It had to have been the work of this man."},
+							{text: "'AND I WILL BOARD THAT HELICOPTER. LETTING YOU WATCH AS I LEAVE YOU TO DIE.' he continues"},
+							{text: "I've had enough."},
+							{text: "I charge up my first and perform a clean hook to his face, knocking him out."},
+							{text: "Noticing the gunfire had stopped, we walked towards the helicopter that has now landed.", actor: ""},
+							{text: "Not even looking back, we board the helicopter and leave..."},
+							{text: "..."},
+							{function() {
+								text_area.hide();
+
+								SaveData("location", "meta");
+								SaveData("encounter", "S1");
+
+								$("div#fade").fadeIn(600, function() {
+									window.location.reload();
+								});
+							}}
+						];
+
+						setScript(battleScript(lance_hp));
+					}}
+				);
+
+				setScript(script);
+			}},
 		]
 	}
 }

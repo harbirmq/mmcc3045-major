@@ -49,18 +49,21 @@
 			const location = ReadData("location");
 			const encounter = ReadData("encounter");
 
-			if (location == "meta" && encounter == "E0") { $("#information-panel").hide(); }
+			if (location == "meta") { 
+				if (encounter == "E0") { $("#information-panel").hide(); }
+			}
+			else {
+				// backgrounds have been sourced from https://www.pexels.com/. they have then been de-saturated, posterized, and pixelated
+				$(".background").attr("src","images/backgrounds/" + location + ".png");
 
-			// backgrounds have been sourced from https://www.pexels.com/. they have then been grayscaled, posterized, and pixelated
-			$(".background").attr("src","images/backgrounds/" + location + ".png");
-
-			SetScript(ENCOUNTERS[location][encounter], true);
-
-			const music = new Audio("sounds/music/" + location + ".mp3");
-			music.volume = 0.3;
-			music.play();
+				const music = new Audio("sounds/music/" + location + ".mp3");
+				music.volume = 0.3;
+				music.play();
+			}
 
 			$(".actor").hide();
+
+			SetScript(ENCOUNTERS[location][encounter], true);
 
 			IncrementProgressFlags();
 			RefreshWindows();

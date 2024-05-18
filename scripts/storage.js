@@ -101,6 +101,8 @@ function RemoveGeneric(genericID, genericArray, genericType) {
 			if (genericID.stats != null) {
 				for (const [key, value] of Object.entries(genericID.stats)) {
 					stats[key] -= value;
+
+					if (stats[key] < 0) { stats[key] = 0; }
 				}
 				SaveData("stats", stats);
 			}
@@ -126,6 +128,8 @@ function HasGeneric(genericID, genericArray) {
 function ModifyStats(inputStats) {
 	for (const [key, value] of Object.entries(inputStats)) {
 		stats[key] += value;
+
+		if (stats[key] < 0) { stats[key] = 0; }
 	}
 
 	if (stats.health > stats["max health"]) { stats.health = stats["max health"]; }
@@ -157,6 +161,8 @@ function IncrementProgressFlags() {
 		if (flags.military_counter == 5) {
 			SetObjective("wait_for_military", false);
 			SetObjective("go_to_lake", true);
+
+			AddEncounter("MACQUARIE LAKE", "S0");
 		}
 	}
 }
