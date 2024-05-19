@@ -496,7 +496,9 @@ const ENCOUNTERS = {
 
 	"CENTRAL COURTYARD": {
 		"E0": [
-			{text: "Walking through Central Courtyard, you notice a scream!"},
+			{text: "Walking through Central Courtyard, you notice a scream!", function() {
+				SetFlag("vanessa_encountered", true);
+			}},
 			{text: "You duck behind some cover and peek out."},
 			{text: "You notice a pair of zombies attacking a fairly armored girl!", options: [
 				Option("[SPEED CHECK] Distract Zombies", function(){
@@ -523,6 +525,9 @@ const ENCOUNTERS = {
 					else {
 						let roll = Roll(stats.strength, 15);
 
+						SetFlag("save_vanessa", true);
+						if (objectives.find_vanessa) { AddEncounter("CENTRAL COURTYARD", "S2"); }
+
 						setScript([
 							{text: "[SPEED CHECK FAIL] You scream at the top of your lungs to distract the zombies... but now they're coming at you!",
 							function() {
@@ -545,6 +550,8 @@ const ENCOUNTERS = {
 					let roll = Roll(stats.luck, 10);
 
 					if (roll.success) {
+						SetFlag("vanessa_encountered", false);
+
 						setScript([
 							{text: "LUCK ROLL: " + roll.text + "!"},
 							{text:"You watch the girl fight for her life."},
@@ -554,6 +561,8 @@ const ENCOUNTERS = {
 						], true);
 					}
 					else {
+						if (objectives.find_vanessa) { AddEncounter("CENTRAL COURTYARD", "S2"); }
+
 						setScript([
 							{text: "LUCK ROLL: " + roll.text + "..."},
 							{text: "You watch the girl swiftly take out the zombies with ease."},
@@ -565,6 +574,8 @@ const ENCOUNTERS = {
 				}),
 				Option(" ", function(){}),
 				Option("Do Nothing", function(){
+					if (objectives.find_vanessa) { AddEncounter("CENTRAL COURTYARD", "S2"); }
+
 					setScript([
 						{text:"You decide to sneak away, leaving the poor girl alone [-1 SANITY]", stat: {sanity: -1}},
 						{finish: true, removeencounter: ["CENTRAL COURTYARD", "E0"]},
@@ -742,6 +753,79 @@ const ENCOUNTERS = {
 				}),
 				Option("", function() {}),
 			]}
+		],
+
+		"S2": [
+			{function() {
+				let script = [];
+
+				if (flags.save_vanessa) {
+					script.push(
+						{text: "As you sneak through Central Courtyard, you notice someone trying to call out to you."},
+						{text: "'*psst* Hey.' the voice says."},
+						{text: "You turn around and look to see a beautiful girl in a motorcycle helmet", actor: "Vanessa"},
+						{text: "'Thanks for trying to save me back there.' she says."},
+						{text: "'Oh yeah, uh... no problem.' I embarrassingly reply."},
+						{text: "..."},
+						{text: "There's an awkward silence that I need to break..."},
+						{text: "'Oh, would you like to join me? I have a safehouse setup.' I finally ask"},
+						{text: "She snickers."},
+						{text: "'Okay, I'll join you. Because you're brave.' she says."},
+						{text: "'I'm Vanessa. What about you?' she asks."},
+						{text: "I'm... brave?"},
+						{text: "Wait... did she just say Vanessa?"},
+						{text: "'Oh right, we shouldn't stay out here for too long.' I say."},
+						{text: "We decided to head back and resupply. [+ALLY: Vanessa]", ally: [ALLIES["Vanessa"]]},
+						{finish: true, removeencounter: ["CENTRAL COURTYARD", "S2"], function() {
+							if (objectives.find_vanessa) {
+								SetObjective("find_vanessa", false);
+								SetObjective("return_vanessa", true);
+							}
+						}}
+					);
+				}
+				else {
+					script.push(
+						{text: "As you sneak through Central Courtyard, you see that girl again - the one that was fighting two zombies."},
+						{text: "She notices you and approaches."},
+						{text: "'Thanks for nothing back there.' she says", actor: "Vanessa"},
+						{text: "...", function() {
+							if (stats.charisma >= 10) {
+								setScript([
+									{text: "[CHARISMA CHECK SUCCESS] 'Sorry about that... I panicked.' I reply."},
+									{text: "She snickers."},
+									{text: "'Yeah... It's okay.' she responds."},
+									{text: "'Do you want to join me? I think we'll have a higher chance of surviving together.' I ask hesitantly."},
+									{text: "..."},
+									{text: "'Sure. Whatever.' she sharply says."},
+									{text: "'I'm Vanessa. What about you?' she proudly asks."},
+									{text: "Wait.. did she just say Vanessa?"},
+									{text: "'Oh right, we shouldn't stay out here for too long.' I say."},
+									{text: "We decided to head back and resupply. [+ALLY: Vanessa]", ally: [ALLIES["Vanessa"]]},
+									{finish: true, removeencounter: ["CENTRAL COURTYARD", "S2"], function() {
+										if (objectives.find_vanessa) {
+											SetObjective("find_vanessa", false);
+											SetObjective("return_vanessa", true);
+										}
+									}}
+								], true);
+							}
+						}},
+						{text: "[CHARISMA CHECK FAILED] 'Uh.... sorry?' I reply."},
+						{text: "She snickers."},
+						{text: "'Yeah... whatever.' she sharply responds."},
+						{text: "She then turns around and leaves.", actor: ""},
+						{text: "Ah crap, I messed up."},
+						{text: "Well, let's just head back for now then."},
+						{finish: true, removeencounter: ["CENTRAL COURTYARD", "S2"], function() {
+							RemoveEncounter("LECTURE HALL", "S0");
+							AddEncounter("LECTURE HALL", "S1");
+						}}
+					);
+				}
+
+				setScript(script, true);
+			}}
 		]
 	},
 
@@ -1113,7 +1197,7 @@ const ENCOUNTERS = {
 						{text: "..."},
 						{text: "She seems serious... what should I do?", options: [
 							Option("[CHARISMA CHECK] Reason with her", function(){
-								if (stats.charisma >= 10) {
+								if (stats.charisma >= 8) {
 									setScript([
 										{text: "[CHARISMA CHECK SUCCESS] 'Look, It's safe out here right now, but it might not be later.' you calmly speak"},
 										{text: "'We've got plenty of supplies... you'll be safe with us.'"},
@@ -1193,7 +1277,7 @@ const ENCOUNTERS = {
 			}},
 			{text: "She's... still in there. What should I do?", options: [
 				Option("[CHARISMA CHECK] Reason with her", function(){
-					if (stats.charisma >= 10) {
+					if (stats.charisma >= 8) {
 						setScript([
 							{text: "[CHARISMA CHECK SUCCESS] 'Look, It's safe out here right now, but it might not be later.' you calmly speak"},
 							{text: "'We've got plenty of supplies... you'll be safe with us.'"},
@@ -1207,6 +1291,12 @@ const ENCOUNTERS = {
 							{text: "Okay... I need to go find a Vanessa... If she's even still alive."},
 							{finish: true, function() {
 								SetObjective("find_vanessa", true);
+
+								console.log("VANNY FOUND? " + flags.vanessa_encountered)
+								
+								if (flags.vanessa_encountered) {
+									AddEncounter("CENTRAL COURTYARD", "S2");
+								}
 							}},
 						], true);
 					}
@@ -1229,6 +1319,16 @@ const ENCOUNTERS = {
 				}),
 			]}
 		],
+
+		"S1": [
+			{text: "You come across the same closet that girl was in..."},
+			{text: "The door is open."},
+			{text: "..."},
+			{text: "Nobody is inside...", function() {
+				SetObjective("find_vanessa", false);
+			}},
+			{finish: true, removeencounter: ["LECTURE HALL", "S1"]}
+		]
 	},
 
 	"MACQUARIE LAKE": {

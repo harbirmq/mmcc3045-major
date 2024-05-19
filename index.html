@@ -46,6 +46,8 @@
 			});
 
 			load_game.click(function() {
+				if (!localStorage.length) { return; }
+
 				fade.fadeIn(400, function() {
 					section_menu.hide();
 

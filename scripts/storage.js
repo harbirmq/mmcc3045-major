@@ -19,15 +19,7 @@ let stats = { // default stats
 };
 
 let flags = {
-	unlocked_apartments: false,
-	unlocked_lake: false,
-
-	rested: false,
 	rested_count: 0,
-	rested_one: false,
-	rested_two: false,
-	rested_three: false,
-	rested_four: false,
 
 	military_counter: 0,
 	military_max: 0,
