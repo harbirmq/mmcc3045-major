@@ -11,7 +11,7 @@ function InitTextEngine(_text_area, _choice_buttons) {
 	choice_buttons = _choice_buttons;
 }
 
-function SetScript(script, run, menu = false) {
+function SetScript(script, run) {
 	script_index = 0;
 
 	choice_buttons.forEach(element => {
@@ -23,7 +23,7 @@ function SetScript(script, run, menu = false) {
 		RunScript(script);
 	});
 
-	if (run) { RunScript(script, menu); }
+	if (run) { RunScript(script, run); }
 }
 
 function WriteText(text) {
@@ -47,7 +47,7 @@ function DisableButton(button) {
 	button.off("click");
 }
 
-function RunScript(script, menu = false) {
+function RunScript(script, run = false) {
 	if ($("#mark-of-death").length) {
 		SaveData("location", "meta");
 		SaveData("encounter", "S2");
@@ -57,7 +57,7 @@ function RunScript(script, menu = false) {
 	if (script_index >= script.length) { return; }
 
 	if (active) {
-		if (menu) {
+		if (run) {
 			clearTimeout(timeout);
 		}
 		else {

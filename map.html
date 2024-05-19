@@ -53,6 +53,7 @@
 
 			const music = new Audio("sounds/music/map.mp3");
 			music.volume = 0.3;
+			music.loop = true;
 			music.play();
 
 			$(".actor").hide();
@@ -69,12 +70,12 @@
 					if (flags.rested) {
 						setScript([
 							{text: "I don't think theres anything left to explore at " + location + " for now..."}
-						], true, true);
+						], true);
 					}
 					else {
 						setScript([
 							{text: "I don't think theres anything left to explore at " + location + " for now...", options: MenuOptions() }
-					 	], true, true);
+					 	], true);
 					}
 
 					return;
