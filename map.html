@@ -57,7 +57,7 @@
 			$(".actor").hide();
 
 			if (!flags.unlocked_apartments) { $("#map-apartments").hide(); $("#apartments").hide(); }
-			if (!flags.unlocked_lake) { $("#map-lake").hide(); }
+			if (!flags.unlocked_lake) { $("#map-lake").hide(); $("#macquarie-lake").hide(); }
 
 			SetFlag("rested", false);
 
@@ -88,15 +88,43 @@
 					window.location.replace("encounter.html");
 				});
 			});
+
+			$(".map-button").on({
+				mouseenter: function() {
+					let location = $(this).data("location");
+					let selector = $("#map");
+
+					switch(location) {
+						case "MACQUARIE LAKE": selector = $("#map-lake"); break;
+						case "APARTMENTS": selector = $("#map-apartments"); break;
+					}
+
+					selector.attr("src","images/backgrounds/map " + location + " glow.png");
+				},
+				mouseleave: function() {
+					let location = $(this).data("location");
+					let selector = $("#map");
+
+					selector.attr("src","images/backgrounds/map.png");
+
+					switch(location) {
+						case "MACQUARIE LAKE": selector = $("#map-lake"); break;
+						case "APARTMENTS": selector = $("#map-apartments"); break;
+						default: return;
+					}
+
+					selector.attr("src","images/backgrounds/map " + location + ".png");
+				}
+			});
 		});
 	</script>
 </head>
 
 <body>
 	<div id="stage">
-		<img class="background" src="images/backgrounds/map.png">
-		<img class="background" id="map-lake" src="images/backgrounds/map lake.png">
-		<img class="background" id="map-apartments" src="images/backgrounds/map apartments.png">
+		<img class="background" id="map" src="images/backgrounds/map.png">
+		<img class="background" id="map-lake" src="images/backgrounds/map MACQUARIE LAKE.png">
+		<img class="background" id="map-apartments" src="images/backgrounds/map APARTMENTS.png">
 
 		<div class="map-button" id="lecture-hall" data-location="LECTURE HALL" style="height: 160px; width: 161px; top: 200px; left: 166px;">⠀</div>
 		<div class="map-button" id="central-courtyard" data-location="CENTRAL COURTYARD" style="height: 170px; width: 150px; top: 31px; left: 353px;">⠀</div>
