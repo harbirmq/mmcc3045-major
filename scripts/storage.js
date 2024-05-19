@@ -28,6 +28,9 @@ let flags = {
 	rested_two: false,
 	rested_three: false,
 	rested_four: false,
+
+	military_counter: 0,
+	military_max: 0,
 }
 
 let objectives = {
@@ -154,11 +157,27 @@ function SetObjective(id, value) {
 	SaveData("objectives", objectives);
 }
 
+function CountEncounters() {
+	let counter = 0;
+
+	for (const [location, _] of Object.entries(ACTIVE_ENCOUNTERS)) {
+		if (location == "meta") { continue; }
+	
+		counter += ACTIVE_ENCOUNTERS[location].length;
+	}
+
+	return counter;
+}
+
 function IncrementProgressFlags() {
 	if (objectives.wait_for_military) {
+		if (flags.military_max == 0) {
+			SetFlag("military_max", Math.min(5, CountEncounters()));
+		}
+
 		SetFlag("military_counter", flags.military_counter + 1);
 
-		if (flags.military_counter == 5) {
+		if (flags.military_counter == flags.military_max) {
 			SetObjective("wait_for_military", false);
 			SetObjective("go_to_lake", true);
 
@@ -306,7 +325,7 @@ function RefreshWindows() {
 			case "find_frequency": string = "If we investigate the LAW BUILDING again, maybe we can find the military frequency?"; break;
 			case "find_linus": string = "I need to find someone who can read binary... Maybe I'll look at the COMP BUILDING?"; break;
 			case "return_linus": string = "Linus seems great with computers. I should take him to the whiteboard at the LAW BUILDING."; break;
-			case "wait_for_military": string = "I need to survive for " + (5 - flags.military_counter) + " more encounters, then head to MACQUARIE LAKE"; break;
+			case "wait_for_military": string = "I need to survive for " + (flags.military_max - flags.military_counter) + " more encounters, then head to MACQUARIE LAKE"; break;
 			case "go_to_lake": string = "The military should be here any second now! I need to head to MACQUARIE LAKE!"; break;
 		}
 

@@ -820,7 +820,7 @@ const ENCOUNTERS = {
 		"E1": [
 			{text: "Skimming through one of the classrooms, you notice tally marks scratched onto the wall."},
 			{text: "The numbers look to only go up to seven... The thought of people not even surviving past a week fills you with dread. [-2 SANITY]", stat: { sanity: -2 }, function() {
-				FlagIncrementor("law_e1", 3, "LAW BUILDING", "E1");
+				FlagIncrementor("law_e1", 2, "LAW BUILDING", "E1");
 			}},
 			{finish: true}
 		],
@@ -1340,9 +1340,9 @@ const ENCOUNTERS = {
 		],
 
 		"S0": [
-			{text: "As you make your way to the lake, you notice the military helicopter flying above."},
+			{text: "As you make your way to the lake, you notice the military helicopter flying above.", sound:"effects/helicopter"},
 			{text: "It makes several rounds above the lake."},
-			{text: "Suddenly, soldiers sitting on the sides of the helicopter start opening fire on the zombies!"},
+			{text: "Suddenly, soldiers sitting on the sides of the helicopter start opening fire on the zombies!", sound:"effects/gunshots"},
 			{text: "It seems that they're clearing the way to land..."},
 			{text: "While I wait under cover for the shooting to stop..."},
 			{text: "And while my allies are busy taking on some zombie stragglers...", function() {
@@ -1363,7 +1363,7 @@ const ENCOUNTERS = {
 				}
 				else {
 					script.push(
-						{text: "[PERCEPTION CHECK FAILED] I notice a throbbing pain on my arm... [-4 HP]", stat: { health : -4}},
+						{text: "[PERCEPTION CHECK FAILED] I notice a throbbing pain on my arm... [-4 HP]", sound:"effects/stab", stat: { health : -4}},
 						{text: "I quickly dodge back and turn around to find..."},
 						{text: "A man standing there, in body armour...", actor: "Lance"},
 						{text: "His posture hardens, he smiles..."},
@@ -1430,7 +1430,7 @@ const ENCOUNTERS = {
 							{text: "The body we found with the walkie talkie... It had to have been the work of this man."},
 							{text: "'AND I WILL BOARD THAT HELICOPTER. LETTING YOU WATCH AS I LEAVE YOU TO DIE.' he continues"},
 							{text: "I've had enough."},
-							{text: "I charge up my first and perform a clean hook to his face, knocking him out."},
+							{text: "I charge up my fist and perform a clean hook to his face, knocking him out."},
 							{text: "Noticing the gunfire had stopped, we walked towards the helicopter that has now landed.", actor: ""},
 							{text: "Not even looking back, we board the helicopter and leave..."},
 							{text: "..."},
