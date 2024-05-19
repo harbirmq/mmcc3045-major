@@ -225,14 +225,7 @@ const ENCOUNTERS = {
 						case "Alvin": script.push({text: "'Boy am I glad you found me...'", actor: "Alvin"}); break;
 						case "Lily": script.push({text: "'We really did it...'", actor: "Lily"}); break;
 						case "Linus": script.push({text: "'Imagine if I never sent that message...'", actor: "Linus"}); break;
-						case "Trevor":
-							if (flags.jane_found) {
-								script.push({text: "'Watch me fly, Jane.'", actor: "Trevor"});
-							}
-							else {
-								script.push({text: "'...Where are you, Jane?'", actor: "Trevor"});
-							}
-						break;
+						case "Trevor": script.push({text: "'Watch me fly, Jane.'", actor: "Trevor"}); break;
 						case "Wendy": script.push({text: "'Good thing I stayed in that closet...'", actor: "Wendy"}); break;
 						case "Noelle": script.push({text: "'I knew you could lead us out of here... You did great.'", actor: "Noelle"}); break;
 						case "Kaitlyn": script.push({text: "'So high up...'", actor: "Kaitlyn"}); break;
@@ -1151,6 +1144,7 @@ const ENCOUNTERS = {
 				}
 
 				AddEncounter("APARTMENTS", "S0");
+				AddEncounter("APARTMENTS", "S1");
 			}}
 		],
 
@@ -1167,6 +1161,27 @@ const ENCOUNTERS = {
 			{text: "[DEFENSE CHECK FAILED] The crushing weight of the bookshelf has caused you some damage... [-3 HP]", stat: { health: -3 }},
 			{text: "Before anything else starts falling on you, you quickly leave the apartment."},
 			{finish: true, removeencounter: ["APARTMENTS", "S0"]}
+		],
+		"S1": [
+			{text: "While exploring the corridor between apartments, you notice a man searching the rooms."},
+			{text: "Before you can approach him, he notices you and walks towards you."},
+			{text: "'Have you seen a girl? Short black hair with pigtails... silver heart locket?' he says.", actor:"Trevor"},
+			{text: "'Uh.. no, I can't say I-' before I can finish speaking, he cuts in."},
+			{text: "'Okay. Well, if you find her... Keep her safe.' he says. 'I'll find you.'"},
+			{text: "'W-wait!' I hastily say... 'Come with me, we can look for her together.'"},
+			{text: "'Sorry, but no. I need to find her as soon as possible.' he rejects."},
+			{text: "'But...' he continues, 'If I find her, We'll come join you.'"},
+			{text: "'Okay. It's a deal.' I reply."},
+			{text: "Before he leaves, he says one last thing."},
+			{text: "'I'm Trevor by the way.'"},
+			{text: "Before I can reply he swiftly continues his search.", actor: ""},
+			{text: "..."},
+			{text: "I hope he finds her..."},
+			{finish: true, removeencounter: ["APARTMENTS", "S1"], function() {
+				SetObjective("find_jane", true);
+
+				AddEncounter("LECTURE HALL", "S2");
+			}}
 		]
 	},
 
@@ -1250,6 +1265,112 @@ const ENCOUNTERS = {
 			]},
 		],
 
+		"E1": [
+			{text: "Exploring the lecture hall, you notice a row of bags."},
+			{text: "Most of the bags have nothing special in them but..."},
+			{text: "One has a jacket in it. This could be useful as protection. [+ITEM: BOMBER JACKET]", item: [ITEMS["armor"]["Bomber Jacket"]]},
+			{finish: true, removeencounter: ["LECTURE HALL", "E1"]}
+		],
+
+		"E2": [
+			{text: "As you walk through a hallway you notice a groaning sound..."},
+			{text: "A zombie attacks you from behind!", zombie: false, options: [
+				Option("[STRENGTH ROLL] Attack", function(){
+					let roll = Roll(stats.strength, 10);
+
+					if (roll.success) {
+						setScript([
+							{text: "STRENGTH ROLL: " + roll.text + "!"},
+							{text: "You successfully defeated the zombie with ease!"},
+							{finish: true, function() {
+								FlagIncrementor("hall_e2", 2, "LECTURE HALL", "E2");
+							}}
+						], true);
+					}
+					else {
+						setScript([
+							{text: "STRENGTH ROLL: " + roll.text + "..."},
+							{text: "You defeated the zombie, with some difficulty... [-5 HP]", stat: { health: -5 }},
+							{finish: true, function() {
+								FlagIncrementor("hall_e2", 2, "LECTURE HALL", "E2");
+							}}
+						], true);
+					}
+				}),
+				Option("[DEFENSE ROLL] Parry", function() {
+					let roll = Roll(stats.defense, 8);
+
+					if (roll.success) {
+						setScript([
+							{text: "DEFENSE ROLL: " + roll.text + "!"},
+							{text: "The zombie dives at you and you perform a clean parry."},
+							{text: "You stomp on it's head to finish it off..."},
+							{finish: true, function() {
+								FlagIncrementor("hall_e2", 2, "LECTURE HALL", "E2");
+							}}
+						], true);
+					}
+					else {
+						setScript([
+							{text: "DEFENSE ROLL: " + roll.text + "..."},
+							{text: "The zombie leaps at your block... It wasn't strong enough! [-3 HP]", stat: { health: -3}},
+							{text: "You perform a counterattack and kill it..."},
+							{finish: true, function() {
+								FlagIncrementor("hall_e2", 2, "LECTURE HALL", "E2");
+							}}
+						], true);
+					}
+				}),
+				Option("[LUCK ROLL] Pray", function(){
+					let roll = Roll(stats.luck, 8);
+
+					if (roll.success) {
+						setScript([
+							{text: "LUCK ROLL: " + roll.text + "!"},
+							{text: "The zombie trips over and smashes its head on the floor!"},
+							{text: "'That was lucky..' you think to yourself."},
+							{finish: true, function() {
+								FlagIncrementor("hall_e2", 2, "LECTURE HALL", "E2");
+							}}
+						], true);
+					}
+					else {
+						setScript([
+							{text: "LUCK ROLL: " + roll.text + "..."},
+							{text: "The zombie lunges at you dealing severe damage! [-7 HP]", stat: { health: -7 }},
+							{text: "As you recover, you swiftly stomp on it's head, finishing it off..."},
+							{finish: true, function() {
+								FlagIncrementor("hall_e2", 2, "LECTURE HALL", "E2");
+							}}
+						], true);
+					}
+				}),
+				Option("[SPEED ROLL] Flee", function(){
+					let roll = Roll(stats.speed, 5);
+
+					if (roll.success) {
+						setScript([
+							{text: "SPEED ROLL: " + roll.text + "!"},
+							{text: "You quickly sprint away, without even looking back."},
+							{finish: true, function() {
+								FlagIncrementor("hall_e2", 2, "LECTURE HALL", "E2");
+							}}
+						], true);
+					}
+					else {
+						setScript([
+							{text: "SPEED ROLL: " + roll.text + "..."},
+							{text: "The zombie lunges at you! You dodge, but... what if you didn't? [-2 SANITY]", stat: { sanity: -2 }},
+							{text: "Before anything else can happen, you swiftly leave the room."},
+							{finish: true, function() {
+								FlagIncrementor("hall_e2", 2, "LECTURE HALL", "E2");
+							}}
+						], true);
+					}
+				}),
+			]},
+		],
+
 		"S0": [
 			{text: "You come across the same closet that girl was in...", function() {
 				if (objectives.find_vanessa) {
@@ -1328,7 +1449,63 @@ const ENCOUNTERS = {
 				SetObjective("find_vanessa", false);
 			}},
 			{finish: true, removeencounter: ["LECTURE HALL", "S1"]}
-		]
+		],
+
+		"S2": [
+			{text: "As you walk into one of the rooms... you notice a groaning sound."},
+			{text: "A zombie attacks you from behind!", zombie: "lover", options: [
+				Option("[STRENGTH ROLL] Attack", function(){
+					setScript(ENCOUNTERS["LECTURE HALL"]["S3"], true);
+				}),
+				Option("[DEFENSE ROLL] Parry", function() {
+					setScript(ENCOUNTERS["LECTURE HALL"]["S3"], true);
+				}),
+				Option("[LUCK ROLL] Pray", function(){
+					setScript(ENCOUNTERS["LECTURE HALL"]["S3"], true);
+				}),
+				Option("[SPEED ROLL] Flee", function(){
+					setScript(ENCOUNTERS["LECTURE HALL"]["S3"], true);
+				}),
+			]},
+		],
+
+		"S3": [
+			{text: "Suddenly, a loud yelling can be heard."},
+			{text: "'WAIT!' the voice screams."},
+			{text: "Before you can do anything, you are pulled out of the room, and the door is shut.", actor: ""},
+			{text: "You turn around to see who pulled you."},
+			{text: "'Hey.. *huff* that's... *puff*' Trevor says.", actor: "Trevor"},
+			{text: "'That's my girlfriend... *huff* Jane..' he finally finishes."},
+			{text: "'Oh... I'm so sorry.' I reply."},
+			{text: "'It's okay...' he says."},
+			{text: "'..Can I?' he asks while directing his head towards the door."},
+			{text: "'Oh. Of course.' I hastily reply."},
+			{text: "He looks away from me and heads towards the door."},
+			{text: "'Okay.. *sigh*' Trevor whispers."},
+			{text: "He enters the room and closes the door behind him.", actor: ""},
+			{text: "..."},
+			{text: "..."},
+			{text: "*BANG*", sound:"effects/gunshot"},
+			{text: "..."},
+			{text: "*BANG*", sound: "effects/gunshot"},
+			{text: "..?"},
+			{text: "'Trevor?' I say out loud."},
+			{text: "..."},
+			{text: "'Trev-' before I can finish saying his name, the door opens again."},
+			{text: "'Sorry I took so long.' Trevor says", actor: "Trevor"},
+			{text: "'I thought you... you..' I can't find the words..."},
+			{text: "'Yeah.' Trevor says slowly. 'I was going to, but...'"},
+			{text: "'I kept this gun loaded with two bullets.' he continues"},
+			{text: "'In the event we were cornered... we wouldn't have had to suffer.'"},
+			{text: "'But... I failed her.' he adds, looking down."},
+			{text: "'Those bullets were our mememto mori... but...'"},
+			{text: "'I'm not going to die anymore.' he says proudly, looking back up."},
+			{text: "'Now. Where to?' he asks."},
+			{text: "[+ALLY: TREVOR]", ally: [ALLIES["Trevor"]]},
+			{finish: true, removeencounter: ["LECTURE HALL","S2"], function() {
+				SetObjective("find_jane", false);
+			}},
+		],
 	},
 
 	"MACQUARIE LAKE": {
@@ -1465,6 +1642,23 @@ const ENCOUNTERS = {
 				SetObjective("investigate_lake", false);
 				SetObjective("find_batteries", true);
 			}}
+		],
+		"E2": [
+			{text: "Wandering under the trees near the lake, you step on a stick."},
+			{text: "..."},
+			{text: "It didn't break?"},
+			{text: "You look back at the stick and try stomping on it..."},
+			{text: "Nothing."},
+			{text: "You decide to pick up the stick and use it as a weapon. [+ITEM: Stick]", item: [ITEMS["weapon"]["Stick"]]},
+			{finish: true, removeencounter: ["MACQUARIE LAKE", "E2"]},
+		],
+		"E3": [
+			{text: "Near the lake, you notice two ducklings running to their mother."},
+			{text: "'It seems zombies have no interest in animals.' you think to yourself"},
+			{text: "Glad to see animals living on, you gain some hope. [+1 HP] [+1 SANITY]", stat: { health: 1, sanity: 1}},
+			{finish: true, function() {
+				FlagIncrementor("lake_e3", 2, "MACQUARIE LAKE", "E3");
+			}},
 		],
 
 		"S0": [

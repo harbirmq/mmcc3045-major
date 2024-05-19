@@ -158,6 +158,14 @@ function RunScript(script, run = false) {
 				});
 			break;
 
+			case "background":
+				$(".background").attr("src","images/backgrounds/" + value + ".png");
+			break;
+
+			case "removeencounter":
+				RemoveEncounter(value[0], value[1]);
+			break;
+
 			case "finish":
 				text_area.hide();
 
@@ -167,14 +175,6 @@ function RunScript(script, run = false) {
 				fade.fadeIn(600, function() {
 					window.location.replace("map.html");
 				});
-			break;
-
-			case "background":
-				$(".background").attr("src","images/backgrounds/" + value + ".png");
-			break;
-
-			case "removeencounter":
-				RemoveEncounter(value[0], value[1]);
 			break;
 		}
 	}

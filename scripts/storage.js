@@ -35,6 +35,9 @@ let objectives = {
 	find_vanessa: false,
 	return_vanessa: false,
 
+	// UNLOCK TREVOR
+	find_jane: false,
+
 	// MILITARY ENDING
 	investigate_lake: false,
 	find_batteries: false, get_batteries: false,
@@ -281,6 +284,8 @@ function RefreshWindows() {
 
 			case "find_vanessa": string = "Find someone named 'Vanessa'.. If they're not already dead"; break;
 			case "return_vanessa": string = "Return to the LECTURE HALL with Vanessa"; break;
+
+			case "find_jane": string = "If I find a girl with short black pigtails and a heart locket, I should keep her safe until Trevor finds us."; break;
 
 			case "investigate_lake": string = "Investigate MACQUARIE LAKE to find out what the whiteboard markings meant"; break;
 			case "find_batteries": string = "Find batteries somewhere to power the handheld radio"; break;

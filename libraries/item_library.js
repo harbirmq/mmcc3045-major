@@ -43,6 +43,7 @@ const ITEMS = {
 		"Motorcycle Helmet": Armor("Motorcycle Helmet", "A cool, black, motorcycle helmet", { defense: 5, perception: -5 }),
 		"Lucky Bracelet": Armor("Lucky Bracelet", "A shiny gold bracelet decorated with some gems", { luck: 3 }),
 		"Coding Socks": Armor("Coding Socks", "A pair of thigh-high, black socks", { charisma: 2, luck: 1 }),
+		"Bomber Jacket": Armor("Bomber Jacket", "A cool looking, black jacket with purple markings.", { defense: 3 }),
 	},
 
 	"key": {
