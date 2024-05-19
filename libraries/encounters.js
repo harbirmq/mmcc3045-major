@@ -89,10 +89,10 @@ function FlagIncrementor(id, threshold, location, code) {
 	Creative Commons CC BY 3.0
 	https://creativecommons.org/licenses/by/3.0/
 
-	Skeleton Carnival by Shane Ivers | https://www.silvermansound.com
+	Echoes of Time v2 by Kevin MacLeod | https://incompetech.com/
 	Music promoted by https://www.chosic.com/free-music/all/
-	Creative Commons CC BY 4.0
-	https://creativecommons.org/licenses/by/4.0/
+	Creative Commons CC BY 3.0
+	https://creativecommons.org/licenses/by/3.0/
 
 	Fall From Grace by Darren Curtis | https://www.darrencurtismusic.com/
 	Music promoted by https://www.chosic.com/free-music/all/
