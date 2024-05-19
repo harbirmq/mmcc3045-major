@@ -207,9 +207,7 @@ const ENCOUNTERS = {
 			{text: "Oh, and it's always raining...",},
 			{text: "...",},
 			{text: "Now then...",},
-			{function() {
-				window.location.replace("map.html");
-			}},
+			{finish: true}
 		],
 
 		"S0": [
@@ -582,6 +580,112 @@ const ENCOUNTERS = {
 						{text:"You decide to sneak away, leaving the poor girl alone [-1 SANITY]", stat: {sanity: -1}},
 						{finish: true, removeencounter: ["CENTRAL COURTYARD", "E0"]},
 					], true);
+				}),
+			]},
+		],
+
+		"E1": [
+			{text: "Raiding one of the restaurants at Central Courtyard, you get an idea..."},
+			{text: "If I can go into the kitchen maybe I can..."},
+			{text: "And there it was waiting; a kitchen knife - the perfect weapon! [+ITEM: KITCHEN KNIFE]", item: [ITEMS["weapon"]["Kitchen Knife"]]},
+			{finish: true, removeencounter: ["CENTRAL COURTYARD","E1"]}
+		],
+
+		"E2": [
+			{text: "As you walk through Central Courtyard, you notice a groaning sound..."},
+			{text: "A zombie attacks you from behind!", zombie: false, options: [
+				Option("[STRENGTH ROLL] Attack", function(){
+					let roll = Roll(stats.strength, 10);
+
+					if (roll.success) {
+						setScript([
+							{text: "STRENGTH ROLL: " + roll.text + "!"},
+							{text: "You successfully defeated the zombie with ease!"},
+							{finish: true, function() {
+								FlagIncrementor("courtyard_e2", 2, "CENTRAL COURTYARD", "E2");
+							}}
+						], true);
+					}
+					else {
+						setScript([
+							{text: "STRENGTH ROLL: " + roll.text + "..."},
+							{text: "You defeated the zombie, with some difficulty... [-5 HP]", stat: { health: -5 }},
+							{finish: true, function() {
+								FlagIncrementor("courtyard_e2", 2, "CENTRAL COURTYARD", "E2");
+							}}
+						], true);
+					}
+				}),
+				Option("[DEFENSE ROLL] Parry", function() {
+					let roll = Roll(stats.defense, 8);
+
+					if (roll.success) {
+						setScript([
+							{text: "DEFENSE ROLL: " + roll.text + "!"},
+							{text: "The zombie dives at you and you perform a clean parry."},
+							{text: "You stomp on it's head to finish it off..."},
+							{finish: true, function() {
+								FlagIncrementor("courtyard_e2", 2, "CENTRAL COURTYARD", "E2");
+							}}
+						], true);
+					}
+					else {
+						setScript([
+							{text: "DEFENSE ROLL: " + roll.text + "..."},
+							{text: "The zombie leaps at your block... It wasn't strong enough! [-3 HP]", stat: { health: -3}},
+							{text: "You perform a counterattack and kill it..."},
+							{finish: true, function() {
+								FlagIncrementor("courtyard_e2", 2, "CENTRAL COURTYARD", "E2");
+							}}
+						], true);
+					}
+				}),
+				Option("[LUCK ROLL] Pray", function(){
+					let roll = Roll(stats.luck, 8);
+
+					if (roll.success) {
+						setScript([
+							{text: "LUCK ROLL: " + roll.text + "!"},
+							{text: "The zombie trips over and smashes its head on the floor!"},
+							{text: "'That was lucky..' you think to yourself."},
+							{finish: true, function() {
+								FlagIncrementor("courtyard_e2", 2, "CENTRAL COURTYARD", "E2");
+							}}
+						], true);
+					}
+					else {
+						setScript([
+							{text: "LUCK ROLL: " + roll.text + "..."},
+							{text: "The zombie lunges at you dealing severe damage! [-7 HP]", stat: { health: -7 }},
+							{text: "As you recover, you swiftly stomp on it's head, finishing it off..."},
+							{finish: true, function() {
+								FlagIncrementor("courtyard_e2", 2, "CENTRAL COURTYARD", "E2");
+							}}
+						], true);
+					}
+				}),
+				Option("[SPEED ROLL] Flee", function(){
+					let roll = Roll(stats.speed, 5);
+
+					if (roll.success) {
+						setScript([
+							{text: "SPEED ROLL: " + roll.text + "!"},
+							{text: "You quickly sprint away, without even looking back."},
+							{finish: true, function() {
+								FlagIncrementor("courtyard_e2", 2, "CENTRAL COURTYARD", "E2");
+							}}
+						], true);
+					}
+					else {
+						setScript([
+							{text: "SPEED ROLL: " + roll.text + "..."},
+							{text: "The zombie lunges at you! You dodge, but... what if you didn't? [-2 SANITY]", stat: { sanity: -2 }},
+							{text: "Before anything else can happen, you swiftly leave the room."},
+							{finish: true, function() {
+								FlagIncrementor("courtyard_e2", 2, "CENTRAL COURTYARD", "E2");
+							}}
+						], true);
+					}
 				}),
 			]},
 		],
@@ -1154,6 +1258,7 @@ const ENCOUNTERS = {
 
 				AddEncounter("APARTMENTS", "S0");
 				AddEncounter("APARTMENTS", "S1");
+				AddEncounter("APARTMENTS", "S2");
 			}}
 		],
 
@@ -1191,6 +1296,63 @@ const ENCOUNTERS = {
 
 				AddEncounter("LECTURE HALL", "S2");
 			}}
+		],
+
+		"S2": [
+			{text: "Trying some of the doors in the apartments, you notice one door doesn't work with your key?"},
+			{text: "..."},
+			{text: "*BASH*"},
+			{text: "*BASH*"},
+			{text: "I try shoulder bashing the door, and...", function() {
+				if (stats.strength >= 20) {
+					let script = [];
+
+					script.push(
+						{text: "[STRENGTH CHECK SUCCESS] The door swings open!"},
+						{text: "Hopefully that didn't make too much noise..."},
+						{text: "I enter the room, when suddenly:"},
+						{text: "'AHHHHHHHH!!!!!!!!!'", actor: "Lily"},
+						{text: "'AAAAHHHHHHHH!!!!!!!!!'", actor: "Kaitlyn"},
+					);
+
+					if (allies.length > 0) {
+						allies.forEach(ally => {
+							switch(ally.name) {
+								case "Alvin": script.push({text: "'AHHHHH!!!!!'", actor: "Alvin"}); break;
+								case "Linus": script.push({text: "'!!!'", actor: "Linus"}); break;
+								case "Wendy": script.push({text: "'AHHHHHHHHHHHHHHHHH!!!!!!!!!!!'", actor: "Wendy"}); break;
+								case "Noelle": script.push({text: "'AHHHHHHH!!'", actor: "Noelle"}); break;
+								case "Trevor": script.push({text: "'...'", actor: "Trevor"}); break;
+								case "Vanessa": script.push({text: "'..?'", actor: "Vanessa"}); break;
+							}
+						});
+					}
+
+					script.push(
+						{text: "'DIE ZOMBIE SCUM!!!'", actor: "Kaitlyn"},
+						{text: "A girl dashes at me with a knife!"},
+						{text: "I prepare for impact, when I hear another girl yell out."},
+						{text: "'KAITLYN WAIT!!' the girl screams", actor: "Lily"},
+						{text: "'HUMANS! HUMANS!' the girl rejoices."},
+						{text: "'Humans?' the other girl asks", actor: "Kaitlyn"},
+						{text: "'HUMANS!' she suddenly starts screaming", actor: "Kaitlyn"},
+						{text: "'Yes! Yes! Humans! Please don't stab me...' I plead..."},
+						{text: "There were two girls holed up in this apartment..."},
+						{text: "'Would *huff* you two like two.. *puff* join us...?' I ask, out of breath from screaming."},
+						{text: "'Yes... of course.' the girl replies"},
+						{text: "'We've been waiting for so long...' the other girl replies", actor: "Lily"},
+						{text: "'I'm Lily, and that's Kaitlyn.' she says. 'Nice to meet you.'"},
+						{text: "Still shook from that close call, I decide to head back and rest a little."},
+						{text: "[+ALLY: LILY] [+ALLY: KAITLYN]", ally: [ALLIES["Lily"], ALLIES["Kaitlyn"]]},
+						{finish: true, removeencounter: ["APARTMENTS", "S2"]},
+					);
+
+					setScript(script);
+				}
+			}},
+			{text: "[STRENGTH CHECK FAILED] I fail to open the door..."},
+			{text: "I'll have to come back when I'm a litle stronger to find out what's inside."},
+			{finish: true}
 		]
 	},
 
@@ -1715,7 +1877,7 @@ const ENCOUNTERS = {
 					{text: "We need to settle this right here. Right now."},
 					{text: "I prepare my weapon and get ready..."},
 					{text: "For the final battle.", function() {
-						let lance_hp = 25;
+						let lance_hp = 30;
 
 						let battleScript = function(new_hp){ return [
 							{text: "[LANCE: " + new_hp + " HP]... What should I do?", options: [
@@ -1723,7 +1885,7 @@ const ENCOUNTERS = {
 									const strengthRoll = Random(stats.strength);
 									const speedRoll = Random(stats.speed);
 
-									const lance_damage = Math.max(0, 8 - speedRoll);
+									const lance_damage = Math.max(0, 9 - speedRoll);
 
 									setScript([
 										{text: "I step back and begin a running attack. I damage him for [STRENGTH ROLL: " + strengthRoll + "].", function() {
