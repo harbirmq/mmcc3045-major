@@ -157,35 +157,6 @@ function SetObjective(id, value) {
 	SaveData("objectives", objectives);
 }
 
-function CountEncounters() {
-	let counter = 0;
-
-	for (const [location, _] of Object.entries(ACTIVE_ENCOUNTERS)) {
-		if (location == "meta") { continue; }
-	
-		counter += ACTIVE_ENCOUNTERS[location].length;
-	}
-
-	return counter;
-}
-
-function IncrementProgressFlags() {
-	if (objectives.wait_for_military) {
-		if (flags.military_max == 0) {
-			SetFlag("military_max", Math.min(5, CountEncounters()));
-		}
-
-		SetFlag("military_counter", flags.military_counter + 1);
-
-		if (flags.military_counter == flags.military_max) {
-			SetObjective("wait_for_military", false);
-			SetObjective("go_to_lake", true);
-
-			AddEncounter("MACQUARIE LAKE", "S0");
-		}
-	}
-}
-
 // id generator
 // src: https://stackoverflow.com/a/33226136
 const uniqId = (() => {

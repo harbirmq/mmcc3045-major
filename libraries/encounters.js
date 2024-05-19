@@ -985,6 +985,7 @@ const ENCOUNTERS = {
 							SetObjective("find_frequency", false);
 							SetObjective("return_linus", false);
 							SetObjective("wait_for_military", true);
+							IncrementProgressFlags();
 							SetFlag("military_counter", 0);
 						}}
 					]);
@@ -1470,3 +1471,32 @@ for (const [location, _] of Object.entries(ENCOUNTERS)) {
 
 let active_encounters_value = ReadData("active_encounters");
 if (active_encounters_value != null) { ACTIVE_ENCOUNTERS = active_encounters_value; }
+
+function CountEncounters() {
+	let counter = 0;
+
+	for (const [location, _] of Object.entries(ACTIVE_ENCOUNTERS)) {
+		if (location == "meta") { continue; }
+	
+		counter += ACTIVE_ENCOUNTERS[location].length;
+	}
+
+	return counter;
+}
+
+function IncrementProgressFlags() {
+	if (objectives.wait_for_military) {
+		if (flags.military_max == 0) {
+			SetFlag("military_max", Math.min(5, CountEncounters()));
+		}
+
+		SetFlag("military_counter", flags.military_counter + 1);
+
+		if (flags.military_counter == flags.military_max || flags.military_max == 0) {
+			SetObjective("wait_for_military", false);
+			SetObjective("go_to_lake", true);
+
+			AddEncounter("MACQUARIE LAKE", "S0");
+		}
+	}
+}
