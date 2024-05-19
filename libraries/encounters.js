@@ -940,6 +940,7 @@ const ENCOUNTERS = {
 			{text: "For now, you decide to go back and get ready to explore the new area."},
 			{finish: true, removeencounter: ["LAW BUILDING", "S0"], function() {
 				AddEncounter("LAW BUILDING", "S1");
+				AddEncounter("LAW BUILDING", "S3");
 			}}
 		],
 
@@ -997,7 +998,33 @@ const ENCOUNTERS = {
 				SetObjective("find_frequency", false);
 				SetObjective("find_linus", true);
 			}}
-		]
+		],
+
+		"S3": [
+			{text: "Sneaking through the upper level of the law building, you notice a boarded off room..."},
+			{text: "'Could someone be hiding in here?' you wonder..."},
+			{text: "You try your best to peek through the window to no avail..."},
+			{text: "Instead you decide to knock very quietly..."},
+			{text: "'Hello?' you whisper."},
+			{text: "..."},
+			{text: "..."},
+			{text: "'Anybody in there?' you whisper again."},
+			{text: "You notice the door handle turn..."},
+			{text: "The door then opens very slightly."},
+			{text: "Through the small crack, you see a boy standing in the room", actor: "Alvin"},
+			{text: "'What do you want..?' the boy asks."},
+			{text: "'Want to join us?' you ask polietly."},
+			{text: "He seems to think about it for a moment before responding."},
+			{text: "'Okay.. I-I don't have anything with me though...' he responds."},
+			{text: "'That's okay, we've got plenty at my safehouse' you respond."},
+			{text: "He opens the door wider and comes out."},
+			{text: "'Stick low, and follow me...' you say, expecting him to respond with his name."},
+			{text: "'...'"},
+			{text: "'Oh, I'm Alvin' he says."},
+			{text: "'Okay sweet. Let's get moving then.' you respond."},
+			{text: "You then move out to return to your safehouse. [+ALLY: ALVIN]", ally: [ALLIES["Alvin"]]},
+			{finish: true, removeencounter: ["LAW BUILDING", "S3"]}
+		],
 	},
 
 	"APARTMENTS": {
