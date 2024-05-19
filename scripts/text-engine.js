@@ -51,7 +51,13 @@ function RunScript(script, run = false) {
 	if ($("#mark-of-death").length) {
 		SaveData("location", "meta");
 		SaveData("encounter", "S2");
-		window.location.replace("encounter.html");
+
+		text_area.fadeOut(100);
+
+		const fade = $("div#fade");
+		fade.fadeIn(2500, function() {
+			window.location.replace("encounter.html");
+		});
 	}
 
 	if (script_index >= script.length) { return; }

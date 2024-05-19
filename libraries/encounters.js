@@ -103,6 +103,11 @@ function FlagIncrementor(id, threshold, location, code) {
 	Music promoted by https://www.chosic.com/free-music/all/
 	Creative Commons Attribution 3.0 Unported License
 	https://creativecommons.org/licenses/by/3.0/deed.en_US 
+
+	 Labyrinth of Lost Dreams by Darren Curtis | https://www.darrencurtismusic.com/
+	Music promoted on https://www.chosic.com/free-music/all/
+	Creative Commons Attribution 3.0 Unported (CC BY 3.0)
+	https://creativecommons.org/licenses/by/3.0/
 */
 
 // menu options
@@ -169,7 +174,11 @@ function MenuOptions() {
 function EndingOptions() {
 	return [
 		Option("Main Menu", function() {
-			window.location.replace("index.html");
+			const fade = $("div#fade");
+			fade.fadeIn(600, function() {
+				window.location.replace("index.html");
+			});
+			
 		}),
 		Option("", function() {}),
 		Option("", function() {}),

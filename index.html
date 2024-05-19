@@ -20,13 +20,17 @@
 	<script>
 		$(document).ready(function() {
 			// play music
+			const music = new Audio("sounds/music/menu.mp3");
+			music.volume = 0.4;
+			music.loop = true;
+			music.play();
 
 			// sections
 			const section_menu = $("div#menu");
 			
 			// effects
 			const fade = $("div#fade");
-			fade.hide();
+			fade.fadeOut(400);
 
 			// buttons
 			const new_game = $("div#new-game");
@@ -45,6 +49,10 @@
 				});
 			});
 
+			if (!localStorage.length) {
+				load_game.css("color", "darkgray");
+			}
+
 			load_game.click(function() {
 				if (!localStorage.length) { return; }
 
@@ -61,10 +69,9 @@
 <body>
 	<div id="stage">
 		<div id="menu">
-			<img id="title" src="images/title.png" alt="Always Rainy at MQ">
-
-			<div class="menu-button" id="new-game"><p>NEW GAME</p></div>
-			<div class="menu-button" id="load-game"><p>LOAD GAME</p></div>
+			<div class="menu-button" id="new-game" style="bottom: 140px;">> NEW GAME</div>
+			<div class="menu-button" id="load-game" style="bottom: 80px;">> LOAD GAME</div>
+			<div class="menu-button" id="credits" style="bottom: 20px;">> CREDITS</div>
 		</div>
 
 		<div id="fade"></div>

@@ -42,28 +42,30 @@ body {
 
 /* --- MENU PAGE --- */
 
-#title {
-	position: absolute;
+#menu {
+	background-image: url(images/main_menu.png);
 
-	width: 50%;
-	left: 24%;
+	width: 100%;
+	height: 100%;
 }
 
 .menu-button {
 	position: absolute;
 
-	height: 25%;
-	width: 25%;
+	font-family: cyberpunk-waifus;
 
-	background-image: url(images/menu-button.png);
-	background-size: contain;
-	background-repeat: no-repeat;
+	text-shadow: 2px 2px black;
+
+	margin-left: 20px;
+
+	color: white;
+	font-size: 50px;
 
 	cursor: pointer;
 }
 
 .menu-button:hover {
-	filter: brightness(4);
+	color: red;
 }
 
 .menu-button:active {
@@ -77,16 +79,6 @@ body {
 	text-align: center;
 
 	padding-top: 10px;
-}
-
-#new-game {
-	bottom: 5%;
-	left: 20%;
-}
-
-#load-game {
-	bottom: 5%;
-	right: 20%;
 }
 
 /* --- ENCOUNTERS --- */
