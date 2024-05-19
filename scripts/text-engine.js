@@ -1,6 +1,7 @@
 let skip = false;
 let script_index = 0;
 let active = false;
+let timeout;
 
 let text_area;
 let choice_buttons;
@@ -10,7 +11,7 @@ function InitTextEngine(_text_area, _choice_buttons) {
 	choice_buttons = _choice_buttons;
 }
 
-function SetScript(script, run) {
+function SetScript(script, run, menu = false) {
 	script_index = 0;
 
 	choice_buttons.forEach(element => {
@@ -22,7 +23,7 @@ function SetScript(script, run) {
 		RunScript(script);
 	});
 
-	if (run) { RunScript(script); }
+	if (run) { RunScript(script, menu); }
 }
 
 function WriteText(text) {
@@ -46,7 +47,7 @@ function DisableButton(button) {
 	button.off("click");
 }
 
-function RunScript(script) {
+function RunScript(script, menu = false) {
 	if ($("#mark-of-death").length) {
 		SaveData("location", "meta");
 		SaveData("encounter", "S2");
@@ -54,7 +55,16 @@ function RunScript(script) {
 	}
 
 	if (script_index >= script.length) { return; }
-	if (active) { skip = true; }
+
+	if (active) {
+		if (menu) {
+			clearTimeout(timeout);
+		}
+		else {
+			skip = true;
+			return;
+		}
+	}
 
 	active = true;
 
@@ -191,8 +201,13 @@ function RunScript(script) {
             function type_next_character(element, i) {
                 element.html( final_text.substr(0, i)+settings.extra_char );
                 if (final_text.length >= i) {
-                    setTimeout(function() {
-						if (skip) { skip = false; return; }
+                    timeout = setTimeout(function() {
+						if (skip) {
+							current_element.html(final_text);
+							skip = false;
+							active = false;
+							return; 
+						}
                         type_next_character(element, i+1);
                     }, settings.delay);
                 }

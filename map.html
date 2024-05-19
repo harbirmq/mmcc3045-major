@@ -68,12 +68,12 @@
 					if (flags.rested) {
 						setScript([
 							{text: "I don't think theres anything left to explore at " + location + " for now..."}
-						], true);
+						], true, true);
 					}
 					else {
 						setScript([
-						{text: "I don't think theres anything left to explore at " + location + " for now...", options: MenuOptions() }
-					 	], true);
+							{text: "I don't think theres anything left to explore at " + location + " for now...", options: MenuOptions() }
+					 	], true, true);
 					}
 
 					return;
