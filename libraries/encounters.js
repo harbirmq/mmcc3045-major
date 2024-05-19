@@ -536,7 +536,7 @@ const ENCOUNTERS = {
 							}},
 							{text: "STRENGTH ROLL: " + roll.text + "..."},
 							{text: "You barely manage to defeat the zombies..."},
-							{text: "Too scared to look up, you hastily leave the scene. [-6 HP] [+INJURY: DEEP SCRATCH]", stat: {hp: -6}, buff: [BUFFS["Deep Scratch"]] },
+							{text: "Too scared to look up, you hastily leave the scene. [-6 HP] [+INJURY: DEEP SCRATCH]", stat: {health: -6}, buff: [BUFFS["Deep Scratch"]] },
 							{finish: true, removeencounter: ["CENTRAL COURTYARD", "E0"]}
 						], true);
 					}

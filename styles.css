@@ -216,6 +216,7 @@ body {
 
 	padding: 20px;
 
+	user-select: none;
 
 	border: 2px solid white;
 
@@ -291,6 +292,8 @@ body {
 .map-button {
 	position: absolute;
 	cursor: pointer;
+
+	user-select: none;
 
 	background-color: rgba(255, 0, 0, 0);
 }
