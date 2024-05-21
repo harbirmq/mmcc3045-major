@@ -1894,13 +1894,14 @@ const ENCOUNTERS = {
 									const speedRoll = Random(stats.speed);
 
 									const lance_damage = Math.max(0, 9 - speedRoll);
+									let damage = Math.max(strengthRoll - 5, 0);
 
 									setScript([
-										{text: "I step back and begin a running attack. I damage him for [STRENGTH ROLL: " + strengthRoll + "].", function() {
-											lance_hp -= strengthRoll;
+										{text: "I step back and begin a running attack. I damage him for ([STRENGTH ROLL: " + strengthRoll + "] - 5) = " + damage + ".", function() {
+											lance_hp -= damage;
 											if (lance_hp <= 0) { setScript(winningScript); }
 										}},
-										{text: "He performs a counter attack. I try and dodge to the best of my ability. He damages me for ([SPEED ROLL: " + speedRoll + "] - 8) = " + lance_damage + ".", stat: { health: -lance_damage }},
+										{text: "He performs a counter attack. I try and dodge to the best of my ability. He damages me for (9 - [SPEED ROLL: " + speedRoll + "]) = " + lance_damage + ".", stat: { health: -lance_damage }},
 										{function() {
 											setScript(battleScript(lance_hp), true);
 										}}
@@ -1911,11 +1912,11 @@ const ENCOUNTERS = {
 									const luckRoll = Random(stats.luck);
 									const defenseRoll = Random(stats.defense);
 
-									const lance_damage = Math.max(0, 5 - defenseRoll);
+									const lance_damage = Math.max(0, 7 - defenseRoll);
 
 									setScript([
 										{text: "I step back and patch up some of my wounds. I heal for [LUCK ROLL: " + luckRoll + "].", stat: { health: luckRoll }},
-										{text: "He lunges at me. I try to defend to the best of my ability. He damages me for ([DEFENSE ROLL: " + defenseRoll + "] - 5) = " + lance_damage + ".", stat: { health: -lance_damage }},
+										{text: "He lunges at me. I try to defend to the best of my ability. He damages me for (7 - [DEFENSE ROLL: " + defenseRoll + "]) = " + lance_damage + ".", stat: { health: -lance_damage }},
 										{function() {
 											setScript(battleScript(lance_hp), true);
 										}}
