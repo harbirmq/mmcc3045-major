@@ -54,6 +54,14 @@ function FlagIncrementor(id, threshold, location, code) {
 
 	if (flags[id] >= threshold) { RemoveEncounter(location, code); }
 }
+/*
+	ENDING 2:
+	--> get info about repowering the metro [someone in comp building was working on a gas generator backup before the apocalypse hit] (central courtyard) 
+	--> find pieces to raid and fix the metro [flashlight(lecture hall), generator part 1(comp building), generator part 2(comp building), generator part 3(apartments), fuel (law building)] 
+	--> go back to central courtyard to figure out how to put it back together (REQUIRES 3 ALLIES) 
+	--> head to the metro (fight 3 zombies, heal up, fight lance) 
+	--> ESCAPE
+*/
 
 /*
 	LOCATIONS:
