@@ -314,7 +314,7 @@ function RefreshWindows() {
 			case "find_fuel": string = "Find fuel to power the generator"; break;
 			case "find_flashlight": string = "Find a flashlight to make it easier to enter the metro"; break;
 			case "return_components": string = "I have all the components to repower the metro! I should head back to CENTRAL COURTYARD to assemble the pieces"; break;
-			case "find_allies": string = "I need to find " + (allies.length - 4) + " more people to help assemble the generator"; break;
+			case "find_allies": string = "I need to find " + (4 - allies.length) + " more people to help assemble the generator"; break;
 			case "return_allies": string = "I have enough people to return to CENTRAL COURTYARD and assemble the generator!"; break;
 			case "go_to_metro": string = "I need to head to the METRO to repower a train and escape!"; break;
 		}
