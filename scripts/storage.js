@@ -46,6 +46,17 @@ let objectives = {
 	return_linus: false,
 	wait_for_military: false,
 	go_to_lake: false,
+
+	// METRO ENDING
+	find_generator1: false,
+	find_generator2: false,
+	find_generator3: false, find_generator3_apartments: false,
+	find_fuel: false,
+	find_flashlight: false,
+	return_components: false, 
+	find_allies: false,
+	return_allies: false,
+	go_to_metro: false,
 }
 
 // data functions
@@ -282,10 +293,10 @@ function RefreshWindows() {
 			case "find_apartment_key": string = "Look for an apartment master key in the COMP BUILDING"; break;
 			case "apartment_002": string = "Head to the APARTMENTS and meet with the person at room 002"; break;
 
-			case "find_vanessa": string = "Find someone named 'Vanessa'.. If they're not already dead"; break;
+			case "find_vanessa": string = "Find someone named 'Vanessa'.. If she's not already dead"; break;
 			case "return_vanessa": string = "Return to the LECTURE HALL with Vanessa"; break;
 
-			case "find_jane": string = "If I find a girl with short black pigtails and a heart locket, I should keep her safe until Trevor finds us."; break;
+			case "find_jane": string = "If I find a girl with short black pigtails and a heart locket, I should keep her safe until Trevor finds us"; break;
 
 			case "investigate_lake": string = "Investigate MACQUARIE LAKE to find out what the whiteboard markings meant"; break;
 			case "find_batteries": string = "Find batteries somewhere to power the handheld radio"; break;
@@ -295,6 +306,17 @@ function RefreshWindows() {
 			case "return_linus": string = "Linus seems great with computers. I should take him to the whiteboard at the LAW BUILDING."; break;
 			case "wait_for_military": string = "I need to survive for " + (flags.military_max - flags.military_counter) + " more encounters, then head to MACQUARIE LAKE"; break;
 			case "go_to_lake": string = "The military should be here any second now! I need to head to MACQUARIE LAKE!"; break;
+
+			case "find_generator1": string = "Find generator part A to power the metro, It's probably at the COMP BUILDING"; break;
+			case "find_generator2": string = "Find generator part B to power the metro, It's probably at the COMP BUILDING"; break;
+			case "find_generator3": string = "Find generator part C to power the metro, It's probably at the COMP BUILDING"; break;
+			case "find_generator3_apartments": string = "Find generator part C to power the metro, It's probably at the APARTMENTS"; break;
+			case "find_fuel": string = "Find fuel to power the generator"; break;
+			case "find_flashlight": string = "Find a flashlight to make it easier to enter the metro"; break;
+			case "return_components": string = "I have all the components to repower the metro! I should head back to CENTRAL COURTYARD to assemble the pieces"; break;
+			case "find_allies": string = "I need to find " + (allies.length - 4) + " more people to help assemble the generator"; break;
+			case "return_allies": string = "I have enough people to return to CENTRAL COURTYARD and assemble the generator!"; break;
+			case "go_to_metro": string = "I need to head to the METRO to repower a train and escape!"; break;
 		}
 
 		objective_list.append("<li>" + string + "</li>");

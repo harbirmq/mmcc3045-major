@@ -500,6 +500,58 @@ const ENCOUNTERS = {
 				SetFlag("unlocked_apartments", true);
 			}}
 		],
+
+		"S2": [
+			{text: "Scavenging a room, you find a weird looking object..."},
+			{text: "It seems to have a panel on it and some funnels..."},
+			{text: "It also looks oddly familiar..."},
+			{text: "..."},
+			{text: "Wait... It's a generator piece! [+ITEM: GENERATOR PIECE (A)]", item: [ITEMS["key"]["Generator Piece (A)"]], function() {
+				SetObjective("find_generator1", false);
+				SetObjective("find_generator2", true);
+				AddEncounter("COMP BUILDING", "S3");
+			}},
+			{finish: true}
+		],
+		"S3": [
+			{text: "Scavenging a room on the lower floor, you find a weird looking object..."},
+			{text: "It seems to have a cables sticking out of it..."},
+			{text: "It also looks oddly familiar..."},
+			{text: "..."},
+			{text: "Wait... It's a generator piece! [+ITEM: GENERATOR PIECE (B)]", item: [ITEMS["key"]["Generator Piece (B)"]], function() {
+				SetObjective("find_generator2", false);
+				SetObjective("find_generator3", true);
+				AddEncounter("COMP BUILDING", "S4");
+			}},
+			{finish: true}
+		],
+		"S4": [
+			{text: "Despite your best efforts, you simply cannot find the third generator piece."},
+			{text: "It has to exist, because you saw a photo of it on the report..."},
+			{text: "Could it be somewhere else?"},
+			{text: "Actually, you recall one of the photos being taken on a bed."},
+			{text: "A bed..? It could be their house... or the apartments?"},
+			{text: "Well, it's worth a shot to explore the apartments...", function() {
+				if (!flags.unlocked_apartments) {
+					setScript([
+						{text: "But you recall the apartments being locked..."},
+						{text: "'Is it hopeless after all?' you think to yourself..."},
+						{text: "You decide to head back, keeping the idea of the third generator piece in the back of your head."},
+						{finish: true}
+					]);
+
+					SetObjective("find_generator3", false);
+					SetObjective("find_generator3_apartments", true);
+					// TODO: WHEN APARTMENTS ARE UNLOCKED, ADD THE ENCOUNTER
+				}
+			}},
+			{text: "You decide to head back and move focus to the apartments to find the final generator piece.", function() {
+				// TODO: ADD ENCOUNTER
+				SetObjective("find_generator3", false);
+				SetObjective("find_generator3_apartments", true);
+			}},
+			{finish: true}
+		],
 	},
 
 	"CENTRAL COURTYARD": {
@@ -696,6 +748,34 @@ const ENCOUNTERS = {
 					}
 				}),
 			]},
+		],
+
+		"E3": [
+			{text: "Clearing one of the classrooms at Central Courtyard, you notice a small stack of papers."},
+			{text: "It seems to be a report on someone's major project..."},
+			{text: "You skim through the first page and notice the proposing question:"},
+			{text: "'Can a Metro train be powered and operated with just a gas generator?'"},
+			{text: "You skim through some more and notice that... they built a prototype!?"},
+			{text: "This could be a lead on how to get out of here..."},
+			{text: "You decide to read the rest of the paper to understand how it works."},
+			{text: "..."},
+			{text: "..."},
+			{text: "'I see...' you think to yourself."},
+			{text: "'Basically, this person did all the work - I just need to get their prototypes and combine them...'"},
+			{text: "'Yes.. yes... this could work!'"},
+			{text: "Let's see..."},
+			{text: "First we need all three parts of the generator... The photos attached here look like they were built in the COMP BUILDING..."},
+			{text: "Then some fuel for the generator... Not sure where I would find that."},
+			{text: "And finally, a flashlight. For when we enter the metro station."},
+			{text: "I decided to head out and find the materials.", function() {
+				// TODO: ADD ENCOUNTERS
+				SetObjective("find_generator1", true);
+
+				SetObjective("find_fuel", true);
+				
+				SetObjective("find_flashlight", true);
+			}},
+			{finish: true}
 		],
 
 		"S0": [
@@ -1360,6 +1440,20 @@ const ENCOUNTERS = {
 			}},
 			{text: "[STRENGTH CHECK FAILED] I fail to open the door..."},
 			{text: "I'll have to come back when I'm a litle stronger to find out what's inside."},
+			{finish: true}
+		],
+
+		"S3": [
+			{text: "Searching through several rooms in the apartments, you notice a weird smell coming from one..."},
+			{text: "As you go into the room to investigate, you see it! The third generator piece!"},
+			{text: "But... what is that SMELL?"},
+			{text: "It seems the piece is slightly... smoking? Was someone here working on it?"},
+			{text: "Whatever the case is, you decide to take it anyway. [+ITEM: GENERATOR PIECE (C)]", item: [ITEMS["key"]["Generator Piece (C)"]]},
+			{text: "Having all the pieces of the generator obtained, you decide to head back.", function() {
+				SetObjective("find_generator3_apartments", false);
+
+				// TODO: If u have the other components, set the new objective + add encounter
+			}},
 			{finish: true}
 		]
 	},
