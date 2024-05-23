@@ -511,7 +511,7 @@ const ENCOUNTERS = {
 				SetObjective("find_generator2", true);
 				AddEncounter("COMP BUILDING", "S3");
 			}},
-			{finish: true}
+			{finish: true, removeencounter: ["COMP BUILDING", "S2"]}
 		],
 		"S3": [
 			{text: "Scavenging a room on the lower floor, you find a weird looking object..."},
@@ -523,7 +523,7 @@ const ENCOUNTERS = {
 				SetObjective("find_generator3", true);
 				AddEncounter("COMP BUILDING", "S4");
 			}},
-			{finish: true}
+			{finish: true, removeencounter: ["COMP BUILDING", "S3"]}
 		],
 		"S4": [
 			{text: "Despite your best efforts, you simply cannot find the third generator piece."},
@@ -537,20 +537,20 @@ const ENCOUNTERS = {
 						{text: "But you recall the apartments being locked..."},
 						{text: "'Is it hopeless after all?' you think to yourself..."},
 						{text: "You decide to head back, keeping the idea of the third generator piece in the back of your head."},
-						{finish: true}
+						{finish: true, removeencounter: ["COMP BUILDING", "S4"]}
 					]);
 
 					SetObjective("find_generator3", false);
 					SetObjective("find_generator3_apartments", true);
-					// TODO: WHEN APARTMENTS ARE UNLOCKED, ADD THE ENCOUNTER
 				}
 			}},
 			{text: "You decide to head back and move focus to the apartments to find the final generator piece.", function() {
-				// TODO: ADD ENCOUNTER
 				SetObjective("find_generator3", false);
 				SetObjective("find_generator3_apartments", true);
+
+				AddEncounter("APARTMENTS", "S3");
 			}},
-			{finish: true}
+			{finish: true, removeencounter: ["COMP BUILDING", "S4"]}
 		],
 	},
 
@@ -768,14 +768,17 @@ const ENCOUNTERS = {
 			{text: "Then some fuel for the generator... Not sure where I would find that."},
 			{text: "And finally, a flashlight. For when we enter the metro station."},
 			{text: "I decided to head out and find the materials.", function() {
-				// TODO: ADD ENCOUNTERS
 				SetObjective("find_generator1", true);
+				AddEncounter("COMP BUILDING", "S2");
 
 				SetObjective("find_fuel", true);
+				AddEncounter("LECTURE HALL", "S4");
 				
-				SetObjective("find_flashlight", true);
+				if (!HasItem(ITEMS["armor"]["Flashlight"])) {
+					SetObjective("find_flashlight", true);
+				}
 			}},
-			{finish: true}
+			{finish: true, removeencounter: ["CENTRAL COURTYARD", "E3"]}
 		],
 
 		"S0": [
@@ -1020,6 +1023,53 @@ const ENCOUNTERS = {
 
 				setScript(script, true);
 			}}
+		],
+
+		"S3": [
+			{text: "Returning to the classroom with the paper about the metro, you notice a figure..."},
+			{text: "Before you can draw your weapon, the figure turns to you..."},
+			{text: "'Oh.. you scared me.' the girl says.", actor: "Noelle"},
+			{text: "'I hope you aren't violent...' she continues, 'I'm just here to get my assign-'"},
+			{text: "'Wait... are those my generators?' she asks."},
+			{text: "'You made the paper?' you reply."},
+			{text: "She starts smiling."},
+			{text: "'Yes. And it looks like you did the hardest part already.' she replies."},
+			{text: "'Oh, would you look at that. You also have some fuel.' she gleefully says."},
+			{text: "I start to blush a little... her voice is very comforting..."},
+			{text: "'Well, this WAS a group project...' she continues.", function() {
+				// TODO: ADD BUILDING EVENT
+			}},
+			{text: "'So we'll need more people to assemble this properly...'"},
+			{text: "'Accouting for....' she says to herself, 'And just in case of...'"},
+			{text: "'We'll need six people total...' she finally says."},
+			{text: "'So that's me, you...", function() {
+				if (allies.length == 2) {
+					setScript([
+						{text: "'And those two...' she states. 'We'll need two more then.'"},
+						{text: "'I'll stay here and prepare the materials for building... Could you find two more people?'"},
+						{text: "I find myself agreeing without thinking... this level of charisma is unmatched..."},
+						{text: "'Okay, we'll look for some others.' I finally reply."},
+						{text: "And so we decided to head out in search of others to help assemble the generator."},
+						{finish: true, removeencounter: ["CENTRAL COURTYARD", "S3"], function() {
+							SetObjective("return_components", false);
+							SetObjective("find_allies", true);
+						}}
+					]);
+				}
+				else {
+					setScript([
+						{text: "'And those three...' she states. 'We'll need one more then.'"},
+						{text: "'I'll stay here and prepare the materials for building... Could you find one more person?'"},
+						{text: "I find myself agreeing without thinking... this level of charisma is unmatched..."},
+						{text: "'Okay, we'll look for another person.' I finally reply."},
+						{text: "And so we decided to head out in search of one more person to help assemble the generator."},
+						{finish: true, removeencounter: ["CENTRAL COURTYARD", "S3"], function() {
+							SetObjective("return_components", false);
+							SetObjective("find_allies", true);
+						}}
+					]);
+				}
+			}},
 		]
 	},
 
@@ -1289,19 +1339,29 @@ const ENCOUNTERS = {
 			{text: "'Anybody in there?' you whisper again."},
 			{text: "You notice the door handle turn..."},
 			{text: "The door then opens very slightly."},
-			{text: "Through the small crack, you see a boy standing in the room", actor: "Alvin"},
+			{text: "Through the small crack, a flashlight is pointed at you..."},
+			{text: "You see a boy standing in the room.", actor: "Alvin"},
 			{text: "'What do you want..?' the boy asks."},
 			{text: "'Want to join us?' you ask polietly."},
 			{text: "He seems to think about it for a moment before responding."},
 			{text: "'Okay.. I-I don't have anything with me though...' he responds."},
 			{text: "'That's okay, we've got plenty at my safehouse' you respond."},
-			{text: "He opens the door wider and comes out."},
+			{text: "He opens the door wider and comes out, lowering his flashlight."},
 			{text: "'Stick low, and follow me...' you say, expecting him to respond with his name."},
 			{text: "'...'"},
 			{text: "'Oh, I'm Alvin' he says."},
 			{text: "'Okay sweet. Let's get moving then.' you respond."},
-			{text: "You then move out to return to your safehouse. [+ALLY: ALVIN]", ally: [ALLIES["Alvin"]]},
-			{finish: true, removeencounter: ["LAW BUILDING", "S3"]}
+			{text: "You then move out to return to your safehouse. [+ALLY: ALVIN] [+ITEM: FLASHLIGHT]", ally: [ALLIES["Alvin"]], item: [ITEMS["armor"]["Flashlight"]]},
+			{finish: true, removeencounter: ["LAW BUILDING", "S3"], function() {
+				if (objectives.find_flashlight) {
+					SetObjective("find_flashlight", false);
+
+					if (HasItem(ITEMS["key"]["Generator Piece (C)"]) && HasItem(ITEMS["key"]["Fuel Canister"])) {
+						SetObjective("return_components", true);
+						AddEncounter("CENTRAL COURTYARD", "S3");
+					}
+				}
+			}}
 		],
 	},
 
@@ -1347,6 +1407,10 @@ const ENCOUNTERS = {
 				AddEncounter("APARTMENTS", "S0");
 				AddEncounter("APARTMENTS", "S1");
 				AddEncounter("APARTMENTS", "S2");
+
+				if (objectives.find_generator3_apartments) {
+					AddEncounter("APARTMENTS", "S3");
+				}
 			}}
 		],
 
@@ -1452,9 +1516,12 @@ const ENCOUNTERS = {
 			{text: "Having all the pieces of the generator obtained, you decide to head back.", function() {
 				SetObjective("find_generator3_apartments", false);
 
-				// TODO: If u have the other components, set the new objective + add encounter
+				if (HasItem(ITEMS["key"]["Fuel Canister"]) && HasItem(ITEMS["armor"]["Flashlight"])) {
+					SetObjective("return_components", true);
+					AddEncounter("CENTRAL COURTYARD", "S3");
+				}
 			}},
-			{finish: true}
+			{finish: true, removeencounter: ["APARTMENTS", "S3"]}
 		]
 	},
 
@@ -1685,8 +1752,6 @@ const ENCOUNTERS = {
 							{text: "Okay... I need to go find a Vanessa... If she's even still alive."},
 							{finish: true, function() {
 								SetObjective("find_vanessa", true);
-
-								console.log("VANNY FOUND? " + flags.vanessa_encountered)
 								
 								if (flags.vanessa_encountered) {
 									AddEncounter("CENTRAL COURTYARD", "S2");
@@ -1779,6 +1844,33 @@ const ENCOUNTERS = {
 				SetObjective("find_jane", false);
 			}},
 		],
+
+		"S4": [
+			{text: "Sneaking up some stairs, you notice one of the stairs have some give...", function() {
+				if (stats.perception >= 13) {
+					setScript([
+						{text: "[PERCEPTION CHECK SUCCESS] You realise the top of the stair can be removed!"},
+						{text: "Underneath... is a stash of..........."},
+						{text: "..............."},
+						{text: "Ignoring the magazines, you notice the fuel canister that's also stashed away."},
+						{text: "Lifting it up, you find that it's suprisingly heavy!"},
+						{text: "'This is perfect for the generator!' you think to yourself."},
+						{text: "If... this is fuel, and not... anything else..."},
+						{text: "[+ITEM: FUEL CANISTER]", item: [ITEMS["key"]["Fuel Canister"]]},
+						{finish: true, removeencounter: ["LECTURE HALL", "S4"], function() {
+							SetObjective("find_fuel", false);
+
+							if (HasItem(ITEMS["key"]["Generator Piece (C)"]) && HasItem(ITEMS["armor"]["Flashlight"])) {
+								SetObjective("return_components", true);
+								AddEncounter("CENTRAL COURTYARD", "S3");
+							}
+						}}
+					]);
+				}
+			}},
+			{text: "[PERCEPTION CHECK FAILED] You can't discover the reason, so you simply ignore it."},
+			{finish: true},
+		]
 	},
 
 	"MACQUARIE LAKE": {
