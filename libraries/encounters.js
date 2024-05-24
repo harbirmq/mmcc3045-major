@@ -1127,7 +1127,13 @@ const ENCOUNTERS = {
 				{text: "'Now- wait did I introduce myself?' she asks, 'I am Noelle! Pleased to make your acquaintance.'"},
 				{text: "Noelle bows down a little while introducing herself."},
 				{text: "'Alright then.' I say to everyone, 'Let's stock up and get ready to head to the METRO.'"},
-				{text: "[+ALLY: NOELLE] [NEW LOCATION: METRO]", ally: [ALLIES["Noelle"]]},
+				{text: "[+ALLY: NOELLE] [+ITEM: METRO GENERATOR] [NEW LOCATION: METRO]", ally: [ALLIES["Noelle"]], function() {
+					RemoveItem(ITEMS["key"]["Generator Piece (A)"]);
+					RemoveItem(ITEMS["key"]["Generator Piece (B)"]);
+					RemoveItem(ITEMS["key"]["Generator Piece (C)"]);
+
+					AddItem(ITEMS["key"]["Metro Generator"])
+				}},
 				{finish: true, removeencounter: ["CENTRAL COURTYARD", "S4"]}
 			);
 
