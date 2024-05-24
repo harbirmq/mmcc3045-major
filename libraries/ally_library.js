@@ -22,6 +22,15 @@ const ALLIES = {
 };
 
 // functions
-function AddAlly(allyID) { AddGeneric(allyID, allies, "allies"); }
+function AddAlly(allyID) { 
+	AddGeneric(allyID, allies, "allies"); 
+
+	if (objectives.find_allies && allies.length >= 4) {
+		SetObjective("find_allies", false);
+		SetObjective("return_allies", true);
+
+		AddEncounter("CENTRAL COURTYARD", "S4");
+	}
+}
 function RemoveAlly(allyID) { RemoveGeneric(allyID, allies, "allies"); }
 function HasAlly(allyID) { return HasGeneric(allyID, allies); }

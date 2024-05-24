@@ -1037,7 +1037,10 @@ const ENCOUNTERS = {
 			{text: "'Oh, would you look at that. You also have some fuel.' she gleefully says."},
 			{text: "I start to blush a little... her voice is very comforting..."},
 			{text: "'Well, this WAS a group project...' she continues.", function() {
-				// TODO: ADD BUILDING EVENT
+				if (allies.length >= 4) {
+					RemoveEncounter("CENTRAL COURTYARD", "S3");
+					setScript(ENCOUNTERS["CENTRAL COURTYARD"]["S4"]);
+				}
 			}},
 			{text: "'So we'll need more people to assemble this properly...'"},
 			{text: "'Accouting for....' she says to herself, 'And just in case of...'"},
@@ -1070,7 +1073,62 @@ const ENCOUNTERS = {
 					]);
 				}
 			}},
-		]
+		],
+
+		"S4": [{function() {
+			SetObjective("return_allies", false);
+
+			let script = [];
+
+			script.push(
+				{text: "'Ah. There's enough people.' she says", actor: "Noelle"},
+				{text: "'So then, let's get building!'"},
+				{text: "..."},
+				{text: "..."},
+			);
+
+			allies.forEach(ally => {
+				switch(ally.name) {
+					case "Vanessa": script.push({text: "'Here, let me lift this part...'", actor: "Vanessa"}); break;
+					case "Alvin": script.push({text: "'Wait, I see.. okay... let me do this then...'", actor: "Alvin"}); break;
+					case "Lily": script.push({text: "'Uh.. like this?'", actor: "Lily"}); break;
+					case "Linus": 
+						script.push(
+							{text: "'This... isn't right. Let me recalibrate it.'", actor: "Linus"},
+							{text: "'It's not right? Oh... my other group member did that part...'", actor: "Noelle"}
+						); 
+					break;
+					case "Trevor": 
+						script.push(
+							{text: "'I'll just... watch the door.'", actor: "Trevor"},
+							{text: "'Okay, stay safe.'", actor: "Noelle"}
+						); 
+					break;
+					case "Wendy": 
+						script.push(
+							{text: "'... ouch..'", actor: "Wendy"},
+							{text: "'Oh no! Are you alright sweetie?'", actor: "Noelle"}
+						); 
+					break;
+					case "Kaitlyn": script.push({text: "*BANG* *BANG* 'I hope this is working...'", actor: "Kaitlyn"}); break;
+				}
+			});
+
+			script.push(
+				{text: "...", actor: ""},
+				{text: "It's finally done..."},
+				{text: "'Thanks for your great work everyone!' she says.", actor: "Noelle"},
+				{text: "'Now- wait did I introduce myself?' she asks, 'I am Noelle! Pleased to make your acquaintance.'"},
+				{text: "Noelle bows down a little while introducing herself."},
+				{text: "'Alright then.' I say to everyone, 'Let's stock up and get ready to head to the METRO.'"},
+				{text: "[+ALLY: NOELLE] [NEW LOCATION: METRO]", ally: [ALLIES["Noelle"]]},
+				{finish: true, removeencounter: ["CENTRAL COURTYARD", "S4"]}
+			);
+
+			// TODO: ADD METRO FLAG
+
+			setScript(script, true);
+		}}]
 	},
 
 	"LAW BUILDING": {
