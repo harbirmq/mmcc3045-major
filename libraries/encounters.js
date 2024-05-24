@@ -163,7 +163,7 @@ function EndingOptions() {
 const ENCOUNTERS = {
 	"meta": {
 		"E0": [
-			{text: '"Last day, huh?", I thought to myself...', background: "wallyswalk", sound: "music/bad_ending"},
+			{text: '"Last day, huh?", I thought to myself...', background: "wallyswalk", sound: "music/bad_ending", sound: "effects/happy days"},
 			{text: "I lugged myself out of the metro and walked slowly to my class..."},
 			{text: "I took in the sounds of people walking, the birds chirping, the trees rustling...",},
 			{text: "Strolling through Wally's Walk, I noticed the new law building was finally completed...",},
@@ -171,7 +171,7 @@ const ENCOUNTERS = {
 			{text: "The people in front of me, walking ever so slightly slower than me...",},
 			{text: '"I wish I could never leave...", I thought...',},
 			{text: "...",},
-			{text: "It's been 3 weeks now...", background: "wallyswalk2"},
+			{text: "It's been 3 weeks now...", background: "wallyswalk2", sound: "effects/apocalypse"},
 			{text: "Now, I hear the sound of *them* walking, the birds missing, the trees dripping...",},
 			{text: "Strolling through Wally's Walk, I notice the amount of blood on the floor...",},
 			{text: "To my right I see two zombies fighting over the remains of a student..",},
@@ -342,7 +342,7 @@ const ENCOUNTERS = {
 					if (!HasItem(ITEMS["key"]["Keyboard"])) { return; }
 
 					setScript([
-						{text: "You plug in your keyboard, and reply with 'hi? where are you?'."},
+						{text: "You plug in your keyboard, and reply with 'hi? where are you?'.", sound: "effects/keyboard"},
 						{text: "For convienience sake, you leave the keyboard plugged in. Awaiting a reponse fills you with hope. [-ITEM: KEYBOARD] [+2 SANITY]", stat: { sanity: 2 }, removeitem: [ ITEMS["key"]["Keyboard"] ]},
 						{finish: true, removeencounter: ["COMP BUILDING", "E2"], function() {
 							SetObjective("await_response", true);
@@ -487,7 +487,7 @@ const ENCOUNTERS = {
 			{text: "The rest of the text was... sent from this computer? It's a load of gibberish though..."},
 			{text: "..."},
 			{text: "Did a zombie type this?"},
-			{text: "You simply reply with 'got it, i'll try and find it'."},
+			{text: "You simply reply with 'got it, i'll try and find it'.", sound: "effects/keyboard"},
 			{finish: true, removeencounter: ["COMP BUILDING", "S0"], function() {
 				SetObjective("await_response", false);
 				SetObjective("find_apartment_key", true);
@@ -498,7 +498,7 @@ const ENCOUNTERS = {
 		"S1": [
 			{text: "Looking through the bags on the lower floor, you notice a red duffel bag!"},
 			{text: "'Was this the bag that person from the chatroom was talking about?'"},
-			{text: "You look through all the pockets and find a key! [+ITEM: APARTMENT MASTER KEY]", item: [ITEMS["key"]["Apartment Master Key"]]},
+			{text: "You look through all the pockets and find a key! [+ITEM: APARTMENT MASTER KEY]", item: [ITEMS["key"]["Apartment Master Key"]], sound: "effects/bag"},
 			{text: "You add it to your keychain and leave the building. [NEW LOCATION: APARTMENTS]"},
 			{finish: true, removeencounter: ["COMP BUILDING", "S1"], function() {
 				SetObjective("find_apartment_key", false);
@@ -759,7 +759,7 @@ const ENCOUNTERS = {
 		"E3": [
 			{text: "Clearing one of the classrooms at Central Courtyard, you notice a small stack of papers."},
 			{text: "It seems to be a report on someone's major project..."},
-			{text: "You skim through the first page and notice the proposing question:"},
+			{text: "You skim through the first page and notice the proposing question:", sound: "effects/paper"},
 			{text: "'Can a Metro train be powered and operated with just a gas generator?'"},
 			{text: "You skim through some more and notice that... they built a prototype!?"},
 			{text: "This could be a lead on how to get out of here..."},
@@ -803,7 +803,7 @@ const ENCOUNTERS = {
 						{text: "'Alright, let's cut to the chase' Vanessa cuts in", actor: "Vanessa"},
 						{text: "'You have batteries. I saw them. Hand them over.' she adds."},
 						{text: "His eye twitches again.", actor: "William"},
-						{text: "'You smell li-' before he can finish his sentence, Vanessa lunges forward and performs a clean uppercut on him."},
+						{text: "'You smell li-' before he can finish his sentence, Vanessa lunges forward and performs a clean uppercut on him.", sound: "effects/impact"},
 						{text: "'So.' Vanessa starts, 'About those batteries?'", actor: "Vanessa"},
 						{text: "He mumbles something and quickly runs away."},
 						{text: "..."},
@@ -1090,7 +1090,7 @@ const ENCOUNTERS = {
 				{text: "'Ah. There's enough people.' she says", actor: "Noelle"},
 				{text: "'So then, let's get building!'"},
 				{text: "..."},
-				{text: "..."},
+				{text: "...", sound: "effects/building"},
 			);
 
 			allies.forEach(ally => {
@@ -1361,13 +1361,13 @@ const ENCOUNTERS = {
 						{text: "'It's binary.' Linus says", actor: "Linus"},
 						{text: "'It might be the frequency we need to contact the military...' he continues"},
 						{text: "'Give me a few minutes. I'll translate it.'"},
-						{text: "..."},
+						{text: "...", sound: "effects/writing"},
 						{text: "..."},
 						{text: "..."},
 						{text: "'328.6' he finally says."},
 						{text: "I tune the radio to the frequency..."},
 						{text: "'Hello?' I say into it."},
-						{text: "..."},
+						{text: "...", sound: "effects/radio"},
 						{text: "..."},
 						{text: "A voice replies! 'This is a restricted frequency, please tune to a different one. Over.'"},
 						{text: "'W-wait!' I hastily say. 'We're trapped at Macquarie University. Can't you like send a helicopter or something to get us?'"},
@@ -1523,8 +1523,8 @@ const ENCOUNTERS = {
 		"S2": [
 			{text: "Trying some of the doors in the apartments, you notice one door doesn't work with your key?"},
 			{text: "..."},
-			{text: "*BASH*"},
-			{text: "*BASH*"},
+			{text: "*BASH*", sound: "effects/impact"},
+			{text: "*BASH*", sound: "effects/impact"},
 			{text: "I try shoulder bashing the door, and...", function() {
 				if (stats.strength >= 20) {
 					let script = [];
@@ -1678,7 +1678,7 @@ const ENCOUNTERS = {
 		"E1": [
 			{text: "Exploring the lecture hall, you notice a row of bags."},
 			{text: "Most of the bags have nothing special in them but..."},
-			{text: "One has a jacket in it. This could be useful as protection. [+ITEM: BOMBER JACKET]", item: [ITEMS["armor"]["Bomber Jacket"]]},
+			{text: "One has a jacket in it. This could be useful as protection. [+ITEM: BOMBER JACKET]", sound: "effects/bag", item: [ITEMS["armor"]["Bomber Jacket"]]},
 			{finish: true, removeencounter: ["LECTURE HALL", "E1"]}
 		],
 
@@ -2274,15 +2274,15 @@ const ENCOUNTERS = {
 						{text: "'It's ready.' she finally says."},
 						{text: "'Okay... booting up.' Linus states", actor: "Linus"},
 						{text: "..."},
-						{text: "..*VVVRRRr*"},
-						{text: "*VVVVVRRRRRR!!!*"},
-						{text: "*VVRRR--....*"},
+						{text: "..*VVVRRRr*", sound: "effects/generator"},
+						{text: "*VVVVVRRRRRR!!!*", sound: "effects/generator"},
+						{text: "*VVRRR--....*", sound: "effects/generator"},
 						{text: "*....*"},
-						{text: "*VRRRRRRRRRRRRRRR*"},
+						{text: "*VRRRRRRRRRRRRRRR*", sound: "effects/generator"},
 						{text: "The train started!"},
 						{text: "'Oh thank goodness..' Noelle relievingly sighs.", actor: "Noelle"},
 						{text: "'Increasing throttle...' Linus says.", actor: "Linus"},
-						{text: "The train starts to move..."},
+						{text: "The train starts to move...", sound: "effects/train"},
 						{text: "..."},
 						{text: "..."},
 						{text: "And without difficulty, we start blazing down the tracks..."},
@@ -2348,15 +2348,15 @@ const ENCOUNTERS = {
 						{text: "'It's ready.' she finally says."},
 						{text: "'Okay... booting up.' Linus states", actor: "Linus"},
 						{text: "..."},
-						{text: "..*VVVRRRr*"},
-						{text: "*VVVVVRRRRRR!!!*"},
-						{text: "*VVRRR--....*"},
+						{text: "..*VVVRRRr*", sound: "effects/generator"},
+						{text: "*VVVVVRRRRRR!!!*", sound: "effects/generator"},
+						{text: "*VVRRR--....*", sound: "effects/generator"},
 						{text: "*....*"},
-						{text: "*VRRRRRRRRRRRRRRR*"},
+						{text: "*VRRRRRRRRRRRRRRR*", sound: "effects/generator"},
 						{text: "The train started!"},
 						{text: "'Oh thank goodness..' Noelle relievingly sighs.", actor: "Noelle"},
 						{text: "'Increasing throttle...' Linus says.", actor: "Linus"},
-						{text: "The train starts to move..."},
+						{text: "The train starts to move...", sound: "effects/train"},
 						{text: "..."},
 						{text: "..."},
 						{text: "And without difficulty, we start blazing down the tracks..."},
