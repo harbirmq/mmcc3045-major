@@ -1125,7 +1125,7 @@ const ENCOUNTERS = {
 				{finish: true, removeencounter: ["CENTRAL COURTYARD", "S4"]}
 			);
 
-			// TODO: ADD METRO FLAG
+			SetFlag("unlocked_metro", true);
 
 			setScript(script, true);
 		}}]
