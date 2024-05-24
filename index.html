@@ -24,9 +24,6 @@
 			music.volume = 0.4;
 			music.loop = true;
 			music.play();
-
-			// sections
-			const section_menu = $("div#menu");
 			
 			// effects
 			const fade = $("div#fade");
@@ -35,13 +32,12 @@
 			// buttons
 			const new_game = $("div#new-game");
 			const load_game = $("div#load-game");
+			const credits = $("div#credits");
 
 			new_game.click(function() {
 				localStorage.clear();
 
 				fade.fadeIn(400, function() {
-					section_menu.hide();
-
 					SaveData("location", "meta", true);
 					SaveData("encounter", "E0", true);
 					
@@ -57,9 +53,13 @@
 				if (!localStorage.length) { return; }
 
 				fade.fadeIn(400, function() {
-					section_menu.hide();
-
 					window.location.replace("map.html");
+				});
+			});
+
+			credits.click(function() {
+				fade.fadeIn(400, function() {
+					window.location.replace("credits.html");
 				});
 			});
 		});

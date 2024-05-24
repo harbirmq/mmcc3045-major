@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Always Rainy at MQ - Credits</title>
+
+	<link href="styles.css" rel="stylesheet"/>
+	<link rel="shortcut icon" type="image/x-icon" href="favicon.png"/>
+
+	<!-- Load external modules-->
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+	<script>
+		$(document).ready(function() {
+			// play music
+			const music = new Audio("sounds/music/menu.mp3");
+			music.volume = 0.4;
+			music.loop = true;
+			music.play();
+			
+			// effects
+			const fade = $("div#fade");
+			fade.fadeOut(400);
+
+			// buttons
+			const main_menu = $("div#main-menu");
+
+			main_menu.click(function() {
+				fade.fadeIn(400, function() {
+					window.location.replace("index.html");
+				});
+			});
+		});
+	</script>
+</head>
+
+<body>
+	<div id="stage">
+		<div id="credits-page">
+			<div>
+				<p style="font-weight: bolder; font-size: xx-large;">ALWAYS RAINY AT MQ</p>
+				<p style="font-weight: bolder;">By: Harbir Singh, 47409436 | For: MMCC3045 Major Assignment</p>
+				<p style="color: red">---</p>
+				<p>All music provided by https://www.chosic.com/ | Creative Commons CC BY 3.0 https://creativecommons.org/licenses/by/3.0/</p>
+				<p>Lurking Evil by Darren Curtis | https://www.darrencurtismusic.com/</p>
+				<p>My Dark Passenger by Darren Curtis | https://www.darrencurtismusic.com/</p>
+				<p>Echoes of Time v2 by Kevin MacLeod | https://incompetech.com/</p>
+				<p>Fall From Grace by Darren Curtis | https://www.darrencurtismusic.com/</p>
+				<p>The Soul-Crushing Monotony Of Isolation (Instrumental Mix) by Punch Deck | https://soundcloud.com/punch-deck</p>
+				<p>Labyrinth of Lost Dreams by Darren Curtis | https://www.darrencurtismusic.com/</p>
+				<p style="color: red">---</p>
+				<p>Backgrounds: https://www.pexels.com/. They have been de-saturated, posterized, and pixelated</p>
+				<p>Character and Zombie sprites: Harbir Singh and Vanessa Vu</p>
+				<p>Font: Cyberpunk Waifus by Isaac B</p>
+			</div>
+			<div class="menu-button" id="main-menu" style="bottom: -10px;">> MAIN MENU</div>
+		</div>
+
+		<div id="fade"></div>
+	</div>
+</body>
+</html>

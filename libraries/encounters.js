@@ -54,14 +54,6 @@ function FlagIncrementor(id, threshold, location, code) {
 
 	if (flags[id] >= threshold) { RemoveEncounter(location, code); }
 }
-/*
-	ENDING 2:
-	--> get info about repowering the metro [someone in comp building was working on a gas generator backup before the apocalypse hit] (central courtyard) 
-	--> find pieces to raid and fix the metro [flashlight(lecture hall), generator part 1(comp building), generator part 2(comp building), generator part 3(apartments), fuel (law building)] 
-	--> go back to central courtyard to figure out how to put it back together (REQUIRES 3 ALLIES) 
-	--> head to the metro (fight 3 zombies, heal up, fight lance) 
-	--> ESCAPE
-*/
 
 /*
 	LOCATIONS:
@@ -84,38 +76,6 @@ function FlagIncrementor(id, threshold, location, code) {
 	encounters prefixed with 'E' are regular encounters that should be added when a new game is made
 	
 	encounters prefixed with 'S' are special encounters that should not be added when a new game is made
-*/
-
-/*
-	Lurking Evil by Darren Curtis | https://www.darrencurtismusic.com/
-	Music promoted by https://www.chosic.com/free-music/all/
-	Creative Commons CC BY 3.0
-	https://creativecommons.org/licenses/by/3.0/
-
-	My Dark Passenger by Darren Curtis | https://www.darrencurtismusic.com/
-	Music promoted by https://www.chosic.com/free-music/all/
-	Creative Commons CC BY 3.0
-	https://creativecommons.org/licenses/by/3.0/
-
-	Echoes of Time v2 by Kevin MacLeod | https://incompetech.com/
-	Music promoted by https://www.chosic.com/free-music/all/
-	Creative Commons CC BY 3.0
-	https://creativecommons.org/licenses/by/3.0/
-
-	Fall From Grace by Darren Curtis | https://www.darrencurtismusic.com/
-	Music promoted by https://www.chosic.com/free-music/all/
-	Creative Commons CC BY 3.0
-	https://creativecommons.org/licenses/by/3.0/
-
-	The Soul-Crushing Monotony Of Isolation (Instrumental Mix) by Punch Deck | https://soundcloud.com/punch-deck
-	Music promoted by https://www.chosic.com/free-music/all/
-	Creative Commons Attribution 3.0 Unported License
-	https://creativecommons.org/licenses/by/3.0/deed.en_US 
-
-	 Labyrinth of Lost Dreams by Darren Curtis | https://www.darrencurtismusic.com/
-	Music promoted on https://www.chosic.com/free-music/all/
-	Creative Commons Attribution 3.0 Unported (CC BY 3.0)
-	https://creativecommons.org/licenses/by/3.0/
 */
 
 // menu options
@@ -190,7 +150,12 @@ function EndingOptions() {
 		}),
 		Option("", function() {}),
 		Option("", function() {}),
-		Option("Credits", function() {})
+		Option("Credits", function() {
+			const fade = $("div#fade");
+			fade.fadeIn(600, function() {
+				window.location.replace("credits.html");
+			});
+		})
 	]
 }
 
@@ -296,6 +261,47 @@ const ENCOUNTERS = {
 			{text: "I'm coming now, mum..."},
 			{text: "..."},
 			{text: "THE END [BAD ENDING - DEATH]", options: EndingOptions() }
+		],
+
+		// METRO ending
+		"S3": [
+			{function() {
+				let script = [
+					{text: '"Last day, huh?", I thought to myself...', background: "metro_ending", sound: "music/good_ending"},
+					{text: "I knew that I should never give up."},
+					{text: "That it would all be worth it."},
+					{text: "Every choice I've made..."},
+					{text: "For better or for worse, It's come to this."},
+					{text: "I know it's a long road ahead..."}
+				]
+
+				allies.forEach(ally => {
+					switch(ally.name) {
+						case "Vanessa": script.push({text: "'That was way too stressful.'", actor: "Vanessa"}); break;
+						case "Alvin": script.push({text: "'Imagine if I spilled the fuel over the floor..'", actor: "Alvin"}); break;
+						case "Lily": script.push({text: "'We actually did it...'", actor: "Lily"}); break;
+						case "Linus": script.push({text: "'Incredible. It really does work.'", actor: "Linus"}); break;
+						case "Trevor": script.push({text: "'Watch me fly, Jane.'", actor: "Trevor"}); break;
+						case "Wendy": script.push({text: "'Good thing I stayed in that closet...'", actor: "Wendy"}); break;
+						case "Noelle": script.push({text: "'I knew you could lead us out of here... You did great.'", actor: "Noelle"}); break;
+						case "Kaitlyn": script.push({text: "'So fast...'", actor: "Kaitlyn"}); break;
+					}
+				});
+					
+				script.push(
+					{text: "But for now... I can say we made it.", actor: ""},
+					{text: "We all did our parts..."},
+					{text: "We've all endured so much..."},
+					{text: "But..."},
+					{text: "I just can't stop thinking..."},
+					{text: "..."},
+					{text: "The fight has only just begun."},
+					{text: "..."},
+					{text: "THE END [ENDING: METRO ONLINE]", options: EndingOptions() }
+				)
+
+				setScript(script, true);
+			}}
 		],
 
 		"ALL ALLIES": [
@@ -2198,6 +2204,172 @@ const ENCOUNTERS = {
 
 				setScript(script);
 			}},
+		]
+	},
+
+	"METRO": {
+		"E0": [
+			{text: "After sneaking through what felt like a million zombies..."},
+			{text: "We made it to the metro. And to our surpise; a train is still at the platform."},
+			{text: "'Oh. That's pleasant' Noelle says, 'We don't have to walk on the tracks.'", actor: "Noelle"},
+			{text: "The train has two control panels, one in the 'front' of the train and one in the 'back'.", actor: ""},
+			{text: "It doesn't matter which panel we get to."},
+			{text: "The only train doors that seem to be open is the middle carriage. We'll have to go to the front or back from inside the train."},
+			{text: "We sneakily enter the train, and notice groaning coming from both sides..."},
+			{text: "We'll have to fight our way through but..."},
+			{text: "'Which side should we go?' Linus asks.", actor: "Linus"},
+			{text: "'We'll leave it up to you, leader.' Alvin responds.", actor: "Alvin"},
+			{text: "...", actor: ""},
+			{text: "Should we head to the front or the back?", options: [
+				Option("Front", function(){
+					let script = [];
+
+					script.push(
+						{text: "We decided to head to the front of the train..."},
+						{text: "As we make our way forward..."},
+					);
+
+					if (stats.perception >= 15) {
+						script.push(
+							{text: "[PERCEPTION CHECK SUCCESS] I notice a zombie sneaking up to us!", zombie: false },
+							{text: "We swiftly punt it back into hell before it gets a chance to jump us...", actor: ""},
+						);
+					}
+					else {
+						script.push(
+							{text: "[PERCEPTION CHECK FAILED] A zombie jumps out at us!", zombie: false },
+							{text: "We take it down.. but not without some difficulty. [-4 HP] [-2 SANITY]", actor: "", stat: { health: -4, sanity: -2 }},
+						);
+					}
+
+					script.push(
+						{text: "Just when we think that was the end of that..."},
+						{text: "Part of the roof falls down!"},
+					);
+
+					if (stats.defense >= 8) {
+						script.push(
+							{text: "[DEFENSE CHECK SUCCESS] Though, it does little damage to us..."},
+						);
+					}
+					else {
+						script.push(
+							{text: "[DEFENSE CHECK FAILED] It hurt, quite a bit... [-4 HP]", stat: { health: -4 }},
+						);
+					}
+
+					script.push(
+						{text: "We kept moving despite the difficulties..."},
+						{text: "And made it to the front of the train!"},
+						{text: "'Okay... here we go.' Noelle says.", actor: "Noelle"},
+						{text: "'Here, I'll connect this...' she continues. 'Alvin, pass me that.'"},
+						{text: "..."},
+						{text: "..."},
+						{text: "'It's ready.' she finally says."},
+						{text: "'Okay... booting up.' Linus states", actor: "Linus"},
+						{text: "..."},
+						{text: "..*VVVRRRr*"},
+						{text: "*VVVVVRRRRRR!!!*"},
+						{text: "*VVRRR--....*"},
+						{text: "*....*"},
+						{text: "*VRRRRRRRRRRRRRRR*"},
+						{text: "The train started!"},
+						{text: "'Oh thank goodness..' Noelle relievingly sighs.", actor: "Noelle"},
+						{text: "'Increasing throttle...' Linus says.", actor: "Linus"},
+						{text: "The train starts to move..."},
+						{text: "..."},
+						{text: "..."},
+						{text: "And without difficulty, we start blazing down the tracks..."},
+						{function() {
+							text_area.hide();
+
+							SaveData("location", "meta");
+							SaveData("encounter", "S3");
+
+							$("div#fade").fadeIn(600, function() {
+								window.location.reload();
+							});
+						}}
+					);
+
+					setScript(script, true);
+				}),
+				Option("", function(){}),
+				Option("Back", function() {
+					let script = [];
+
+					script.push(
+						{text: "We decided to head to the back of the train..."},
+						{text: "As we make our way forward..."},
+					);
+
+					if (stats.perception >= 15) {
+						script.push(
+							{text: "[PERCEPTION CHECK SUCCESS] I notice a zombie sneaking up to us!", zombie: false },
+							{text: "We swiftly punt it back into hell before it gets a chance to jump us...", actor: ""},
+						);
+					}
+					else {
+						script.push(
+							{text: "[PERCEPTION CHECK FAILED] A zombie jumps out at us!", zombie: false },
+							{text: "We take it down.. but not without some difficulty. [-4 HP] [-2 SANITY]", actor: "", stat: { health: -4, sanity: -2 }},
+						);
+					}
+
+					script.push(
+						{text: "Just when we think that was the end of that..."},
+						{text: "Part of the roof falls down!"},
+					);
+
+					if (stats.defense >= 8) {
+						script.push(
+							{text: "[DEFENSE CHECK SUCCESS] Though, it does little damage to us..."},
+						);
+					}
+					else {
+						script.push(
+							{text: "[DEFENSE CHECK FAILED] It hurt, quite a bit... [-7 HP]", stat: { health: -7 }},
+						);
+					}
+
+					script.push(
+						{text: "We kept moving despite the difficulties..."},
+						{text: "And made it to the back of the train!"},
+						{text: "'Okay... here we go.' Noelle says.", actor: "Noelle"},
+						{text: "'Here, I'll connect this...' she continues. 'Alvin, pass me that.'"},
+						{text: "..."},
+						{text: "..."},
+						{text: "'It's ready.' she finally says."},
+						{text: "'Okay... booting up.' Linus states", actor: "Linus"},
+						{text: "..."},
+						{text: "..*VVVRRRr*"},
+						{text: "*VVVVVRRRRRR!!!*"},
+						{text: "*VVRRR--....*"},
+						{text: "*....*"},
+						{text: "*VRRRRRRRRRRRRRRR*"},
+						{text: "The train started!"},
+						{text: "'Oh thank goodness..' Noelle relievingly sighs.", actor: "Noelle"},
+						{text: "'Increasing throttle...' Linus says.", actor: "Linus"},
+						{text: "The train starts to move..."},
+						{text: "..."},
+						{text: "..."},
+						{text: "And without difficulty, we start blazing down the tracks..."},
+						{function() {
+							text_area.hide();
+
+							SaveData("location", "meta");
+							SaveData("encounter", "S3");
+
+							$("div#fade").fadeIn(600, function() {
+								window.location.reload();
+							});
+						}}
+					);
+
+					setScript(script, true);
+				}),
+				Option("", function(){}),
+			]}
 		]
 	}
 }
