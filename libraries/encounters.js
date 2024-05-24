@@ -554,7 +554,9 @@ const ENCOUNTERS = {
 				SetObjective("find_generator3", false);
 				SetObjective("find_generator3_apartments", true);
 
-				AddEncounter("APARTMENTS", "S3");
+				if (flags.unlocked_apartments) {
+					AddEncounter("APARTMENTS", "S3");
+				}
 			}},
 			{finish: true, removeencounter: ["COMP BUILDING", "S4"]}
 		],
@@ -1133,6 +1135,7 @@ const ENCOUNTERS = {
 					RemoveItem(ITEMS["key"]["Generator Piece (C)"]);
 
 					AddItem(ITEMS["key"]["Metro Generator"])
+					SetObjective("go_to_metro", true);
 				}},
 				{finish: true, removeencounter: ["CENTRAL COURTYARD", "S4"]}
 			);
@@ -2400,6 +2403,7 @@ function CountEncounters() {
 
 	for (const [location, _] of Object.entries(ACTIVE_ENCOUNTERS)) {
 		if (location == "meta") { continue; }
+		if (location == "METRO") { continue; }
 	
 		counter += ACTIVE_ENCOUNTERS[location].length;
 	}
